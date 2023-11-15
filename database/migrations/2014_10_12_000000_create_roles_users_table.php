@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email')->unique();
-            $table->integer('phone');
+            $table->string('phone');
             $table->string('password');
             $table->date('dob');
             $table->boolean('is_approved')->default(false);
