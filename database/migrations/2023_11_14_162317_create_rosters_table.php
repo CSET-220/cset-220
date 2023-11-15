@@ -13,6 +13,25 @@ return new class extends Migration
     {
         Schema::create('rosters', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('doctor_id')->constrained(
+                table: 'users'
+            );
+            $table->foreignId('supervisor_id')->constrained(
+                table: 'users'
+            );
+            $table->foreignId('caregiver1_id')->constrained(
+                table: 'users'
+            );
+            $table->foreignId('caregiver2_id')->constrained(
+                table: 'users'
+            );
+            $table->foreignId('caregiver3_id')->constrained(
+                table: 'users'
+            );
+            $table->foreignId('caregiver4_id')->constrained(
+                table: 'users'
+            );
+            $table->date('date');
             $table->timestamps();
         });
     }

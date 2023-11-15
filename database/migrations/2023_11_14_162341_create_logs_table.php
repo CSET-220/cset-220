@@ -13,6 +13,17 @@ return new class extends Migration
     {
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('patient_id')->constrained();
+            $table->foreignId('caregiver_id')->constrained(
+                table: 'users'
+            );
+            $table->date('date');
+            $table->boolean('morning_med');
+            $table->boolean('afternoon_med');
+            $table->boolean('night_med');
+            $table->boolean('breakfast');
+            $table->boolean('lunch');
+            $table->boolean('dinner');
             $table->timestamps();
         });
     }

@@ -3,24 +3,73 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Log;
+use App\Models\Role;
+use App\Models\Roster;
+use App\Models\Patient;
+use App\Models\Employee;
+use App\Models\Appointment;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    public function role() {
+        return $this->hasOne(Role::class);
+    }
+
+    public function patient() {
+        return $this->hasOne(Patient::class);
+    }
+
+    public function employees() {
+        return $this->hasOne(Employee::class);
+    }
+
+    public function appointments() {
+        return $this->hasMany(Appointment::class, 'doctor_id');
+    }
+
+    public function logs() {
+        return$this->hasMany(Log::class, 'caregiver_id');
+    }
+
+    public function doctorRosters() {
+        return $this->hasMany(Roster::class, 'doctor_id');
+    }
+
+    public function supervisorRosters() {
+        return $this->hasMany(Roster::class, 'supervisor_id');
+    }
+
+    public function caregiver1Rosters() {
+        return $this->hasMany(Roster::class, 'caregiver1_id');
+    }
+
+    public function caregiver2Rosters() {
+        return $this->hasMany(Roster::class, 'caregiver2_id');
+    }
+
+    public function caregiver3Rosters() {
+        return $this->hasMany(Roster::class, 'caregiver3_id');
+    }
+
+    public function caregiver4Rosters() {
+        return $this->hasMany(Roster::class, 'caregiver4_id');
+    }
+
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
+        'phone',
         'password',
+        'date_of_birth',
+        'is_approved'
     ];
 
     /**

@@ -13,6 +13,14 @@ return new class extends Migration
     {
         Schema::create('patients', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained();
+            $table->string('family_code');
+            $table->string('emergency_contact');
+            $table->string('contact_relation');
+            $table->integer('group');
+            $table->date('admission_date');
+            $table->date('last_paid_date');
+            $table->integer('balance');
             $table->timestamps();
         });
     }
