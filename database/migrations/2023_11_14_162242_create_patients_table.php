@@ -17,10 +17,10 @@ return new class extends Migration
             $table->string('family_code');
             $table->string('emergency_contact');
             $table->string('contact_relation');
-            $table->integer('group');
-            $table->date('admission_date');
-            $table->date('last_paid_date');
-            $table->integer('balance');
+            $table->integer('group')->nullable()->default(null);
+            $table->date('admission_date')->nullable()->default(null);
+            $table->date('last_paid_date')->nullable()->default(null);
+            $table->integer('balance')->default(0);
             $table->timestamps();
         });
     }

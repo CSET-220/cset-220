@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->integer('salary');
+            $table->integer('salary')->default(20000);
             $table->timestamps();
         });
     }

@@ -17,18 +17,18 @@ return new class extends Migration
             $table->integer('access_level');
             $table->timestamps();
         });
-        
+
 
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('role_id')->constrained(); // TODO
+            $table->foreignId('role_id')->constrained();
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email')->unique();
             $table->integer('phone');
             $table->string('password');
             $table->date('dob');
-            $table->boolean('is_approved');
+            $table->boolean('is_approved')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

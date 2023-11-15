@@ -18,12 +18,13 @@ return new class extends Migration
                 table: 'users'
             );
             $table->date('date');
-            $table->boolean('morning_med');
-            $table->boolean('afternoon_med');
-            $table->boolean('night_med');
-            $table->boolean('breakfast');
-            $table->boolean('lunch');
-            $table->boolean('dinner');
+            $table->boolean('morning_med')->nullable()->default(null);
+            $table->boolean('afternoon_med')->nullable()->default(null);
+            $table->boolean('night_med')->nullable()->default(null);
+            $table->boolean('breakfast')->nullable()->default(null);
+            $table->boolean('lunch')->nullable()->default(null);
+            $table->boolean('dinner')->nullable()->default(null);
+            $table->unique(array('patient_id', 'date'));
             $table->timestamps();
         });
     }

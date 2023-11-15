@@ -26,15 +26,16 @@ return new class extends Migration
             );
             $table->foreignId('morning_med')->constrained(
                 table: 'prescriptions'
-            )->nullable();
+            )->nullable()->default(null);
             $table->foreignId('afternoon_med')->constrained(
                 table: 'prescriptions'
-            )->nullable();
+            )->nullable()->default(null);
             $table->foreignId('night_med')->constrained(
                 table: 'prescriptions'
-            )->nullable();
+            )->nullable()->default(null);
             $table->date('date');
             $table->string('comments');
+            $table->unique(array('patient_id', 'date'));
             $table->timestamps();
         });
     }
