@@ -14,12 +14,12 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Auth\SessionGuard;
 
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-
     public function role() {
         return $this->hasOne(Role::class);
     }
@@ -95,7 +95,7 @@ class User extends Authenticatable
     ];
 
     public function getAccess(){
-        dd($this);
+        // dd($this);
         $access = Role::select('role_title')->where('id',$this->role_id)->first();
         return $access->role_title;
     }

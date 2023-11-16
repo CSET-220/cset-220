@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class loginController extends Controller
 {
@@ -31,7 +32,8 @@ class loginController extends Controller
         );
         if(Auth::attempt($credentials)){
             $user = Auth::user();
-            dd(Auth::getAccess());
+            $user->getAccess();
+            dd($user->getAccess());
         }
         else{
             return redirect()->back()->withErrors([
