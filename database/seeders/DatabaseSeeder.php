@@ -3,7 +3,10 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -12,11 +15,28 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        // ----- Roles -----
+        $roles = [
+            ['id' => 1, 'role_title' => 'admin', 'access_level' => 1],
+            ['id' => 2, 'role_title' => 'supervisor', 'access_level' => 1],
+            ['id' => 3, 'role_title' => 'doctor', 'access_level' => 2],
+            ['id' => 4, 'role_title' => 'caregiver', 'access_level' => 2],
+            ['id' => 5, 'role_title' => 'patient', 'access_level' => 3],
+            ['id' => 6, 'role_title' => 'family', 'access_level' => 3],
+        ];
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        foreach ($roles as $role) {
+            Role::updateOrCreate(['id' => $role['id']], $role);
+        }
+
+
+        // ----- Users -----
+        User::factory()
+            ->count(10)
+            ->create();
+
+
+        // ----- Patients -----
+        
     }
 }
