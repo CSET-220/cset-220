@@ -21,5 +21,8 @@
     "test": "tests"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "flowbite": "^2.1.1"
+  }
 }
