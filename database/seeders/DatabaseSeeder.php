@@ -5,6 +5,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Patient;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -32,11 +33,13 @@ class DatabaseSeeder extends Seeder
 
         // ----- Users -----
         User::factory()
-            ->count(10)
+            ->count(40)
             ->create();
 
 
         // ----- Patients -----
-        
+        Patient::factory()
+            ->count(9)
+            ->create();
     }
 }

@@ -20,12 +20,12 @@ class PatientFactory extends Factory
         $patientIds = User::where('role_id', 5)->pluck('id')->toArray();
 
         return [
-            'user_id' => fake()->randomElement($patientIds),
+            'user_id' => fake()->unique()->randomElement($patientIds),
             'family_code' => fake()->unique()->sentence(3),
             'emergency_contact' => fake()->phoneNumber(),
             'contact_relation' => fake()->word(),
             'group' => fake()->numberBetween(1, 4),
-            'admission_date' => fake()->dateTimeBetween('-10 years', 'now'),
+            'admission_date' => fake()->dateTimeBetween('-10 years', '-1 month'),
             'last_paid_date' => fake()->dateTimeBetween('-1 month', 'now'),
             'balance' => fake()->randomFloat(2, 0, 1000),
         ];
