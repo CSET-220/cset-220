@@ -4,17 +4,17 @@
 
 @section('mainContent')
 
-    <div>
-        <div class="">
-            <h1>Welcome, {{-- $user->name --}}</h1>
-            <p>Patient ID: {{-- $patient->id --}}</p>
+    <div class="ml-4">
+        <div class="mt-4 mb-10">
+            <h1 class="text-3xl mb-2">Welcome, </h1>{{-- $user->name --}}
+            <p class="text-xl">Patient ID: </p>{{-- $patient->id --}}
         </div>
         <div>
-            <h2>Daily Log</h2>
+            <h2 class="text-xl font-bold mb-4">Daily Log</h2>
             <div></div> {{-- TODO: Datepicker component --}}
 
-            <table class="table-layout">
-                <thead>
+            <table class="table-layout border-collapse border">
+                <thead class="border border-slate-500">
                     <tr>
                         <th>Doctor</th>
                         <th>Appointment</th>
@@ -27,16 +27,18 @@
                         <th>Dinner</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>tom{{-- if appointment ? doctor name : "" --}}</tr>
-                    <tr>{{-- if appointment ? attended (boolean) : "" --}}</tr>
-                    <tr>{{-- caregiver name --}}</tr>
-                    <tr>{{-- morning med --}}</tr>
-                    <tr>{{-- afternoon med --}}</tr>
-                    <tr>{{-- night med --}}</tr>
-                    <tr>{{-- breakfast --}}</tr>
-                    <tr>{{-- lunch --}}</tr>
-                    <tr>{{-- dinner --}}</tr>
+                <tbody class="border border-slate-500">
+                    <tr>
+                        <td>tom{{-- if appointment ? doctor name : "" --}}</td>
+                        <td>{{-- if appointment ? attended (boolean) : "" --}}</td>
+                        <td>{{-- caregiver name --}}</td>
+                        <td>{{-- morning med --}}</td>
+                        <td>{{-- afternoon med --}}</td>
+                        <td>{{-- night med --}}</td>
+                        <td>{{-- breakfast --}}</td>
+                        <td>{{-- lunch --}}</td>
+                        <td>{{-- dinner --}}</td>
+                    </tr>
                 </tbody>
             </table>
         </div>
