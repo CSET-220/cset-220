@@ -32,14 +32,24 @@ class DatabaseSeeder extends Seeder
 
 
         // ----- Users -----
-        User::factory()
-            ->count(40)
-            ->create();
+        User::factory(50)
+            ->create()
+            ->each(function ($user) {
+                if ($user->role_id === 5) {
+                    Patient::factory()
+                    ->for($user)
+                    ->create();
+                }
+                elseif ($user->role_id === 6) {
+                    $patient = Patient::factory()
+                        ->create();
+                    $user->update(['patient_id' => $patient->id]);
+                }
+            });
 
 
         // ----- Patients -----
-        Patient::factory()
-            ->count(9)
+        Patient::factory(10)
             ->create();
     }
 }
