@@ -95,7 +95,8 @@ class User extends Authenticatable
     ];
 
     public function getAccess(){
-        $access = Role::selesct('access_level')->where('role_title',$this->role_title);
-        return $access;
+        dd($this);
+        $access = Role::select('role_title')->where('id',$this->role_id)->first();
+        return $access->role_title;
     }
 }
