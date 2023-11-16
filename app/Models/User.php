@@ -94,9 +94,8 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function getAccess(){
-        // dd($this);
-        $access = Role::select('role_title')->where('id',$this->role_id)->first();
-        return $access->role_title;
+    public function getAccess(array $role_title){
+        $role_ids = Role::where('role_title',$role_title)->pluck('id');
+        return in_Array($this->role_id, $role_ids->toArray());
     }
 }
