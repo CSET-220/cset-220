@@ -32,8 +32,10 @@ class loginController extends Controller
         );
         if(Auth::attempt($credentials)){
             $user = Auth::user();
-            $user->getAccess();
-            dd($user->getAccess());
+            dd($user->getAccess(['admin']));
+            if($user->getAccess(['admin'])){
+                dd('ADMIN LOGGED IN');
+            }
         }
         else{
             return redirect()->back()->withErrors([
