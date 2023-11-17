@@ -22,11 +22,12 @@
             </div>
         </nav>
     {{--  --}}
+    
 
-
+    
 
     {{-- MAIN BODY CONTENT --}}
-        <div class="flex-grow container flex justify-center items-center mx-auto min-h-full">
+        <div class="flex-grow flex justify-center items-center mx-auto min-h-full w-full">
             @yield('mainContent')
 
             <form action="{{ route('app.login') }}" method="post" class="flex flex-col shadow-lg">
@@ -47,5 +48,5 @@
     {{--  --}}
     
 </body>
-    @yield('script')
+    {{-- @yield('script') --}}
 </html>
