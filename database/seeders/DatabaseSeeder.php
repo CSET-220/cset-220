@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Patient;
+use App\Models\Employee;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -32,14 +33,35 @@ class DatabaseSeeder extends Seeder
 
 
         // ----- Users -----
-        User::factory()
-            ->count(40)
-            ->create();
-
-
-        // ----- Patients -----
-        Patient::factory()
-            ->count(9)
-            ->create();
+        User::factory(50)
+            ->create()
+            ->each(function ($user) {
+                if ($user->role_id === 5) {
+                    Patient::factory()
+                    ->for($user)
+                    ->create();
+                }
+                // Caregiver
+                elseif ($user->role_id === 4) {
+                    Employee::factory()
+                    ->caregiver()
+                    ->for($user)
+                    ->create();
+                }
+                // Doctor
+                elseif ($user->role_id === 3) {
+                    Employee::factory()
+                    ->doctor()
+                    ->for($user)
+                    ->create();
+                }
+                // Supervisor
+                elseif ($user->role_id === 2) {
+                    Employee::factory()
+                    ->supervisor()
+                    ->for($user)
+                    ->create();
+                }
+            });
     }
 }

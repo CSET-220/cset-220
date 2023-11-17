@@ -20,7 +20,7 @@ class PatientFactory extends Factory
         $patientIds = User::where('role_id', 5)->pluck('id')->toArray();
 
         return [
-            'user_id' => fake()->unique()->randomElement($patientIds),
+            'user_id' => null,
             'family_code' => fake()->unique()->sentence(3),
             'emergency_contact' => fake()->phoneNumber(),
             'contact_relation' => fake()->word(),
