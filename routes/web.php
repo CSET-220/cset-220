@@ -14,5 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [loginController::class, 'home'])->name('app.home');
+// TODO: remove when done with patient page
+Route::get('/', function() {
+    return view('patients/index');
+});
 

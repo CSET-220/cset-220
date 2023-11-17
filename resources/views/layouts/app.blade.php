@@ -56,16 +56,15 @@
         @yield('pageHeader')
 
     {{-- MAIN BODY CONTENT --}}
-        <div class="flex-grow flex min-h-full mt-0">
+
             @yield('mainContent')
 
-        </div>
     {{--  --}}
 
 
 
     {{-- FOOTER --}}
-        <footer class="bg-gray-700 flex p-4 text-center justify-center items-center">
+        <footer class="bg-gray-700 flex p-4 text-center justify-center items-center absolute bottom-0 w-full h-20">
             <p class="text-white">© 2023 Dave Drummond; David Leach; Ryan Short; Chris Wright</p>
         </footer>
     {{--  --}}
