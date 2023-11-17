@@ -3,8 +3,10 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use DateTime, DatePeriod, DateInterval;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Roster;
 use App\Models\Patient;
 use App\Models\Employee;
 use Illuminate\Database\Seeder;
@@ -32,7 +34,7 @@ class DatabaseSeeder extends Seeder
         }
 
 
-        // ----- Users -----
+        // ----- Users, Patients, and Employees -----
         User::factory(50)
             ->create()
             ->each(function ($user) {
@@ -63,5 +65,16 @@ class DatabaseSeeder extends Seeder
                     ->create();
                 }
             });
+
+
+        // ----- Rosters -----
+        $start = (new DateTime())->modify('-3 months');
+        $end = (new DateTime())->modify('+1 month');
+        $interval = new DateInterval('P1D');
+        $period = new DatePeriod($start, $interval, $end);
+
+        foreach ($period as $day) {
+            Roster::factory()->create(['date' => $day]);
+        }
     }
 }
