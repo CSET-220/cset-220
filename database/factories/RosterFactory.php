@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,17 @@ class RosterFactory extends Factory
      */
     public function definition(): array
     {
+        $doctor = User::where('role_id', 3)->get()->random();
+        $supervisor = User::where('role_id', 2)->get()->random();
+        $caregivers = User::where('role_id', 1)->get()->random(4);
+
         return [
-            //
+            'doctor_id' => $doctor->id,
+            'supervisor_id' => $supervisor->id,
+            'caregiver1_id' => $caregivers[0]->id,
+            'caregiver2_id' => $caregivers[1]->id,
+            'caregiver3_id' => $caregivers[2]->id,
+            'caregiver4_id' => $caregivers[3]->id,
         ];
     }
 }
