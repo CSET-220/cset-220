@@ -13,13 +13,23 @@ class RosterController extends Controller
      */
     public function index(Request $request)
     {   
-        // TODO come back and finish once auth is setup
-        $rosters = Roster::paginate(10);
+        // TODO add user once auth is implemented
+        $rosters = Roster::where('date', '>=', date('Y-m-d'))->paginate(10);
+        return view('rosters.index', compact('rosters'));
+    }
+
+    public function dateSearch(Request $request)
+    {
+        // TODO add user once auth is implemented
+        $date = date('Y-m-d', strtotime($request->date));
+        $rosters = Roster::where('date', '=', $date)->paginate(10);
         return view('rosters.index', compact('rosters'));
     }
     
 
-    public function create(){
+    public function create()
+    {
+        return view('rosters.create');
 
     }
 

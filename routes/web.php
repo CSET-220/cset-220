@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\loginController;
+use App\Http\Controllers\RosterController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,3 +20,5 @@ Route::get('/', function() {
     return view('patients/index');
 });
 
+Route::post('/rosters/dateSearch', [RosterController::class, 'dateSearch'])->name('rosters.dateSearch');
+Route::resource('rosters', RosterController::class);

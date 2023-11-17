@@ -30,7 +30,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::resource('/users', UserController::class);
-Route::resource('/rosters', RosterController::class);
+// Route::resource('/rosters', RosterController::class);
 Route::resource('/roles', RoleController::class);
 Route::resource('/prescriptions', PrescriptionController::class);
 Route::resource('/patients', PatientController::class);
