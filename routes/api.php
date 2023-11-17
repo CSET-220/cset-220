@@ -41,3 +41,5 @@ Route::resource('/admin', AdminController::class);
 
 
 Route::post('/login', [loginController::class, 'login'])->name('app.login');
+
+Route::post('/admin/approve/{id}', [AdminController::class, 'approve'])->name('admin.approve');
