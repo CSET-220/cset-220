@@ -24,15 +24,15 @@ return new class extends Migration
             $table->foreignId('doctor_id')->constrained(
                 table: 'users'
             );
-            $table->foreignId('morning_med')->constrained(
+            $table->foreignId('morning_med')->nullable()->constrained(
                 table: 'prescriptions'
-            )->nullable()->default(null);
-            $table->foreignId('afternoon_med')->constrained(
+            );
+            $table->foreignId('afternoon_med')->nullable()->constrained(
                 table: 'prescriptions'
-            )->nullable()->default(null);
-            $table->foreignId('night_med')->constrained(
+            );
+            $table->foreignId('night_med')->nullable()->constrained(
                 table: 'prescriptions'
-            )->nullable()->default(null);
+            );
             $table->date('date');
             $table->string('comments');
             $table->unique(array('patient_id', 'date'));

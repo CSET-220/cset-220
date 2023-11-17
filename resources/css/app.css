@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+th,
+td {
+    @apply py-1.5 px-2.5 border border-slate-500
+}
