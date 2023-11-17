@@ -2,17 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Roster;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RosterController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
+    public function index(Request $request)
+    {   
+        // TODO come back and finish once auth is setup
+        $rosters = Roster::paginate(10);
+        return view('rosters.index', compact('rosters'));
     }
+    
 
     public function create(){
 
