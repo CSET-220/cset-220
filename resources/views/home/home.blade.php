@@ -47,7 +47,6 @@
             <div class="container mx-auto text-center">
                 <h2 class="text-3xl font-bold mb-8">Our Services</h2>
                 <div class="flex flex-wrap justify-center">
-
                     {{-- Service --}}
                     <div class="relative flex flex-col justify-between bg-contain bg-no-repeat bg-center p-8 rounded-lg shadow-md mx-4 my-8 flex-shrink-0 flex-grow-0 w-72 h-96 hover:shadow-xl transition-all duration-300" style="background-image: url('https://img.freepik.com/premium-vector/nurse-characters-group-medical-team-isolated-vector-illustartion_126609-700.jpg?w=740')">
                         <h3 class="text-xl font-extrabold mb-4">Personalized Care</h3>
@@ -152,7 +151,6 @@
                             <option hidden>Patient or Family Member</option>
                             <option value="patient" @if (old('user_type') == "patient") {{ 'selected' }} @endif>Patient</option>
                             <option value="family" @if (old('user_type') == "family") {{ 'selected' }} @endif>Family Member</option>
-
                         </select>
                         @error('user_type')
                             <p class="text-xs text-red-500">{{ $errors->first('user_type') }}</p>
@@ -181,7 +179,6 @@
 
                         {{-- EMERGENCY RELATIION --}}
 
-
                         <div class="relative">
                             <label for="emergency_relation" class="sr-only">Relation To Patient</label>
                             <select id="emergency_relation" name="emergency_relation" class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
@@ -191,7 +188,6 @@
                                 <option value="child" @if (old('emergency_relation') == "child") {{ 'selected' }} @endif>Child</option>
                                 <option value="grandchild" @if (old('emergency_relation') == "grandchild") {{ 'selected' }} @endif>Grandchild</option>
                                 <option value="extended" @if (old('emergency_relation') == "extended") {{ 'selected' }} @endif>Extended Family</option>
-
                             </select>
                             @error('user_type')
                                 <p class="text-xs text-red-500">{{ $errors->first('user_type') }}</p>
