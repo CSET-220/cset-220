@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -18,13 +19,13 @@ class loginController extends Controller
 
         $credentials = $request->validate(
             [
-                'email' => 'required|exists:users,email',
-                'password' => 'required'
+                'login_email' => 'required|exists:users,email',
+                'login_password' => 'required'
             ],
             [
-                'email.required' => 'Please enter valid Email',
-                'email.exists' => 'That email is not linked to an account',
-                'password.required' => 'Please enter a password'
+                'login_email.required' => 'Please enter valid Email',
+                'login_email.exists' => 'That email is not linked to an account',
+                'login_password.required' => 'Please enter a password'
             ]
     
         );
@@ -32,7 +33,7 @@ class loginController extends Controller
         $remember = ($request->has('remember')) ? true : false;
 
 
-        if(Auth::attempt(['email' =>$request->email, 'password' => $request->password, 'is_approved' => 1], $remember )){
+        if(Auth::attempt(['email' =>$request->login_email, 'password' => $request->login_password, 'is_approved' => 1], $remember )){
             $user = Auth::user();
             if($user->getAccess(['admin'])){
                 return redirect()->route('admin.show',['admin' => Auth::user()])->with('login_success','Login Successful');
@@ -55,9 +56,17 @@ class loginController extends Controller
         }
         else{
             return redirect()->back()->withErrors([
-                'email' => 'You must be approved before you can login.'
+                'login_email' => 'You must be approved before you can login.'
             ]);
         }
 
+    }
+
+    public function logout(Request $request){
+        Auth::logout();
+ 
+        $request->session()->invalidate();
+    
+        $request->session()->regenerateToken();
     }
 }
