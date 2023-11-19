@@ -22,5 +22,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [loginController::class , 'home'])->name('app.home');
 
-Route::post('/rosters/dateSearch', [RosterController::class, 'dateSearch'])->name('rosters.dateSearch');
 Route::resource('rosters', RosterController::class);

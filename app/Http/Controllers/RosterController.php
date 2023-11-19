@@ -14,30 +14,39 @@ class RosterController extends Controller
      */
     public function index(Request $request)
     {   
-        // TODO add user once auth is implemented
-        $rosters = Roster::where('date', '>=', date('Y-m-d'))->orderBy('date', 'asc')->paginate(10);
-        return view('rosters.index', compact('rosters'));
+        if(Auth::check()) {
+            // $rosters = Roster::where('date', '>=', date('Y-m-d'))->orderBy('date', 'asc')->paginate(10);
+            $rosters = Roster::all();
+            return view('rosters.index', compact('rosters'));
+        } else {
+            // TODO fix this error message not showing up tried to set it up in the view but it didn't work
+            return redirect()->route('app.home')->withErrors([
+                'not_auth' => 'You must be logged in to view this page.'
+            ]);
+        }
     }
-
-    public function dateSearch(Request $request)
-    {
-        // TODO add user once auth is implemented
-        // TODO possibly add ajax to not go to new page
-        // TODO add validation
-        $date = date('Y-m-d', strtotime($request->date));
-        $rosters = Roster::where('date', '=', $date)->orderBy('date', 'asc')->paginate(10);
-        return view('rosters.index', compact('rosters'));
-    }
-    
 
     public function create()
     {   
-        // TODO add user once auth is implemented
-        // TODO need to protect route can only be accessed by admin/supervisor
-        $doctors = User::where('role_id', 3)->get();
-        $supervisors = User::where('role_id', 2)->get();
-        $caregivers = User::where('role_id', 4)->get();
-        return view('rosters.create', compact('doctors', 'supervisors', 'caregivers'));
+        if(Auth::check()) {
+            $user = Auth::user();
+            if (auth()->user()->getAccess(['admin']) || auth()->user()->getAccess(['supervisor'])) {
+                $doctors = User::where('role_id', 3)->get();
+                $supervisors = User::where('role_id', 2)->get();
+                $caregivers = User::where('role_id', 4)->get();
+                return view('rosters.create', compact('doctors', 'supervisors', 'caregivers'));
+            } else {
+                // TODO fix this error message not showing up tried to set it up in the view but it didn't work
+                return redirect()->route('app.home')->withErrors([
+                    'not_auth' => 'You do not have access to this page.'
+                ]);
+            }
+        } else {
+            // TODO fix this error message not showing up tried to set it up in the view but it didn't work
+            return redirect()->route('app.home')->withErrors([
+                'not_auth' => 'You need to login.'
+            ]);
+        }
 
     }
 
@@ -47,7 +56,6 @@ class RosterController extends Controller
     public function store(Request $request)
     {
         // TODO add user once auth is implemented
-        // TODO need to protect route can only be accessed by admin/supervisor
         // TODO validate maybe before adding to db
         // dd($request->all());
         $date = date('Y-m-d', strtotime($request->date));

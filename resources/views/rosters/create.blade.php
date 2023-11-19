@@ -2,26 +2,10 @@
 
 @section('title', 'Rosters')
 
-@section('navLink')
-    @if(auth()->check())
-        @if(auth()->user()->getAccess(['admin']))
-            <x-navbar.admin-nav />
-        @elseif(auth()->user()->getAccess(['supervisor']))
-            <x-navbar.supervisor-nav />
-        @elseif(auth()->user()->getAccess(['doctor']))
-            <x-navbar.doctor-nav />
-        @elseif(auth()->user()->getAccess(['caregiver']))
-            <x-navbar.caregiver-nav />
-        @elseif(auth()->user()->getAccess(['patient']))
-            <x-navbar.patient-nav />
-        @elseif(auth()->user()->getAccess(['family']))
-            <x-navbar.family-nav />
-        @endif
-    @endif
-@endsection
+{{-- @section('navLink')
+@endsection --}}
 
 @section('mainContent')
-{{-- TODO need to finish authentication/design/filtering caregivers if selected --}}
 <div class="min-h-full mt-1">
     <div class="flex justify-center mb-1">
         <div class="text-center">
