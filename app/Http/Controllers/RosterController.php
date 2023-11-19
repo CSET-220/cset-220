@@ -55,9 +55,16 @@ class RosterController extends Controller
      */
     public function store(Request $request)
     {
-        // TODO add user once auth is implemented
-        // TODO validate maybe before adding to db
-        // dd($request->all());
+        //TODO update validation w/errors or something once figure out the issue with errors/successes not showing up
+        $request->validate([
+            'doctor_id' => 'required',
+            'supervisor_id' => 'required',
+            'caregiver1_id' => 'required',
+            'caregiver2_id' => 'required',
+            'caregiver3_id' => 'required',
+            'caregiver4_id' => 'required',
+            'date' => 'required',
+        ]);
         $date = date('Y-m-d', strtotime($request->date));
         Roster::create([
             'doctor_id' => $request->doctor_id,
@@ -68,8 +75,10 @@ class RosterController extends Controller
             'caregiver4_id' => $request->caregiver4_id,
             'date' => $date,
         ]);
-
-        return redirect()->route('rosters.index');
+        
+        // TODO fix this success message not showing up tried to set it up in the view but it didn't work
+        session()->flash('success', 'Roster created successfully.');
+        return redirect()->route('rosters.create');
     }
 
     /**
