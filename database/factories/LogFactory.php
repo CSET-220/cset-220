@@ -17,7 +17,12 @@ class LogFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'morning_med' => fake()->optional(0.01)->boolean(),
+            'afternoon_med' => fake()->optional(0.01)->boolean(),
+            'night_med' => fake()->optional(0.01)->boolean(),
+            'breakfast' => fake()->optional(0.01)->boolean(),
+            'lunch' => fake()->optional(0.01)->boolean(),
+            'dinner' => fake()->optional(0.01)->boolean(),
         ];
     }
 }

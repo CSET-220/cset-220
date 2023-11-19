@@ -9,15 +9,12 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class PrescriptionFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
+        $doses/*and mimosas*/= [5, 10, 15, 20, 25, 30, 40, 50, 60, 70 ,80, 90, 100];
+
         return [
-            //
+            'medication_dosage' => fake()->randomElement($doses)
         ];
     }
 }

@@ -3,14 +3,18 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use DateTime, DatePeriod, DateInterval;
+
+use App\Models\Appointment;
+use App\Models\Log;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Roster;
 use App\Models\Patient;
 use App\Models\Employee;
+use App\Models\Prescription;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use DateTime, DatePeriod, DateInterval;
 
 class DatabaseSeeder extends Seeder
 {
@@ -75,6 +79,75 @@ class DatabaseSeeder extends Seeder
 
         foreach ($period as $day) {
             Roster::factory()->create(['date' => $day]);
+        }
+
+
+        // ----- Logs -----
+        // each day, one log for each patient, match caregiver to group
+        $patients = Patient::all();
+        $rosters = Roster::all();
+
+        foreach ($rosters as $roster) {
+            foreach ($patients as $patient) {
+                $group = $patient->group;
+                $caregiver = null;
+
+                switch ($group) {
+                    case 1:
+                        $caregiver = $roster->caregiver1_id;
+                        break;
+                    case 2:
+                        $caregiver = $roster->caregiver2_id;
+                        break;
+                    case 3:
+                        $caregiver = $roster->caregiver3_id;
+                        break;
+                    case 4:
+                        $caregiver = $roster->caregiver4_id;
+                        break;
+                }
+
+                Log::factory()->create([
+                    'patient_id' => $patient->id,
+                    'caregiver_id' => $caregiver,
+                    'date' => $roster->date,
+                ]);
+            }
+        }
+
+
+        // ----- Prescriptions -----
+        $meds = array_map('ucfirst', fake()->words(10));
+
+        for ($i = 0; $i < 50; $i++) {
+            Prescription::factory()->create([
+                'medication_name' => fake()->randomElement($meds)
+            ]);
+        }
+
+
+        // ----- Appointments -----
+        $patients = Patient::all();
+
+        foreach ($patients as $patient) {
+            $dates = collect();
+            $numAppointments = rand(5, 15);
+
+            for ($i = 0; $i < $numAppointments; $i++) {
+                do {
+                    $date = fake()->unique()->dateTimeBetween('-3 months', '+1 month')->setTime(0, 0);
+                } while ($dates->contains($date));
+
+                $dates->push($date);
+
+                $doctor = Roster::whereDate('date', $date)->first()->doctor_id;
+
+                Appointment::factory()->create([
+                    'patient_id' => $patient->id,
+                    'doctor_id' => $doctor,
+                    'date' => $date
+                ]);
+            }
         }
     }
 }
