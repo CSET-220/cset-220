@@ -35,6 +35,12 @@ class Roster extends Model
     }
 
     protected $fillable = [
-        'date'
+        'date',
+        'doctor_id',
+        'supervisor_id',
+        'caregiver1_id',
+        'caregiver2_id',
+        'caregiver3_id',
+        'caregiver4_id'
     ];
 }
