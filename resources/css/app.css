@@ -8,6 +8,18 @@ td {
     @apply py-1.5 px-2.5 border border-slate-500
 }
 
+
+th,
+td {
+    @apply py-1.5 px-2.5 border border-slate-500
+}
+
+
+th,
+td {
+    @apply py-1.5 px-2.5 border border-slate-500
+}
+
 .dataTables_length select {
     @apply w-20;
 }
