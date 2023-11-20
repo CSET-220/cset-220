@@ -9,6 +9,10 @@
             <li>
                 <a href="{{route('rosters.index')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Rosters</a>
             </li>
+
+            <li>
+                <a href="{{route('employees.show', ['employee' => Auth::id()])}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Your Patients</a>
+            </li>
         </ul>
     </div>
 </div>

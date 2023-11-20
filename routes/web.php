@@ -16,5 +16,4 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/', [loginController::class , 'home'])->name('app.home');
 Route::resource('/rosters', RosterController::class);
