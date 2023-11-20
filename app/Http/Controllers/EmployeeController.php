@@ -41,16 +41,15 @@ class EmployeeController extends Controller
         elseif (Auth::user()->getAccess(['doctor'])) {
             // if the request was an ajax request 
             if ($request->ajax()) {
-                // Handle DataTables AJAX request
                 $appointments = Appointment::with(['patient.user', 'morningPrescriptions', 'afternoonPrescriptions', 'nightPrescriptions'])
                     ->where('doctor_id', Auth::id())
-                    ->select(['appointments.*', 'users.first_name', 'users.last_name'])->orderByDesc('date') // Include the necessary columns for searching and ordering
+                    ->select(['appointments.*', 'users.first_name', 'users.last_name'])->orderByDesc('date')
                     ->get();
-    
+                // Return custom datatable
                 return DataTables::of($appointments)->make(true);
             }
     
-            // Non-AJAX request, load the view as before
+            // Non-AJAX request return regular view
             $appointments = Appointment::with(['patient.user', 'morningPrescriptions', 'afternoonPrescriptions', 'nightPrescriptions'])
                 ->where('doctor_id', Auth::id())
                 ->get();

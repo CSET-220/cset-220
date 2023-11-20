@@ -205,11 +205,11 @@
 @endsection
 
 @section('script')
-    {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script> --}}
     <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script> --}}
-    {{-- <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script> --}}
+    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             var dataTable = $('#doctor_patients').DataTable({
@@ -218,11 +218,13 @@
                 "sDom":"ltpr",
                 pagingType: 'simple_numbers',
                 language: {
+                    // NEXT PAGE AND PAGE NUMBERS
                     paginate: {
                         next: '<span class="sr-only">Next</span><svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"/></svg>',
                         previous: '<span class="sr-only">Previous</span><svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>'
                     }
                 },
+                // AJAX REQUEST TO /api/doctor/search
                 ajax: {
                     url: "{{ route('doctor.search') }}",
                     type: "POST",
@@ -232,6 +234,7 @@
                         console.log(d.searchValue);
                     },
                 },
+                // Making each column with specified data
                 columns: [
                     { data: 'patient_name', name: 'patient.user.first_name', title: 'Patient Name' },
                     { data: 'date', name: 'date', title: 'Date' },
@@ -240,6 +243,7 @@
                     { data: 'afternoon_med', name: 'afternoon_med', title: 'Afternoon Medicine' },
                     { data: 'night_med', name: 'night_med', title: 'Night Medicine' },
                 ],
+                // when drawing table create pagination buttons like this
                 drawCallback: function(settings) {
                     $('.pagination').addClass('flex items-center justify-center space-x-2 my-4');
                     $('.pagination li').addClass('inline-flex items-center justify-center text-sm py-2 px-3 leading-tight border bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-white');
