@@ -39,7 +39,7 @@ class EmployeeController extends Controller
 
         }
         elseif (Auth::user()->getAccess(['doctor'])) {
-            // if the request was an ajax request 
+            // if the request was an ajax request
             if ($request->ajax()) {
                 $appointments = Appointment::with(['patient.user', 'morningPrescriptions', 'afternoonPrescriptions', 'nightPrescriptions'])
                     ->where('doctor_id', Auth::id())
@@ -48,14 +48,14 @@ class EmployeeController extends Controller
                 // Return custom datatable
                 return DataTables::of($appointments)->make(true);
             }
-    
+
             // Non-AJAX request return regular view
             $appointments = Appointment::with(['patient.user', 'morningPrescriptions', 'afternoonPrescriptions', 'nightPrescriptions'])
                 ->where('doctor_id', Auth::id())
                 ->get();
-            
+
             return view('doctors.doctorHome', ['appointments' => $appointments]);
-            
+
         }
         elseif (Auth::user()->getAccess(['caregiver'])) {
             # code...
@@ -71,10 +71,10 @@ class EmployeeController extends Controller
         // ORIGINAL QUERY TO GET ALL APPOINTMENTS BY DOCTOR
         $query = Appointment::query();
         $query->with(['patient.user', 'morningPrescriptions', 'afternoonPrescriptions', 'nightPrescriptions'])->where('doctor_id', Auth::id());
-    
+
         $columnName = $request->columnName;
         $searchValue = $request->searchValue;
-        
+
         // Search and filter
         if ($columnName && $searchValue) {
             // dd($searchValue);
@@ -112,7 +112,7 @@ class EmployeeController extends Controller
                 $query->where($columnName, 'like' ,"%{$searchValue}%");
             }
         }
-    
+
         return DataTables::of($query)
             ->addColumn('patient_name', function ($appointment) {
                 return $appointment->patient->user->first_name . ' ' . $appointment->patient->user->last_name;
@@ -134,7 +134,7 @@ class EmployeeController extends Controller
             })
             ->rawColumns(['morning_med', 'afternoon_med', 'night_med'])
             ->make(true);
-    
+
     }
     /**
      * Update the specified resource in storage.
