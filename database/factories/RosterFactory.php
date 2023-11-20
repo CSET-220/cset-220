@@ -19,7 +19,7 @@ class RosterFactory extends Factory
     {
         $doctor = User::where('role_id', 3)->get()->random();
         $supervisor = User::where('role_id', 2)->get()->random();
-        $caregivers = User::where('role_id', 1)->get()->random(4);
+        $caregivers = User::where('role_id', 4)->get()->random(4);
 
         return [
             'doctor_id' => $doctor->id,
