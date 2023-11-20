@@ -20,15 +20,15 @@ class Appointment extends Model
     }
 
     public function morningPrescriptions() {
-        return $this->hasMany(Prescription::class);
+        return $this->hasOne(Prescription::class ,'id', 'morning_med');
     }
 
     public function afternoonPrescriptions() {
-        return $this->hasMany(Prescription::class);
+        return $this->hasOne(Prescription::class, 'id','afternoon_med');
     }
 
     public function nightPrescriptions() {
-        return $this->hasMany(Prescription::class);
+        return $this->hasOne(Prescription::class, 'id','night_med');
     }
 
     protected $fillable = [
