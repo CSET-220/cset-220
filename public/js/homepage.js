@@ -43,7 +43,7 @@ $('#emergency_contact').on('input', function () {
         phoneNumber = phoneNumber.substring(0, 10);
     }
     
-    // Formats phone to (XXX) XXX-XXXX
+    // Format the phone number as (XXX) XXX-XXXX
     let formattedPhoneNumber = phoneNumber.replace(/(\d{3})(\d{0,3})(\d{0,4})/, function(match, p1, p2, p3) {
         let formatted = '(' + p1;
         if (p2) formatted += ') ' + p2;

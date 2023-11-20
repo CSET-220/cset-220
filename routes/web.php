@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\loginController;
+use App\Http\Controllers\RosterController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,3 +22,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [loginController::class , 'home'])->name('app.home');
 
+Route::get('/', [loginController::class , 'home'])->name('app.home');
+Route::resource('/rosters', RosterController::class);

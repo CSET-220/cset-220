@@ -7,3 +7,24 @@ th,
 td {
     @apply py-1.5 px-2.5 border border-slate-500
 }
+
+
+th,
+td {
+    @apply py-1.5 px-2.5 border border-slate-500
+}
+
+
+th,
+td {
+    @apply py-1.5 px-2.5 border border-slate-500
+}
+
+.dataTables_length select {
+    @apply w-20;
+}
+
+/* TODO can change if needed just didn't need it to show on the filter page */
+.dataTables_filter {
+    @apply hidden;
+}
