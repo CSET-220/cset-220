@@ -25,6 +25,7 @@ class Patient extends Model
     }
 
     protected $fillable = [
+        'user_id',
         'family_code',
         'emergency_contact',
         'contact_relation',
@@ -32,5 +33,9 @@ class Patient extends Model
         'admission_date',
         'last_paid_date',
         'balance'
+    ];
+
+    protected $casts = [
+        'family_code' => 'hashed'
     ];
 }
