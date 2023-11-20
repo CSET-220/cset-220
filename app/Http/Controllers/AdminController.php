@@ -31,7 +31,7 @@ class AdminController extends Controller
                 User::where('id',$id)->update(['is_approved' => 1]);
                 $user = User::find($id);
                 $role = Role::where('id',$user->role_id)->value('role_title');
-                if($role == 'doctor' || $role == 'supervisor' || $role == 'caregiver' || $role == 'admin'){
+                if($role == 'doctor' || $role == 'supervisor' || $role == 'caregiver'){
                     $employee = new Employee;
                     $employee->user_id = $id;
                     $employee->save();
