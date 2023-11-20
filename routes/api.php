@@ -27,6 +27,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
 Route::resource('/users', UserController::class);
 Route::resource('/rosters', RosterController::class);
 Route::resource('/roles', RoleController::class);
@@ -43,3 +45,6 @@ Route::resource('/admin', AdminController::class);
 Route::post('/login', [loginController::class, 'login'])->name('app.login');
 
 Route::post('/admin/reg_approval', [AdminController::class, 'reg_approval'])->name('admin.reg_approval');
+Route::post('/logout', [loginController::class, 'logout'])->name('app.logout');
+
+Route::get('/careers', [UserController::class, 'employeeRegister'])->name('employee.register');

@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <title>@yield('title')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col relative">
 
 
     {{-- NAV --}}
@@ -34,7 +35,7 @@
                                 </li>
                             </ul>
                             <div class="py-2">
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
+                                <a href="{{ route('app.logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
                             </div>
                         </div>
                     </div>
@@ -42,8 +43,8 @@
                     @else
                     <div class="mr-2">
                         <!-- TODO change colors -->
-                        <a href="/login" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login</a>
-                        <a href="/register" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Register</a>
+                        <button data-modal-target="login-modal" data-modal-toggle="login-modal" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login</button>
+                        <a href="#register" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Register</a>
                     </div>
                     @endauth
                 </div>
@@ -51,11 +52,11 @@
         </nav>
     {{--  --}}
 
-
+        @yield('pageHeader')
 
     {{-- MAIN BODY CONTENT --}}
 
-            @yield('mainContent')
+        @yield('mainContent')
 
     {{--  --}}
 
@@ -67,6 +68,8 @@
         </footer>
     {{--  --}}
 
+
 </body>
     @yield('script')
+
 </html>
