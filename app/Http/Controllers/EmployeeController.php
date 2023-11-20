@@ -48,7 +48,6 @@ class EmployeeController extends Controller
                 // Return custom datatable
                 return DataTables::of($appointments)->make(true);
             }
-
             // Non-AJAX request return regular view
             $appointments = Appointment::with(['patient.user', 'morningPrescriptions', 'afternoonPrescriptions', 'nightPrescriptions'])
                 ->where('doctor_id', Auth::id())
