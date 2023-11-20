@@ -16,10 +16,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 // TODO: remove when done with patient page
-// Route::get('/', function() {
-//     return view('patients/index');
-// });
+
+Route::get('/', function() {
+    return view('patients/index');
+});
 
 Route::get('/', [loginController::class , 'home'])->name('app.home');
 
-Route::resource('rosters', RosterController::class);
