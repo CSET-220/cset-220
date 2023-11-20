@@ -28,7 +28,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
 Route::resource('/users', UserController::class);
 // Route::resource('/rosters', RosterController::class);
 Route::resource('/roles', RoleController::class);

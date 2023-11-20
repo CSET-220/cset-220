@@ -140,7 +140,6 @@
 {{-- <button data-modal-target="appointment_details" data-modal-toggle="appointment_details" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
     Toggle modal
   </button> --}}
-
   <!-- Main modal -->
   <div id="appointment_details" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed flex top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
       {{-- <div class="relative p-4 w-full max-w-md max-h-full">
