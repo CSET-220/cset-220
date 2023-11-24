@@ -69,6 +69,6 @@ class loginController extends Controller
     
         $request->session()->regenerateToken();
         
-        redirect()->route('app.home')->with('logout_success', 'Sucessfully Logged Out');
+        return redirect()->route('app.home')->with('logout_success', 'Sucessfully Logged Out');
     }
 }

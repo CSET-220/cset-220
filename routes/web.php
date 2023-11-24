@@ -14,6 +14,6 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
+Route::get('/' ,[loginController::class ,'home'])->name('app.home');
 
 Route::resource('/rosters', RosterController::class);

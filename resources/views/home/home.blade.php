@@ -22,6 +22,12 @@
             @if (session('logout_success'))
                 <p class="text-lg text-green-500">{{ session('logout_success') }}</p>
             @endif
+            
+            @if (session('access_error'))
+                <p class="text-lg text-red-500">{{ session('access_error') }}</p>
+            @endif
+
+
 
             <a href="#about" class="bg-white text-blue-700 px-6 py-3 rounded-full mt-8 inline-block hover:bg-gray-200 transition duration-300 ease-in-out focus:outline-none focus:ring focus:border-blue-300">Learn More</a>
         </div>
