@@ -76,7 +76,7 @@ class EmployeeController extends Controller
                 // dd($appointments);
             
             return view('doctors.doctorHome', ['appointments' => $appointments]);
-            
+
         }
 
         elseif (Auth::check() && Auth::user()->getAccess(['caregiver'])) {
@@ -191,7 +191,7 @@ class EmployeeController extends Controller
             })
             ->rawColumns(['morning_med', 'afternoon_med', 'night_med'])
             ->make(true);
-    
+
     }
     /**
      * Update the specified resource in storage.
