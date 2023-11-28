@@ -29,7 +29,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::resource('/users', UserController::class);
-// Route::resource('/rosters', RosterController::class);
+Route::resource('/rosters', RosterController::class);
 Route::resource('/roles', RoleController::class);
 Route::resource('/prescriptions', PrescriptionController::class);
 Route::resource('/patients', PatientController::class);
@@ -46,9 +46,6 @@ Route::get('/careers', [UserController::class, 'employeeRegister'])->name('emplo
 
 Route::post('/doctor/search', [EmployeeController::class, 'search'])->name('doctor.search');
 Route::post('/updateLog', [LogController::class, 'updateLog'])->name('log.update');
-Route::post('/logout', [loginController::class, 'logout'])->name('app.logout');
-
-Route::get('/careers', [UserController::class, 'employeeRegister'])->name('employee.register');
 
 
 Route::get('/prescriptions/{prescription_name}/dosage',[PrescriptionController::class, 'getDosage'])->name('prescription.dosage');
