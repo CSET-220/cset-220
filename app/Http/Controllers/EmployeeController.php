@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Models\Log;
 use Carbon\Carbon;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -58,7 +59,11 @@ class EmployeeController extends Controller
             
         }
         elseif (Auth::user()->getAccess(['caregiver'])) {
-            # code...
+            $patients = Log::where('caregiver_id', Auth::id())
+            ->where('date', Carbon::today())
+            ->with('patient.user')
+            ->get();
+            return view('caregivers.home', compact('patients'));
         }
         else{
             redirect()->route('app.home')->with('access_error', 'You do not have permission to access this page');
@@ -141,7 +146,7 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        
     }
 
     public function edit($id){

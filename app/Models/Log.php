@@ -21,6 +21,8 @@ class Log extends Model
 
     protected $fillable = [
         'date',
+        'patient_id',
+        'caregiver_id',
         'morning_med',
         'afternoon_med',
         'night_med',
