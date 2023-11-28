@@ -28,9 +28,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
-
-
 Route::resource('/users', UserController::class);
 // Route::resource('/rosters', RosterController::class);
 Route::resource('/roles', RoleController::class);
@@ -53,4 +50,7 @@ Route::post('/logout', [loginController::class, 'logout'])->name('app.logout');
 
 Route::get('/careers', [UserController::class, 'employeeRegister'])->name('employee.register');
 
+
+Route::get('/prescriptions/{prescription_name}/dosage',[PrescriptionController::class, 'getDosage'])->name('prescription.dosage');
+Route::post('/appointments/{appointment}/conduct', [AppointmentController::class, 'conductAppointment'])->name('appointment.conduct');
 Route::post('/admin/approval', [AdminController::class, 'approval'])->name('admin.approval');

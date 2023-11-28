@@ -27,7 +27,7 @@ class loginController extends Controller
                 'login_email.exists' => 'That email is not linked to an account',
                 'login_password.required' => 'Please enter a password'
             ]
-    
+
         );
         // remember me checkbox
         $remember = ($request->has('remember')) ? true : false;
@@ -64,11 +64,11 @@ class loginController extends Controller
 
     public function logout(Request $request){
         Auth::logout();
- 
+
         $request->session()->invalidate();
-    
+
         $request->session()->regenerateToken();
         
-        redirect()->route('app.home')->with('logout_success', 'Sucessfully Logged Out');
+        return redirect()->route('app.home')->with('logout_success', 'Sucessfully Logged Out');
     }
 }
