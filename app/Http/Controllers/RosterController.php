@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Patient;
 use App\Models\Roster;
+use App\Models\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -30,6 +32,7 @@ class RosterController extends Controller
     {   
         if(Auth::check()) {
             $user = Auth::user();
+            // TODO change to use one array at some point
             if (auth()->user()->getAccess(['admin']) || auth()->user()->getAccess(['supervisor'])) {
                 $doctors = User::where('role_id', 3)->get();
                 $supervisors = User::where('role_id', 2)->get();
@@ -55,7 +58,7 @@ class RosterController extends Controller
      */
     public function store(Request $request)
     {
-        //TODO update validation w/errors or something once figure out the issue with errors/successes not showing up
+        //validate the request
         $request->validate([
             'doctor_id' => 'required',
             'supervisor_id' => 'required',
@@ -65,20 +68,43 @@ class RosterController extends Controller
             'caregiver4_id' => 'required',
             'date' => 'required',
         ]);
+
         $date = date('Y-m-d', strtotime($request->date));
-        Roster::create([
-            'doctor_id' => $request->doctor_id,
-            'supervisor_id' => $request->supervisor_id,
-            'caregiver1_id' => $request->caregiver1_id,
-            'caregiver2_id' => $request->caregiver2_id,
-            'caregiver3_id' => $request->caregiver3_id,
-            'caregiver4_id' => $request->caregiver4_id,
-            'date' => $date,
-        ]);
-        
-        // TODO fix this success message not showing up tried to set it up in the view but it didn't work
-        session()->flash('success', 'Roster created successfully.');
-        return redirect()->route('rosters.create');
+        if(Roster::where('date', $date)->exists()) {
+            return redirect()->route('rosters.create')->withErrors([
+                'date_error' => 'There is already a roster for that date.'
+            ]);
+        } else {
+            // create the roster
+            $roster = Roster::create([
+                'doctor_id' => $request->doctor_id,
+                'supervisor_id' => $request->supervisor_id,
+                'caregiver1_id' => $request->caregiver1_id,
+                'caregiver2_id' => $request->caregiver2_id,
+                'caregiver3_id' => $request->caregiver3_id,
+                'caregiver4_id' => $request->caregiver4_id,
+                'date' => $date,
+            ]);
+            $caregiverGroups = [];
+            for ($i = 1; $i <= 4; $i++) {
+                $caregiverId = $roster->{"caregiver{$i}_id"};
+                if($caregiverId) {
+                    $caregiverGroups[$i] = $caregiverId;
+                }
+            }
+    
+            foreach($caregiverGroups as $group => $caregiverId) {
+                $patientIds = Patient::where('group', $group)->pluck('id');
+                foreach($patientIds as $patientId) {
+                    Log::create([
+                        'caregiver_id' => $caregiverId,
+                        'patient_id' => $patientId,
+                        'date' => $date,
+                    ]);
+                }
+            }
+            return redirect()->route('rosters.create')->with('success', 'Roster created successfully.');
+        }
     }
 
     /**

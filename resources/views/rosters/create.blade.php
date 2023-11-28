@@ -10,6 +10,16 @@
     <div class="flex justify-center mb-1">
         <div class="text-center">
             <h1 class="text-3xl font-semibold">Create New Roster</h1>
+            @error('date_error')
+                <div class="text-red-500 mt-2 text-sm">
+                    {{ $errors->first('date_error') }}
+                </div>
+            @enderror
+            @if(session('success'))
+                <div class="text-green-500 mt-2 text-sm">
+                    {{ session('success') }}
+                </div>
+            @endif
         </div>
     </div>
     <div class="mx-auto w-full md:max-w-lg lg:max-w-xl">

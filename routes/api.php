@@ -42,11 +42,13 @@ Route::resource('/appointments', AppointmentController::class);
 Route::resource('/admin', AdminController::class);
 
 
-
-
 Route::post('/login', [loginController::class, 'login'])->name('app.login');
-Route::post('/logout', [loginController::class, 'logout'])->name('app.logout');
+Route::get('/logout', [loginController::class, 'logout'])->name('app.logout');
 
 Route::get('/careers', [UserController::class, 'employeeRegister'])->name('employee.register');
+
+Route::post('/doctor/search', [EmployeeController::class, 'search'])->name('doctor.search');
+Route::post('/updateLog', [LogController::class, 'updateLog'])->name('log.update');
+
 
 Route::post('/admin/approval', [AdminController::class, 'approval'])->name('admin.approval');
