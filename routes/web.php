@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\loginController;
-use App\Http\Controllers\RosterController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,9 +14,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// TODO: remove when done with patient page
-// Route::get('/', function() {
-//     return view('patients/index');
-// });
 
 Route::get('/', [loginController::class , 'home'])->name('app.home');
