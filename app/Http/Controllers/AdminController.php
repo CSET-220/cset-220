@@ -10,12 +10,11 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    //
     public function index(){
         if (Auth::check()) {
             if (auth()->user()->getAccess(['admin', 'supervisor'])) {
-                $users = User::where('is_approved', 0)->paginate(6);
-                return view('admin.reg_approval', compact('users'));
+                $users = User::where('is_approved', 0)->get();
+                return view('admin.approval', compact('users'));
             }
             else{
                 return redirect()->back();
@@ -23,7 +22,7 @@ class AdminController extends Controller
         }
     }
 
-    public function reg_approval(Request $request){
+    public function approval(Request $request){
         $approve = $request->approve;
         $deny = $request->deny;
         if($approve){
@@ -31,6 +30,7 @@ class AdminController extends Controller
                 User::where('id',$id)->update(['is_approved' => 1]);
                 $user = User::find($id);
                 $role = Role::where('id',$user->role_id)->value('role_title');
+                // Modify if statement to include new roles
                 if($role == 'doctor' || $role == 'supervisor' || $role == 'caregiver'){
                     $employee = new Employee;
                     $employee->user_id = $id;
@@ -45,4 +45,17 @@ class AdminController extends Controller
         }
         return redirect()->back();
     }
-}
+
+    public function show(User $admin){
+        if (Auth::check()) {
+            if (auth()->user()->getAccess(['admin'])) {
+                return view('admin.home');
+            }
+            else{
+                return redirect()->back();
+            }
+        }
+    }
+
+
+} 

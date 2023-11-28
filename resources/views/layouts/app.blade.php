@@ -68,11 +68,9 @@
     {{--  --}}
 
         @yield('pageHeader')
-        @yield('pageHeader')
 
     {{-- MAIN BODY CONTENT --}}
 
-        @yield('mainContent')
         @yield('mainContent')
 
     {{--  --}}
