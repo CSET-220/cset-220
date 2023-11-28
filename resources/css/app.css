@@ -23,8 +23,3 @@ td {
 .dataTables_length select {
     @apply w-20;
 }
-
-/* TODO can change if needed just didn't need it to show on the filter page */
-.dataTables_filter {
-    @apply hidden;
-}
