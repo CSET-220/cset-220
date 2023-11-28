@@ -99,4 +99,11 @@ class User extends Authenticatable
         $role_ids = Role::whereIn('role_title',$role_title)->pluck('id');
         return in_Array($this->role_id, $role_ids->toArray());
     }
+
+    // concatenates first name and last name
+    // can be accessed with user()->full_name
+    protected $appends = ['full_name'];
+    public function getFullNameAttribute(){
+        return $this->first_name . ' ' . $this->last_name;
+    }
 }

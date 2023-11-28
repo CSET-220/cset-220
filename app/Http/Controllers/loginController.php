@@ -39,19 +39,19 @@ class loginController extends Controller
                 return redirect()->route('admin.show',['admin' => Auth::user()])->with('login_success','Login Successful');
             }
             elseif ($user->getAccess(['supervisor'])) {
-                return redirect()->route('employees.show',['employee' => Auth::user()])->with('login_success','Login Successful');
+                return redirect()->route('users.show',['user' => Auth::user()])->with('login_success','Login Successful');
             }
             elseif ($user->getAccess(['doctor'])) {
-                return redirect()->route('employees.show',['employee' => Auth::user()])->with('login_success','Login Successful');
+                return redirect()->route('users.show',['user' => Auth::user()])->with('login_success','Login Successful');
             }
             elseif ($user->getAccess(['caregiver'])) {
-                return redirect()->route('employees.show',['employee' => Auth::user()])->with('login_success','Login Successful');
+                return redirect()->route('users.show',['user' => Auth::user()])->with('login_success','Login Successful');
             }
             elseif ($user->getAccess(['family'])) {
-                return redirect()->route('patients.show',['patient' => Auth::user()])->with('login_success','Login Successful');
+                return redirect()->route('users.show',['user' => Auth::user()])->with('login_success','Login Successful');
             }
             elseif ($user->getAccess(['patient'])) {
-                return redirect()->route('patients.show',['patient' => Auth::user()])->with('login_success','Login Successful');
+                return redirect()->route('users.show',['user' => Auth::user()])->with('login_success','Login Successful');
             }
         }
         else{

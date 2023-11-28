@@ -34,7 +34,7 @@ return new class extends Migration
                 table: 'prescriptions'
             );
             $table->date('date');
-            $table->string('comments');
+            $table->string('comments')->nullable(); // comments need to be null to create appointments
             $table->unique(array('patient_id', 'date'));
             $table->timestamps();
         });

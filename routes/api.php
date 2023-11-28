@@ -49,3 +49,6 @@ Route::post('/doctor/search', [EmployeeController::class, 'search'])->name('doct
 
 Route::get('/prescriptions/{prescription_name}/dosage',[PrescriptionController::class, 'getDosage'])->name('prescription.dosage');
 Route::post('/appointments/{appointment}/conduct', [AppointmentController::class, 'conductAppointment'])->name('appointment.conduct');
+
+Route::get('/appointments/by/day', [AppointmentController::class, 'getAppointmentDay'])->name('appointments.by.day');
+Route::get('/appointments/doctor/onShift', [AppointmentController::class, 'getDrOnShift'])->name('doctor.on.shift');

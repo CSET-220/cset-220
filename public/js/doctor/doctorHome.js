@@ -1,14 +1,9 @@
-// converts date from YYYY-MM-DD to MonthName DD YYYY
+// converts date to MonthName DD YYYY
 function dateToWords(inputDate) {
     // console.log(inputDate);
-    const dateParts = inputDate.split('-');
-    const year = parseInt(dateParts[0]);
-    const month = parseInt(dateParts[1]) - 1;
-    const day = parseInt(dateParts[2]);
-    const formattedDate = new Date(year, month, day);
+    const formattedDate = new Date(inputDate);
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const formattedString = formattedDate.toLocaleDateString('en-US', options);
-
     return formattedString;
 }
 // Checks if appointment date is today or not

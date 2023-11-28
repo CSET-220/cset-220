@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -118,7 +119,7 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+        User::with(['patient', 'employees', 'appointments', 'logs', 'doctorRosters', 'supervisorRosters', 'caregiver1Rosters', 'caregiver2Rosters', 'caregiver3Rosters', 'caregiver4Rosters'])->where('id',Auth::id())->get();
     }
 
     /**
