@@ -49,3 +49,8 @@ Route::get('/careers', [UserController::class, 'employeeRegister'])->name('emplo
 
 Route::post('/doctor/search', [EmployeeController::class, 'search'])->name('doctor.search');
 Route::post('/updateLog', [LogController::class, 'updateLog'])->name('log.update');
+Route::post('/logout', [loginController::class, 'logout'])->name('app.logout');
+
+Route::get('/careers', [UserController::class, 'employeeRegister'])->name('employee.register');
+
+Route::post('/admin/approval', [AdminController::class, 'approval'])->name('admin.approval');

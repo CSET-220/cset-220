@@ -1,8 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\User;
+use App\Models\Role;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class RoleController extends Controller
 {
@@ -11,7 +15,15 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
+        if (Auth::check()) {
+            if (auth()->user()->getAccess(['admin'])) {
+                $roles = Role::all();
+                return view('roles.index', compact('roles'));
+            }
+            else{
+                return redirect()->back();
+            }
+        }
     }
 
     public function create(){
@@ -23,7 +35,14 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $role = Role::create($request->all());
+
+        $role = new Role;
+        $role->role_title = $request->role_title;
+        $role->access_level = $request->access_level;
+        $role->save();
+
+        return redirect()->route('roles.index');
     }
 
     /**
