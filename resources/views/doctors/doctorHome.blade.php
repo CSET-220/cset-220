@@ -2,8 +2,7 @@
 
 
 @section('linkStyles')
-    {{-- <script type="text/javascript" src="https://cdn.datatables.net/1.13.8/js/dataTables.jqueryui.min.js"></script> --}}
-    {{-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script> --}}
+    <meta name="csrf-token" content="{{ csrf_token() }}">    
 @endsection
 
 @section('title')
@@ -18,7 +17,7 @@
             <p class="text-lg">Patients</p>
 
             @if (session('appointment_success'))
-                <p class="text-lg text-green-500">{{ session('register_success') }}</p>
+                <p class="text-lg text-green-500">{{ session('appointment_success') }}</p>
             @endif
         </div>
     </div>
@@ -28,15 +27,15 @@
 @section('mainContent')
     <section class="p-3 sm:p-5">
         <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
-            <div class="bg-gray-800 relative shadow-md rounded-lg overflow-hidden">
+            <div class="bg-gray-300 relative shadow-md rounded-lg overflow-hidden">
 
                 {{-- START OF TOP ROW --}}
-                <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+                <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4 bg-gray-800">
                     <div class="w-full md:w-1/2">
                         <div>
                             <div class="flex">
                                 {{-- COLUMN SELECT --}}
-                                <select id="columnName" class="block p-2.5 w-full z-20 text-sm rounded-e-lg border-s-2 border focus:ring-blue-500 bg-gray-700 border-s-gray-700 border-gray-600 placeholder-gray-400 text-white focus:border-blue-500">
+                                <select id="columnName" class="block p-2.5 w-full z-20 text-sm border-s-2 border focus:ring-blue-500 bg-gray-700 border-s-gray-700 border-gray-600 placeholder-gray-400 text-white focus:border-blue-500">
                                     <option value="name">Patient Name</option>
                                     <option value="date">Appointment Date</option>
                                     <option value="comments">Comment</option>
@@ -59,6 +58,27 @@
                         </div>
                     </div>
 
+                    {{-- DATE PICKER --}}
+                    <div date-rangepicker id="appointment_date_range" class="flex items-center">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                </svg>
+                            </div>
+                            <input id="datePicker_start" value="{{ session('start_date') }}"  name="start" type="text" datepicker-title= "Appointment Start Date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start">
+                        </div>
+                            <span class="mx-4 text-gray-500">to</span>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                </svg>
+                            </div>
+                            <input value="{{ session('end_date') }}" id="datePicker_end" datepicker datepicker-autohide datepicker-buttons" name="end" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end">
+                        </div>
+                    </div>
+  
 
                     <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
                         {{-- OTHER BUTTONS --}}
@@ -68,81 +88,34 @@
 
                 {{-- TABLE START --}}
                 <div class="">
-                    <table id="doctor_patients" class="w-full text-sm text-left text-gray-400">
+                    <table id="doctor_patients" class="w-full text-sm text-left text-gray-900">
                         {{-- TABLE HEADER + Items --}}
-                        <thead class="text-xs  uppercase bg-gray-700 text-gray-400">
+                        <thead class="text-xs text-center uppercase bg-gray-800 text-gray-400">
                             <tr>
                                 <th scope="col" class="px-4 py-3">Patient Name</th>
-                                <th scope="col" class="px-4 py-3">Appointment Date</th>
-                                <th scope="col" class="px-4 py-3">Comment</th>
-                                <th scope="col" class="px-4 py-3">Morning Medicine</th>
-                                <th scope="col" class="px-4 py-3">Afternoon Medicine</th>
-                                <th scope="col" class="px-4 py-3">Night Medicine</th>
+                                <th scope="col" class="px-4 py-3 cursor-pointer hover:underline">Appointment Date</th>
+                                <th scope="col" class="px-4 py-3 cursor-pointer hover:underline">Comment</th>
+                                <th scope="col" class="px-4 py-3 cursor-pointer hover:underline">Morning Medicine</th>
+                                <th scope="col" class="px-4 py-3 cursor-pointer hover:underline">Afternoon Medicine</th>
+                                <th scope="col" class="px-4 py-3 cursor-pointer hover:underline">Night Medicine</th>
                             </tr>
                         </thead>
                         <tbody>
-                            
+
                         </tbody>
                     </table>
                 </div>
-
-                {{-- PAGINATION --}}
-                {{-- <nav class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
-                    <span class="text-sm font-normal text-gray-400">
-                        Showing
-                        <span class="font-semibold text-white">1-10</span>
-                        of
-                        <span class="font-semibold text-white">1000</span>
-                    </span>
-                    <ul class="inline-flex items-stretch -space-x-px">
-                        <li>
-                            <a href="#" class="flex items-center justify-center h-full py-1.5 px-3 ml-0 rounded-l-lg border bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-white">
-                                <span class="sr-only">Previous</span>
-                                <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-                                </svg>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center justify-center text-sm py-2 px-3 leading-tight border bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-white">1</a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center justify-center text-sm py-2 px-3 leading-tight border  bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-white">2</a>
-                        </li>
-                        <li>
-                            <a href="#" aria-current="page" class="flex items-center justify-center text-sm z-10 py-2 px-3 leading-tight text-primary-600 bg-primary-50 border border-primary-300 hover:bg-primary-100 hover:text-primary-700 border-gray-700 bg-gray-700 text-white">3</a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center justify-center text-sm py-2 px-3 leading-tight  border bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-white">...</a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center justify-center text-sm py-2 px-3 leading-tight border bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-white">100</a>
-                        </li>
-                        <li>
-                            <a href="#" class="flex items-center justify-center h-full py-1.5 px-3 leading-tight rounded-r-lg border  bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-white">
-                                <span class="sr-only">Next</span>
-                                <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                                </svg>
-                            </a>
-                        </li>
-                    </ul>
-                </nav> --}}
             </div>
         </div>
     </section>
-
-
-
-    {{-- Appointment Details MODAL --}}
-    <!-- Modal toggle -->
-
-<button data-modal-target="appointment_details" data-modal-toggle="appointment_details" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-    Toggle modal
-  </button>
   
-  <!-- Main modal -->
-  <div id="appointment_details" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+
+    
+
+
+  
+  {{-- DYNAMICALLY CREATED STYLES ONLY WORK WHEN ITS LOADED HERE FOR SOME REASON --}}
+  <div id="" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
       <div class="relative p-4 w-full max-w-md max-h-full">
           <!-- Modal content -->
           <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -151,7 +124,7 @@
                       <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                           Changelog
                       </h3>
-                      <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm h-8 w-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="timeline-modal">
+                      <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm h-8 w-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
                           <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                           </svg>
@@ -198,25 +171,30 @@
               </div>
       </div>
   </div> 
-
-
-
+  
+  <!-- Main modal -->
+  <div id="appointment_details" aria-hidden="true" class="hidden overflow-x-hidden fixed flex top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+      
+  </div> 
 
 @endsection
 
 @section('script')
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>  
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.js"></script> --}}
-    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
-    {{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script> --}}
-    <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+{{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>   --}}
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+<script src="{{ asset('js/doctor/doctorHome.js') }}"></script>
     <script type="text/javascript">
+        var dataTable;
+            
         $(document).ready(function () {
             var dataTable = $('#doctor_patients').DataTable({
                 serverSide: true,
                 processing: true,
-                "sDom":"ltpr",
+                "sDom":"tpr",
                 pagingType: 'simple_numbers',
+
                 language: {
                     // NEXT PAGE AND PAGE NUMBERS
                     paginate: {
@@ -231,65 +209,64 @@
                     data: function (d) {
                         d.columnName = $('#columnName').val();
                         d.searchValue = $('#doctor_search').val();
-                        console.log(d.searchValue);
+                        d.start_date = $('input[name="start"]').val();
+                        d.end_date = $('input[name="end"]').val();
+                        // console.log(d.searchValue);
                     },
                 },
                 // Making each column with specified data
                 columns: [
-                    { data: 'patient_name', name: 'patient.user.first_name', title: 'Patient Name' },
-                    { data: 'date', name: 'date', title: 'Date' },
-                    { data: 'comments', name: 'comments', title: 'Comments' },
-                    { data: 'morning_med', name: 'morning_med', title: 'Morning Medicine' },
-                    { data: 'afternoon_med', name: 'afternoon_med', title: 'Afternoon Medicine' },
-                    { data: 'night_med', name: 'night_med', title: 'Night Medicine' },
+                    { data: 'patient_name', name: 'patient.user.first_name', title: 'Patient Name', orderable: true },
+                    { data: 'date', name: 'date', title: 'Date', orderable: true },
+                    { data: 'comments', name: 'comments', title: 'Comments', orderable: true },
+                    { data: 'morning_med', name: 'morning_med', title: 'Morning Medicine', orderable: true },
+                    { data: 'afternoon_med', name: 'afternoon_med', title: 'Afternoon Medicine', orderable: true },
+                    { data: 'night_med', name: 'night_med', title: 'Night Medicine', orderable: true },
                 ],
+                // order
+                order: [[1,'asc']],
                 // when drawing table create pagination buttons like this
                 drawCallback: function(settings) {
+                    $('#doctor_patients td').addClass('border border-gray-900 p-2 text-left');
                     $('.pagination').addClass('flex items-center justify-center space-x-2 my-4');
                     $('.pagination li').addClass('inline-flex items-center justify-center text-sm py-2 px-3 leading-tight border bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-white');
                     $('.pagination .active').addClass('text-gray-600 bg-primary-50 border border-primary-300 hover:bg-gray-100 hover:text-gray-700');
                 },
                 rowCallback: function(row, data, index) {
+                    checkDate = new Date(data.date)
+                    if(isTodayAppt(checkDate) && data.comments === ""){
+                        $(row).addClass('bg-green-400');
+                    }
                     $(row).attr({
-                        'data-modal-target': 'appointment_details',
-                        'data-modal-toggle': 'appointment_details',
                         'data-modal-content': JSON.stringify(data)
                     });
 
                     $(row).on('click', function () {
-                        var rowData = JSON.parse($(this).attr('data-modal-content'));
+                        let attr = $(this).attr('data-modal-content');
+                        var rowData = JSON.parse(attr)
+                        // console.log(rowData)
                         displayModal(rowData);
                     });
 
                     $(row).hover(
                         function() {
-                            $(this).addClass('hover:bg-gray-800 hover:text-white cursor-pointer');
+                            $(this).addClass('hover:bg-gray-800 hover:text-white cursor-pointer hover:shadow-lg');
                         },
                         function() {
-                            $(this).removeClass('hover:bg-gray-800 hover:text-white');
+                            $(this).removeClass('hover:bg-gray-800 hover:text-white hover:shadow-lg');
                         }
                     );
                 },
             });
-
-            function displayModal(data) {
-                $('#appointment_etails').html(`
-                    <h2>Appointment Details</h2>
-                    <p><strong>Patient Name:</strong> ${data.patient_name}</p>
-                    <p><strong>Date:</strong> ${data.date}</p>
-                    <p><strong>Comments:</strong> ${data.comments}</p>
-                    <p><strong>Morning Medicine:</strong> ${data.morning_med}</p>
-                    <p><strong>Afternoon Medicine:</strong> ${data.afternoon_med}</p>
-                    <p><strong>Night Medicine:</strong> ${data.night_med}</p>
-                `);
-                $('#appointment_details').removeClass('hidden');
-                console.log(this)
-            }
+            // END DATATABLE
+            $('#datePicker_start, #datePicker_end').on('changeDate', function () {
+                dataTable.ajax.reload();
+            });
 
             $('#doctor_search').on('input', function () {
                 // Redraw the DataTable on input change
                 dataTable.ajax.reload();
             });
-        });
+        });   
     </script>
 @endsection

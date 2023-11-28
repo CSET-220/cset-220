@@ -96,7 +96,7 @@ class User extends Authenticatable
     ];
 
     public function getAccess(array $role_title){
-        $role_ids = Role::where('role_title',$role_title)->pluck('id');
+        $role_ids = Role::whereIn('role_title',$role_title)->pluck('id');
         return in_Array($this->role_id, $role_ids->toArray());
     }
 }
