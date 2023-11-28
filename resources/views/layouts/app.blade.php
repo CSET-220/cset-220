@@ -67,11 +67,9 @@
     {{--  --}}
 
         @yield('pageHeader')
-        @yield('pageHeader')
 
     {{-- MAIN BODY CONTENT --}}
 
-        @yield('mainContent')
         @yield('mainContent')
 
     {{--  --}}
@@ -80,13 +78,17 @@
 
     {{-- FOOTER --}}
         <footer class="bg-gray-700 flex p-4 text-center justify-center items-center w-full h-20">
+        <footer class="bg-gray-700 flex p-4 text-center justify-center items-center w-full h-20">
             <p class="text-white">© 2023 Dave Drummond; David Leach; Ryan Short; Chris Wright</p>
         </footer>
     {{--  --}}
 
 
 
+
+
 </body>
     @yield('script')
+
 
 </html>

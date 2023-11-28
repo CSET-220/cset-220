@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Log;
 
 class LogController extends Controller
 {
@@ -52,5 +53,24 @@ class LogController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function updateLog(Request $request) 
+    {
+        $validated = $request->validate([
+            'patient_id' => 'required|integer',
+            'log_type' => 'required|string',
+            'date' => 'required|date',
+            'status' => 'required|boolean',
+        ]);
+        $log = Log::where('patient_id', $validated['patient_id'])
+            ->where('date', $validated['date'])
+            ->first();
+        if(!$log) {
+            return response()->json(['error' => 'Log not found'], 404);
+        }
+        $log->{$validated['log_type']} = $validated['status'];
+        $log->save();
+        return response()->json(['success' => true]);
     }
 }
