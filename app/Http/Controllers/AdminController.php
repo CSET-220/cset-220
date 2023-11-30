@@ -23,27 +23,25 @@ class AdminController extends Controller
     }
 
     public function approval(Request $request){
-        $approve = $request->approve;
-        $deny = $request->deny;
-        if($approve){
-            foreach($approve as $id){
-                User::where('id',$id)->update(['is_approved' => 1]);
-                $user = User::find($id);
-                $role = Role::where('id',$user->role_id)->value('role_title');
-                // Modify if statement to include new roles
-                if($role == 'doctor' || $role == 'supervisor' || $role == 'caregiver'){
-                    $employee = new Employee;
-                    $employee->user_id = $id;
-                    $employee->save();
-                }
+        $approved_id = $request->approved_id;
+        $denied_id = $request->denied_id;
+        if($approved_id){
+            User::where('id',$approved_id)->update(['is_approved' => 1]);
+            $user = User::where('id', $approved_id)->first();
+            $role = Role::where('id',$user->role_id)->first();
+            // To do: Add users with created roles to employee table as well - test
+            if($role->role_title == 'doctor' || $role->role_title == 'supervisor' || $role->role_title == 'caregiver' || $role->access_level == 4){
+                Employee::create(['user_id' => $approved_id]);
+            }
+            elseif($role == 'patient'){
+                Patient::where("user_id", $approved_id)->update(['admission_date' => date('Y-m-d')]);
             }
         }
-        if($deny){
-            foreach($deny as $id){
-                User::destroy($id);
-            }
+        if($denied_id){
+            $deniedPatientID = Patient::where('user_id', $denied_id)->value('id');
+            Patient::destroy($deniedPatientID);
+            User::destroy($denied_id);
         }
-        return redirect()->back();
     }
 
     public function show(User $admin){
