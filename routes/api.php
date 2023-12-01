@@ -46,6 +46,9 @@ Route::get('/careers', [UserController::class, 'employeeRegister'])->name('emplo
 
 Route::post('/doctor/search', [EmployeeController::class, 'search'])->name('doctor.search');
 Route::post('/updateLog', [LogController::class, 'updateLog'])->name('log.update');
+Route::post('/updateSalary', [AdminController::class, 'updateSalary'])->name('admin.updateSalary');
+Route::post('/admin/searchEmployee', [AdminController::class, 'searchEmployee'])->name('admin.searchEmployee');
+Route::post('/admin/refreshEmployeeTable', [AdminController::class, 'refreshEmployeeTable'])->name('admin.refreshEmployeeTable');
 
 
 Route::get('/prescriptions/{prescription_name}/dosage',[PrescriptionController::class, 'getDosage'])->name('prescription.dosage');
