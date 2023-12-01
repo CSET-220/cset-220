@@ -78,6 +78,9 @@ class AdminController extends Controller
     public function updateSalary(Request $request)
     {
         // TODO validate amount returned from request
+        if($request->salary < 0 || !is_numeric($request->salary)) {
+            return response()->json(['message' => 'Invalid salary amount']);
+        } 
         $employee = Employee::find($request->employeeId);
         if($employee) {
             $employee->salary = $request->salary;
@@ -127,6 +130,14 @@ class AdminController extends Controller
             } else {
                 return response()->json(['results' => $results]);
             }
+        }
+    }
+
+    public function refreshEmployeeTable(Request $request)
+    {
+        if($request->ajax()) {
+            $results = Employee::with(['user', 'user.role'])->get();
+            return response()->json(['results' => $results]);
         }
     }
 

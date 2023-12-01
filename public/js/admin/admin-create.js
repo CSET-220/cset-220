@@ -16,27 +16,12 @@ $(document).ready(function() {
     });
     $(document).on('click', '.employee-svg', function() {
         const employeeId = $(this).data('employee-id');
-        // openModal();
         dialog.showModal();
         employeeIdInput.val(employeeId);
     })
-    // $('.employee-svg').click(function() {
-    //     const employeeId = $(this).data('employee-id');
-    //     openModal();
-    //     employeeIdInput.val(employeeId);
-    // });
-
-    // function openModal() {
-    //     modal.removeClass('hidden').addClass('flex')
-    // }
-    
-    // function closeModal() {
-    //     modal.addClass('hidden')
-    //     salaryInput.val('');
-    //     modal.click();
-    // }
 
     $('#updateSalary').click(function() {
+        var salaryError = $("#salary-error");
         $.ajax({
             url: '/api/updateSalary',
             type: 'POST',
@@ -48,12 +33,12 @@ $(document).ready(function() {
             success: function(response) {
                 if (response.newSalary) {
                     $("#salary-" + employeeIdInput.val()).text(response.newSalary);
+                    dialog.close();
+                    salaryInput.val('');
+                    salaryError.hide();
+                } else if(response.message) {
+                    salaryError.text(response.message).show();
                 }
-                dialog.close();
-                salaryInput.val('');
-            },
-            error: function(error) {
-                console.log(error);
             }
         });
     });
@@ -93,6 +78,8 @@ $(document).ready(function() {
             searchInput.hide();
             first_name.show();
             last_name.show();
+            minSalary.hide();
+            maxSalary.hide();
         } else if(columnName === 'salary') {
             searchInput.hide();
             first_name.hide();
@@ -134,6 +121,26 @@ $(document).ready(function() {
             }
         })
     })
+    var refresh = $('#refresh-svg');
+    $(refresh).click(function(){
+        $(this).addClass('animated-spin');
+        setTimeout(function() {
+            refresh.removeClass('animated-spin');
+            }, 1000);
+            searchInput.val('');
+            minSalary.val('');
+            maxSalary.val('');
+            first_name.val('');
+            last_name.val('');
+        $.ajax({
+            url: '/api/admin/refreshEmployeeTable',
+            type: 'POST',
+            success: function(response) {
+                updateTable(response.results);
+
+            }
+        })
+    })
 });
 
 
@@ -148,14 +155,13 @@ function updateTable(data) {
 
         var employeeRow = `
             <tr>
-                <td class="px-3 py-2 text-center align-middle">${employee.id}</td>
-                <td class="px-3 py-2 text-center align-middle">${fullName}</td>
-                <td class="px-3 py-2 text-center align-middle">${roleTitle}</td>
-                <td class="px-3 py-2 text-center align-middle">
+                <td class="px-3 py-2 text-left align-middle">${employee.id}</td>
+                <td class="px-3 py-2 text-left align-middle">${fullName}</td>
+                <td class="px-3 py-2 text-left align-middle">${roleTitle}</td>
+                <td class="px-3 py-2 text-left align-middle">
                     <div class="flex min-w-full justify-center items-center">
-                        <div class="flex-1"></div>
-                        <span id="salary-${employee.id}" class="flex-1 text-center">${employee.salary}</span>
-                        <svg id="employee-${employee.id}" data-employee-id="${employee.id}" data-modal-target="crud-modal" data-modal-toggle="crud-modal" class="w-6 h-6 text-gray-800 dark:text-white cursor-pointer flex-1 right-0 employee-svg" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <span id="salary-${employee.id}" class="flex-grow text-left">${employee.salary}</span>
+                        <svg id="employee-${employee.id}" data-employee-id="${employee.id}" class="w-6 h-6 text-gray-800 dark:text-white cursor-pointer flex-end right-0 employee-svg" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17v1a.97.97 0 0 1-.933 1H1.933A.97.97 0 0 1 1 18V5.828a2 2 0 0 1 .586-1.414l2.828-2.828A2 2 0 0 1 5.828 1h8.239A.97.97 0 0 1 15 2M6 1v4a1 1 0 0 1-1 1H1m13.14.772 2.745 2.746M18.1 5.612a2.086 2.086 0 0 1 0 2.953l-6.65 6.646-3.693.739.739-3.692 6.646-6.646a2.087 2.087 0 0 1 2.958 0Z"/>
                         </svg>
                     </div>
