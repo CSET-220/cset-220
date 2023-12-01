@@ -35,14 +35,8 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $role = Role::create($request->all());
-
-        $role = new Role;
-        $role->role_title = $request->role_title;
-        $role->access_level = $request->access_level;
-        $role->save();
-
-        return redirect()->route('roles.index');
+        Role::create(['role_title' => $request->role_title, 'access_level' => $request->access_level]);
+        return redirect()->back();
     }
 
     /**
