@@ -34,7 +34,7 @@ return new class extends Migration
                 table: 'prescriptions'
             );
             $table->date('date');
-            $table->string('comments');
+            $table->string('comments')->nullable();
             $table->unique(array('patient_id', 'date'));
             $table->timestamps();
         });

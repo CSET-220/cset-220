@@ -88,30 +88,65 @@ class DatabaseSeeder extends Seeder
         $rosters = Roster::all();
 
         foreach ($rosters as $roster) {
-            foreach ($patients as $patient) {
-                $group = $patient->group;
-                $caregiver = null;
-
-                switch ($group) {
-                    case 1:
-                        $caregiver = $roster->caregiver1_id;
-                        break;
-                    case 2:
-                        $caregiver = $roster->caregiver2_id;
-                        break;
-                    case 3:
-                        $caregiver = $roster->caregiver3_id;
-                        break;
-                    case 4:
-                        $caregiver = $roster->caregiver4_id;
-                        break;
+            if ($roster->date <= date('Y-m-d')) {
+                foreach ($patients as $patient) {
+                    $group = $patient->group;
+                    $caregiver = null;
+    
+                    switch ($group) {
+                        case 1:
+                            $caregiver = $roster->caregiver1_id;
+                            break;
+                        case 2:
+                            $caregiver = $roster->caregiver2_id;
+                            break;
+                        case 3:
+                            $caregiver = $roster->caregiver3_id;
+                            break;
+                        case 4:
+                            $caregiver = $roster->caregiver4_id;
+                            break;
+                    }
+    
+                    Log::factory()->create([
+                        'patient_id' => $patient->id,
+                        'caregiver_id' => $caregiver,
+                        'date' => $roster->date,
+                    ]);
                 }
-
-                Log::factory()->create([
-                    'patient_id' => $patient->id,
-                    'caregiver_id' => $caregiver,
-                    'date' => $roster->date,
-                ]);
+            }
+            else {
+                foreach ($patients as $patient) {
+                    $group = $patient->group;
+                    $caregiver = null;
+    
+                    switch ($group) {
+                        case 1:
+                            $caregiver = $roster->caregiver1_id;
+                            break;
+                        case 2:
+                            $caregiver = $roster->caregiver2_id;
+                            break;
+                        case 3:
+                            $caregiver = $roster->caregiver3_id;
+                            break;
+                        case 4:
+                            $caregiver = $roster->caregiver4_id;
+                            break;
+                    }
+    
+                    Log::factory()->create([
+                        'patient_id' => $patient->id,
+                        'caregiver_id' => $caregiver,
+                        'date' => $roster->date,
+                        'morning_med' => null,
+                        'afternoon_med' => null,
+                        'night_med' => null,
+                        'breakfast' => null,
+                        'lunch' => null,
+                        'dinner' => null,
+                    ]);
+                }
             }
         }
 
@@ -136,17 +171,39 @@ class DatabaseSeeder extends Seeder
             for ($i = 0; $i < $numAppointments; $i++) {
                 do {
                     $date = fake()->unique()->dateTimeBetween('-3 months', '+1 month')->setTime(0, 0);
-                } while ($dates->contains($date));
+                } 
+                while ($dates->contains($date));
 
                 $dates->push($date);
 
+                // check to see if roster exists for the day
+                $roster = Roster::whereDate('date', $date)->first();
+                if ($roster === null) {
+                    continue;
+                }
+
                 $doctor = Roster::whereDate('date', $date)->first()->doctor_id;
 
-                Appointment::factory()->create([
-                    'patient_id' => $patient->id,
-                    'doctor_id' => $doctor,
-                    'date' => $date
-                ]);
+                // check to see if appointment is in the past
+                if ($date <= date('Y-m-d')) {
+                    Appointment::factory()->create([
+                        'patient_id' => $patient->id,
+                        'doctor_id' => $doctor,
+                        'date' => $date,
+                    ]);
+                }
+                else {
+                    Appointment::factory()->create([
+                        'patient_id' => $patient->id,
+                        'doctor_id' => $doctor,
+                        'date' => $date,
+                        'morning_med' => null,
+                        'afternoon_med' => null,
+                        'night_med' => null,
+                        'comments' => null,
+                    ]);
+                }
+
             }
         }
     }
