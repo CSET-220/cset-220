@@ -6,6 +6,7 @@ use App\Models\Log;
 use App\Models\User;
 use App\Models\Appointment;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Patient extends Model

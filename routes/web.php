@@ -1,7 +1,10 @@
 <?php
 
-use App\Http\Controllers\loginController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\loginController;
+use App\Http\Controllers\RosterController;
+use App\Http\Controllers\PatientController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +19,6 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/', [loginController::class , 'home'])->name('app.home');
+Route::resource('/rosters', RosterController::class);
+Route::get('/patients/{id}/logs', [PatientController::class, 'logs'])->name('patients.logs');
+Route::resource('/patients', PatientController::class);

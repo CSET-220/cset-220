@@ -35,4 +35,8 @@ class Appointment extends Model
         'date',
         'comments'
     ];
+
+    function scopePatientAppointmentSearch($query, $date, $patient_id) {
+        $query->where('date', $date)->where('patient_id', $patient_id);
+    }
 }

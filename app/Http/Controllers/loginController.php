@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
+use App\Models\User;
+use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class loginController extends Controller
@@ -51,7 +52,8 @@ class loginController extends Controller
                 return redirect()->route('patients.show',['patient' => Auth::user()])->with('login_success','Login Successful');
             }
             elseif ($user->getAccess(['patient'])) {
-                return redirect()->route('patients.show',['patient' => Auth::user()])->with('login_success','Login Successful');
+                $patient = Patient::where('user_id', $user->id)->first();
+                return redirect()->route('patients.show',['patient' => $patient])->with('login_success','Login Successful');
             }
         }
         else{
@@ -68,7 +70,7 @@ class loginController extends Controller
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
-        
-        return redirect()->route('app.home')->with('logout_success', 'Sucessfully Logged Out');
+
+        redirect()->route('app.home')->with('logout_success', 'Sucessfully Logged Out');
     }
 }

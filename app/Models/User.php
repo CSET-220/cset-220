@@ -99,4 +99,8 @@ class User extends Authenticatable
         $role_ids = Role::whereIn('role_title',$role_title)->pluck('id');
         return in_Array($this->role_id, $role_ids->toArray());
     }
+
+    public function scopeNameSearch($query, $id) {
+        $query->where('id', $id);
+    }
 }

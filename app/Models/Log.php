@@ -30,4 +30,8 @@ class Log extends Model
         'lunch',
         'dinner'
     ];
+
+    public function scopePatientLogSearch($query, $date, $patient_id) {
+        $query->where('date', $date)->where('patient_id', $patient_id);
+    }
 }
