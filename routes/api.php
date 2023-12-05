@@ -49,6 +49,7 @@ Route::post('/updateLog', [LogController::class, 'updateLog'])->name('log.update
 Route::post('/updateSalary', [AdminController::class, 'updateSalary'])->name('admin.updateSalary');
 Route::post('/admin/searchEmployee', [AdminController::class, 'searchEmployee'])->name('admin.searchEmployee');
 Route::post('/admin/refreshEmployeeTable', [AdminController::class, 'refreshEmployeeTable'])->name('admin.refreshEmployeeTable');
+Route::get('/admin/report/all', [AdminController::class, 'adminReport'])->name('admin.adminReport');
 
 
 Route::get('/prescriptions/{prescription_name}/dosage',[PrescriptionController::class, 'getDosage'])->name('prescription.dosage');

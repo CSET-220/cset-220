@@ -19,6 +19,20 @@ class Log extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function scopePatientMissedCare($query, $patient_id, $date) {
+        $query->where('patient_id', $patient_id)
+            ->where('date', '<=', $date)
+            ->where(function ($q) {
+                $q->whereNull('morning_med')
+                    ->orWhereNull('afternoon_med')
+                    ->orWhereNull('night_med')
+                    ->orWhereNull('breakfast')
+                    ->orWhereNull('lunch')
+                    ->orWhereNull('dinner');
+            });
+    }
+    
+
     protected $fillable = [
         'date',
         'patient_id',
