@@ -26,7 +26,7 @@
 
 @section('mainContent')
     <section class="p-3 sm:p-5">
-        <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
+        <div class="mx-auto max-w-screen-xl px-4 pb-24 lg:px-12">
             <div class="bg-gray-300 relative shadow-md rounded-lg overflow-hidden">
 
                 {{-- START OF TOP ROW --}}
@@ -234,7 +234,7 @@
                 },
                 rowCallback: function(row, data, index) {
                     checkDate = new Date(data.date)
-                    if(isTodayAppt(checkDate) && data.comments === ""){
+                    if(isTodayAppt(checkDate) && data.comments === null){
                         $(row).addClass('bg-green-400');
                     }
                     $(row).attr({

@@ -5,6 +5,7 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\Employee;
 use App\Models\Patient;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -58,4 +59,24 @@ class AdminController extends Controller
     }
 
 
+    public function billPatients(){
+        if(Auth::check() && Auth::user()->getAccess(['admin'])){
+            $patients = Patient::all();
+            foreach ($patients as $patient) {
+                $today = Carbon::now();
+                $lastBilled = $patient->last_billed_date;
+                $differenceInDays = $today->diffInDays($lastBilled);
+                $amount = $differenceInDays * 10;
+    
+                $patient->last_billed_date = $today;
+                $patient->balance += $amount;
+                $patient->save();
+    
+            }
+            return redirect()->route('users.show', ['user' => Auth::user()])->with('bill_success', 'Successfully Billed All Patients');
+        }
+        else{
+            return redirect()->route('app.home')->with('access_error', 'You do not have permission to view this page.');
+        }
+    }
 } 

@@ -1,5 +1,9 @@
 @extends('layouts.app')
-
+@section('linkStyles')
+    <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
+    <script src="https://unpkg.com/flowbite-datepicker@1.2.2/dist/js/datepicker-full.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.3/dist/flowbite.min.css" />
+@endsection
 @section('title')
     Wrinkly Ranch - Welcome {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}
 @endsection
@@ -27,8 +31,8 @@
             <table id="appointments_table" class="bg-gray-300 w-full text-sm text-left rtl:text-right text-gray-400">
 
                 {{-- CAPTION --}}
-                <caption id="table_caption" class="p-5 text-lg font-semibold text-left rtl:text-right text-white bg-gray-800">
-                    Schedule Appointment
+                <caption id="" class="p-5 text-lg font-semibold text-left rtl:text-right text-white bg-gray-800">
+                    <p id="table_caption" class="text-lg font-semibold text-left rtl:text-right text-white bg-gray-800">Schedule Appointment</p>
                     @error('patient_id')
                         <p class="mt-1 text-sm font-normal text-red-500">{{ $errors->first('patient_id') }}</p>
                     @enderror
@@ -39,6 +43,7 @@
                         <p class="mt-1 text-sm font-normal text-red-500">{{ $errors->first('doctor_id') }}</p>
                     @enderror
 
+                    <p id="sub_caption"></p>
                     <p id="table_sub_caption" class="mt-1 text-sm font-normal text-green-500">
                         @if(session('appointment_change_success'))
                             {{ session('appointment_change_success') }}
@@ -74,7 +79,7 @@
                         </td>
                         <td colspan="" class="px-6 py-4">
                             <label for="doctor_id" class="sr-only">Doctor</label>
-                            <select id="doctor_id" name="doctor_id" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none text-gray-400 border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer @error('doctor_id') border-red-500 @enderror"required>
+                            <select id="doctor_id" name="doctor_id" class="doctor_dropdown block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2 appearance-none text-gray-400 border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer @error('doctor_id') border-red-500 @enderror"required>
                                 <option hidden>Choose Doctor</option>
                             </select>
                         </td>
@@ -124,7 +129,5 @@
 @endsection
 
 @section('script')
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="{{ asset('js/datepicker/datepicker.js') }}"></script>
     <script src="{{ asset('js/appointments/appointments.js') }}"></script>
 @endsection

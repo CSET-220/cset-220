@@ -20,19 +20,19 @@ return new class extends Migration
 
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('patient_id')->constrained();
+            $table->foreignId('patient_id')->constrained()->cascadeOnDelete(); // Deletes row ifpatient is deleted
             $table->foreignId('doctor_id')->constrained(
                 table: 'users'
-            );
+            )->nullOnDelete(); // If deleted dont delete whole roster just set value to null;
             $table->foreignId('morning_med')->nullable()->constrained(
                 table: 'prescriptions'
-            );
+            )->nullOnDelete(); // If deleted dont delete whole roster just set value to null
             $table->foreignId('afternoon_med')->nullable()->constrained(
                 table: 'prescriptions'
-            );
+            )->nullOnDelete(); // If deleted dont delete whole roster just set value to null;
             $table->foreignId('night_med')->nullable()->constrained(
                 table: 'prescriptions'
-            );
+            )->nullOnDelete(); // If deleted dont delete whole roster just set value to null;
             $table->date('date');
             $table->string('comments')->nullable(); // comments need to be null to create appointments
             $table->unique(array('patient_id', 'date'));

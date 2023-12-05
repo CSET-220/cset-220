@@ -1,7 +1,8 @@
 // converts date to MonthName DD YYYY
 function dateToWords(inputDate) {
     // console.log(inputDate);
-    const formattedDate = new Date(inputDate);
+    const [year, month, day] = inputDate.split('-');
+    let formattedDate = new Date(year, month - 1, day);
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const formattedString = formattedDate.toLocaleDateString('en-US', options);
     return formattedString;
@@ -58,9 +59,9 @@ function displayAppointmentModal(appointments){
         let appointmentLabel = 'Patient Check-Up'
         // Will use to display See Patient Button
         let checkDate = new Date(appointment.date)
-        console.log(checkDate);
+        
         // Patient was seen if a comment was written
-        if(appointment.comments === ""){
+        if(appointment.comments === "" || appointment.comments === null){
             newDateCheck = new Date(appointment.date)
             newDateCheck.setHours(24,0,0,0)
             if(newDateCheck >= today){
@@ -86,9 +87,10 @@ function displayAppointmentModal(appointments){
                 <span class="text-sm font-medium mr-2 px-2.5 py-0.5 rounded ms-3 ${statusClass}">${statusText}</span>
             </h3>
             <time class="block mb-3 text-sm font-normal leading-none text-gray-500 dark:text-gray-400">${displayAptDate}</time>
-            <p class="block mb-3 text-sm font-normal text-gray-500 dark:text-gray-400">${appointment.comments}</p>
+            <p class="block mb-3 text-sm font-normal text-gray-500 dark:text-gray-400">${appointment.comments ?? ""}</p>
         `
-        if(isTodayAppt(checkDate) && appointment.comments === ""){
+        if(isTodayAppt(checkDate) && !appointment.comments){
+            // console.log("SHOW SEE PATIENT");
             info += `
                 
                 <a id="show_conduct_apt" class="cursor-pointer my-4 inline-flex items-center py-2 px-3 text-sm font-medium focus:outline-none rounded-lg border focus:z-10 focus:ring-4 focus:ring-gray-700 bg-gray-700 text-gray-400 border-gray-600 hover:text-white hover:bg-gray-600">

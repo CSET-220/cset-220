@@ -57,3 +57,7 @@ Route::get('/appointments/doctor/onShift', [AppointmentController::class, 'getDr
 Route::get('/prescriptions/{prescription_name}/dosage',[PrescriptionController::class, 'getDosage'])->name('prescription.dosage');
 Route::post('/appointments/{appointment}/conduct', [AppointmentController::class, 'conductAppointment'])->name('appointment.conduct');
 Route::post('/admin/approval', [AdminController::class, 'approval'])->name('admin.approval');
+
+Route::post('/users/{user}/payment', [UserController::class, 'payment'])->name('users.payment');
+Route::get('/users/{user}/family/connect', [UserController::class, 'familyCodeSearch'])->name('family.dashboard.connect');
+Route::get('/users/{user}/admin/bill/patients', [AdminController::class, 'billPatients'])->name('bill.patients');

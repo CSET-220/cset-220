@@ -1,5 +1,4 @@
 function dateToWords(inputDate) {
-    // console.log(inputDate);
     const formattedDate = new Date(inputDate);
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const formattedString = formattedDate.toLocaleDateString('en-US', options);
@@ -39,6 +38,7 @@ function createRow(appointment){
     let body = $('#appointment_body')
     // Make row
     const row = $('<tr>');
+    row.attr('data-appointment', encodeURIComponent(JSON.stringify(appointment)));
     $(row).addClass('border-0 border-b border-gray-700 text-gray-800 hover:bg-gray-700 hover:text-white');
     // Make cell for patient name
     const patientCell = $('<td>').text(appointment.patient.user.full_name)
@@ -83,13 +83,13 @@ function createRow(appointment){
             right: '20px',
         });
         dropdown.html(`
-            <div class="py-1 text-sm text-gray-700 dark:text-gray-200">
+            <div class="text-sm text-gray-700 dark:text-gray-200">
                 <form action="" id="${appointment.id}" method="post" class="delete_apt_btn">
-                    <input class="block py-2 px-4 text-sm hover:bg-gray-600 text-gray-200 hover:text-white" type="submit" value="Cancel Appointment">
+                    <input class=" w-full block py-2 px-4 text-sm hover:bg-gray-600 text-gray-800 hover:text-white" type="submit" value="Cancel Appointment">
                 </form>
             </div>
-            <div class="py-1 text-sm text-gray-700 dark:text-gray-200">
-                <a id="appointment_edit_btn" class="cursor-pointer block py-2 px-4 text-sm hover:bg-gray-600 text-gray-200 hover:text-white">Reschedule Appointment</a>
+            <div class="text-sm text-gray-700 dark:text-gray-200">
+                <a id="appointment_edit_btn" class="cursor-pointer block py-2 px-4 text-sm hover:bg-gray-600 text-gray-800 hover:text-white">Reschedule Appointment</a>
             </div>
         `);
         editCell.append(editBtn);
@@ -105,7 +105,6 @@ function createRow(appointment){
 // takes respsonse and currentPage from ajax and creates rows for each appointment
 function displayGroupByTable(data, page) {
     const allAppointments = getAppointmentDate(data, page);
-    // console.log(allAppointments);
     let body = $('#appointment_body')
     body.empty()
     allAppointments.forEach((appointments, index) => {
@@ -125,9 +124,19 @@ function displayPatientAppointments(appointments){
 }
 
 // updates the caption text
-function updateCaption(){
-    let captionText = 'Schedule Appointment'
-    console.log(doctorName);
+function updateCaption(type = "schedule"){
+    console.log("updateCaption called with type:", type);
+    $('#table_caption').text("");
+    if (type === "schedule") {
+        console.log("Setting caption to Schedule appointment");
+        $('#table_caption').text("Schedule appointment");
+    } else if (type === "reschedule") {
+        console.log("Setting caption to Reschedule appointment");
+        $('#table_caption').text("Reschedule appointment");
+    }
+    let captionText = $('#table_caption').text()
+    console.log(captionText,"CAPTION TEXT");
+
     if (patientName && patientName !== 'New Appointment') {
         captionText += ` for ${patientName}`;
     }
@@ -145,7 +154,7 @@ function updateCaption(){
 
 // GETS THE INFO FOR APPOINTMENTS WHEN PAGE LOADS
 function refreshAppointments(){
-    $.ajax({
+    return $.ajax({
         type: "get",
         url: "/api/appointments/by/day",
         dataType: "json",
@@ -154,6 +163,35 @@ function refreshAppointments(){
             currentPage = getCurrentPage(response,todaysDateString)
             displayGroupByTable(data,currentPage)
         },
+    });
+}
+
+// get doctor on day and update dropdown
+function getDrs(aptDate, drDropdown){
+    $.ajax({
+        type: "get",
+        url: "/api/appointments/doctor/onShift",
+        data: {
+            'apt_date': aptDate
+        },
+        dataType: "json",
+        success: function (response) {
+            drDropdown.empty();
+            if(Object.keys(response).length > 0){
+                response.forEach(appointment => {
+                    doctorName = appointment.doctor.full_name
+                    drOption = $('<option>').val(appointment.doctor.id).text(appointment.doctor.full_name).attr('selected','selected')
+                    
+                })
+                drDropdown.removeClass('border-red-500')
+                updateCaption()
+            }
+            else{
+                drDropdown.addClass('border-red-500')
+                drOption =  $('<option>').text("No Doctors Available That Day").attr('selected','selected').val("")
+            }
+            drDropdown.append(drOption);
+        }
     });
 }
 
@@ -185,8 +223,7 @@ $(document).ready(function () {
     $('#patient_id').on('change', function () {
         patientName = $('#patient_id option:selected').text();
         let patient_id = $(this).val();
-        console.log(patient_id);
-        updateCaption();
+        updateCaption("schedule");
         if (patientName === "New Appointment") {
             currentPage = getCurrentPage(data, todaysDateString);
             displayGroupByTable(data,currentPage)
@@ -197,7 +234,6 @@ $(document).ready(function () {
                 url: "/api/appointments/" + patient_id,
                 dataType: "json",
                 success: function (response) {
-                    console.log(response);
                     if ($('#patient_id').val()) {
                         displayPatientAppointments(response);
                     }
@@ -212,39 +248,14 @@ $(document).ready(function () {
     // - if patient name is blank show all appointments on that day
     $('#apt_date').on('changeDate', function() {
         captionDate = $(this).val();
-        patientName = $('#patient_id').val()
-        updateCaption();
-        if(!patientName){
+        patientID = $('#patient_id').val()
+        patientName = $('#patient_id option:selected').text()
+        if(!patientID){
             currentPage = getCurrentPage(data,captionDate);
             displayGroupByTable(data,currentPage);
         }
-        $.ajax({
-            type: "get",
-            url: "/api/appointments/doctor/onShift",
-            data: {
-                'apt_date': captionDate
-            },
-            dataType: "json",
-            success: function (response) {
-                let drDropdown = $('#doctor_id');
-                drDropdown.empty();
-                if(Object.keys(response).length > 0){
-                    // console.log(response.doctor.full_name);
-                    response.forEach(appointment => {
-                        doctorName = appointment.doctor.full_name
-                        drOption = $('<option>').val(appointment.doctor.id).text(appointment.doctor.full_name).attr('selected','selected')
-                        
-                    })
-                    drDropdown.removeClass('border-red-500')
-                    updateCaption()
-                }
-                else{
-                    drDropdown.addClass('border-red-500')
-                    drOption =  $('<option>').text("No Doctors Available That Day").attr('selected','selected')
-                }
-                drDropdown.append(drOption);
-            }
-        });
+        let dropdown = $('#doctor_id');
+        getDrs(captionDate,dropdown);
     });
 
 
@@ -254,6 +265,7 @@ $(document).ready(function () {
         $('.edit_dropdown').addClass('hidden');
         
     });
+
     // Opens the edit dropdown and closes any other opened
     $(document).on('click','.edit_btn', function (e) {
         $('.edit_dropdown').addClass('hidden');
@@ -261,40 +273,118 @@ $(document).ready(function () {
         e.stopPropagation()
     });
 
+    // When the reschedule appointment date field is changed
+    $(document).on('change','.edit_apt_date', function (e) {
+        row = $(this).closest('tr');
+        aptDate = $(this).val();
+        dropdown = $(row).find('.doctor_dropdown')
+        getDrs(aptDate,dropdown);
+        aptDate = new Date(aptDate);
+        captionDate = aptDate.toISOString().slice(0,10).replace(/-/g, '/');
+        updateCaption("reschedule")
+    });
+
 
     // Turns row into form for
     $(document).on('click','#appointment_edit_btn', function (e) {
+        // gets the encrypted apt data from element
         var row = $(this).closest('tr');
-        console.log(row);
-    
+        var row_info = row.attr('data-appointment')
+        var apt_details = JSON.parse(decodeURIComponent(row_info))
+
+        // Clones the row so when cancel is clicked row reverts back to original state
+        var originalRow = row.clone();
         row.find('td').each(function() {
             // Change each cell to form input then ajax to PUT route
+            
             cellName = $(this).attr('data-name');
-            var select = $('<select>');
-            select.addClass('block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer')
-
+            var input =$('<input>')
+            let select = $('<select>');
+            select.addClass('block cursor-pointer py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer')
             if(cellName === "patient"){
-                $('select#patient_id option').each(function() {
-                    var value = $(this).val();
-                    var text = $(this).text();
-                    select.append(new Option(text,value))
-                })
-                // console.log(this, 'PATIENT');
-                $(this).html(select);
+                patientName = $(this).text();
+                updateCaption('reschedule');
             }
             else if(cellName === "date"){
-                var input = $('<input>');
-                input = new Datepicker(input);
-                // input.attr('id', 'edit_apt_datepicker');
-                // input.addClass('border text-sm rounded-lg  block w-full ps-10 p-2.5  bg-gray-700 border-gray-600 placeholder-gray-400 text-white focus:ring-blue-500 focus:border-blue-500');
-                // console.log(this,'DATE');
+                input.attr('type','date');
+                input.attr('min', todaysDateString);
+                input.attr('required',true);
+                input.attr('name', 'apt_date')
+                input.addClass('edit_apt_date bg-transparent cursor-pointer border-0 text-sm rounded-lg  block w-full ps-10 p-2.5  bg-gray-700 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500 hover:shadow-lg')
                 $(this).html(input)
-                // $(this).replaceWith(input);
-                // $('#edit_apt_datepicker').datepicker({
-                //     dateFormat: "yy-mm-dd"
-                // });
             }
-            console.log(cellName);
+            else if(cellName === 'doctor'){
+                select.addClass('doctor_dropdown');
+                select.attr('name', 'doctor_id');
+                select.append(new Option("Select Doctor"))
+                $(this).html(select);
+            }
+            else{
+                var cancelButton = $('<input>').attr('type', 'button').val('Cancel');
+                cancelButton.addClass('bg-gray-500 hover:bg-gray-100 text-gray-800 font-bold py-2 px-4 rounded transition duration-200 shadow');
+                cancelButton.on('click', function() {
+                    row.replaceWith(originalRow);
+                });
+
+                input.attr('type' ,'Submit').val('Reschedule')
+                input.addClass('bg-gray-500 hover:bg-gray-100 text-gray-800 font-bold py-2 px-4 rounded transition duration-200 shadow')
+                input.attr('data-apt-id',apt_details.id)
+                $(this).html(input).append(cancelButton)
+
+                $(input).on('click', function () {
+                    let aptId = apt_details.id;
+                    let patientId = apt_details.patient_id;
+                    let rescheduleDate = $(row).find('.edit_apt_date').val()
+                    let doctor = $(row).find('.doctor_dropdown')
+                    let doctorId = doctor.val()
+                    console.log(aptId);
+                    // RESCHEDULE REQUEST to 
+                    $.ajax({
+                        type: "PUT",
+                        url: '/api/appointments/'+aptId+'',
+                        data: {
+                            // appointment_id: aptId,
+                            patient_id: patientId,
+                            apt_date: rescheduleDate,
+                            doctor_id: doctorId
+                        },
+                        dataType: "json",
+                        success: function (response) {
+                            refreshAppointments().done(function() {
+                                $('#table_sub_caption').text("Appointment Rescheduled Successfully");
+                                console.log($('#sub_caption'));
+                                console.log($('#table_sub_caption'));
+                            });
+                            
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            // status 422 is laravel validation error
+                            if (jqXHR.status == 422) {
+                                // laravel responds with an object of errors 
+                                var allErrors = JSON.parse(jqXHR.responseText);
+
+                                // CUSTOM ERROR
+                                if(allErrors.apt_date){
+                                    console.log(allErrors);
+                                    let fieldError = $(row).find('input[name=apt_date]')
+                                    $(fieldError).after(`<span class="text-red-500">${allErrors.apt_date}</span>`);
+                                }
+                                // error messages are stored in jqXHR.responseText.errors - with inputName (key):errorMessage (value)
+                                var errors = allErrors["errors"]
+                                // console.log(errors);
+
+                                for (var key in errors) {
+                                    // console.log(key);
+                                    let fieldError = $(row).find(`input[name=${key}], select[name="${key}"]`)
+                                    $(fieldError).after(`<span class="text-red-500">${errors[key][0]}</span>`);
+                                
+                                }
+                            }
+                        }
+                    });
+                });
+            }
+        
         });
     });
 

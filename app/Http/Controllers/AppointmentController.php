@@ -7,6 +7,7 @@ use App\Models\Patient;
 use App\Models\Prescription;
 use App\Models\Roster;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller
@@ -21,7 +22,7 @@ class AppointmentController extends Controller
     public function index()
     {
         if(Auth::check() && Auth::user()->getAccess(['admin','supervisor'])){
-            $patients = Patient::all();
+            $patients = Patient::where('admission_date', '<=', date('Y-m-d'))->get();
             return view('appointments.allAppointments', [ 'patients' => $patients]);
 
         }
@@ -112,8 +113,13 @@ class AppointmentController extends Controller
             $afternoonPrescription = $request->afternoon_prescription_id;
             $nightPrescription = $request->night_prescription_id;
             $comment = $request->comment;
-
-
+            $patient_id = Appointment::where('id', $id)->pluck('patient_id')[0];
+            $justPrescribed = [$morningPrescription,$afternoonPrescription,$nightPrescription];
+            $newRx = $this->anyNewRx($patient_id,$justPrescribed);
+            $rxPrice = $newRx * 5;
+            $apt_price = $rxPrice + 50;
+            // dd($apt_price);
+            Patient::where('id', $patient_id)->increment('balance', $apt_price);
             Appointment::where('id',$id)->update(['morning_med' => $morningPrescription,'afternoon_med' => $afternoonPrescription, 'night_med' => $nightPrescription, 'comments' => $comment]);
             return redirect()->route('employees.show',['employee' => Auth::id()])->with('appointment_success', 'Appointment Completed');
             // put appointment success in blade
@@ -121,6 +127,34 @@ class AppointmentController extends Controller
         else{
             return redirect()->route('app.home')->with('access_error', 'You do not have permission to access this page');
         }
+    }
+
+
+    public function anyNewRx($patient_id, array $justPrescribed){
+        // $justPrescribed = [$request->morning_prescription_id,$request->afternoon_prescription_id,$request->night_prescription_id]
+        $justPrescribed = array_unique($justPrescribed);
+        // get all new prescriptions from the 1st til now
+        $now = Carbon::now();
+        $monthFirst = Carbon::now()->startOfMonth();
+        $prescriptions = Prescription::join('appointments', function ($join) {
+            $join->on('appointments.morning_med', '=', 'prescriptions.id')
+                ->orOn('appointments.afternoon_med', '=', 'prescriptions.id')
+                ->orOn('appointments.night_med', '=', 'prescriptions.id');
+        })
+        ->where('appointments.patient_id', $patient_id)
+        ->whereBetween('appointments.date', [$monthFirst, $now])
+        ->select('prescriptions.*')
+        ->distinct()
+        ->get();
+        $allRx = $prescriptions->pluck('id')->toArray();
+        // Counts any new rx and multiplied by 5 before added to patient balance
+        $newRx = 0;
+        foreach ($justPrescribed as $rx) {
+            if(isset($rx) && !in_array($rx,$allRx)){
+                $newRx++;
+            }
+        }
+        return $newRx;
     }
 
     public function edit($id){
@@ -131,8 +165,35 @@ class AppointmentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        
-        
+        if(Auth::check() && Auth::user()->getAccess(['supervisor', 'admin'])){
+            // Reschedule Appointment
+            $request->validate(
+                [
+                    'apt_date' => 'required',
+                    'doctor_id' => 'required',
+                ],
+                [
+                    'apt_date.required' => 'Please Enter a Reschedule Date',
+                    'doctor_id' => 'No Doctors Available'
+                ]
+            );
+            $paitentId = $request->patient_id;
+            $aptDate = $request->apt_date;
+            $doctorId = $request->doctor_id;
+    
+            $unique = Appointment::where('patient_id',$paitentId)->where('date', $aptDate)->where('id', '!=', $id)->first();
+            if($unique){
+                return response()->json(['apt_date' => 'Patient already has an appointment that day'], 422);
+            }
+
+
+            Appointment::where('id',$id)->update(['date' => $aptDate, 'doctor_id' => $doctorId]);
+            return response()->json(['reschedule_success' => 'Appointment Rescheduled Successfully']);
+            // return redirect()->route('appointments.index')->with('appointment_change_success', 'Appointment Canceled');
+        }
+        else{
+            return redirect()->route('app.home')->with('access_error', 'You do not have permission to access this page');
+        }
     }
 
     /**
