@@ -103,4 +103,11 @@ class User extends Authenticatable
     public function scopeNameSearch($query, $id) {
         $query->where('id', $id);
     }
+
+    // concatenates first name and last name
+    // can be accessed with user()->full_name
+    protected $appends = ['full_name'];
+    public function getFullNameAttribute(){
+        return $this->first_name . ' ' . $this->last_name;
+    }
 }

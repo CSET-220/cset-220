@@ -45,6 +45,21 @@ Route::get('/careers', [UserController::class, 'employeeRegister'])->name('emplo
 
 Route::post('/doctor/search', [EmployeeController::class, 'search'])->name('doctor.search');
 Route::post('/updateLog', [LogController::class, 'updateLog'])->name('log.update');
+
+
+
+Route::get('/prescriptions/{prescription_name}/dosage',[PrescriptionController::class, 'getDosage'])->name('prescription.dosage');
+Route::post('/appointments/{appointment}/conduct', [AppointmentController::class, 'conductAppointment'])->name('appointment.conduct');
+
+Route::get('/appointments/by/day', [AppointmentController::class, 'getAppointmentDay'])->name('appointments.by.day');
+Route::get('/appointments/doctor/onShift', [AppointmentController::class, 'getDrOnShift'])->name('doctor.on.shift');
+Route::get('/prescriptions/{prescription_name}/dosage',[PrescriptionController::class, 'getDosage'])->name('prescription.dosage');
+Route::post('/appointments/{appointment}/conduct', [AppointmentController::class, 'conductAppointment'])->name('appointment.conduct');
+Route::post('/admin/approval', [AdminController::class, 'approval'])->name('admin.approval');
+
+Route::post('/users/{user}/payment', [UserController::class, 'payment'])->name('users.payment');
+Route::get('/users/{user}/family/connect', [UserController::class, 'familyCodeSearch'])->name('family.dashboard.connect');
+Route::get('/users/{user}/admin/bill/patients', [AdminController::class, 'billPatients'])->name('bill.patients');Route::post('/updateLog', [LogController::class, 'updateLog'])->name('log.update');
 Route::post('/updateSalary', [AdminController::class, 'updateSalary'])->name('admin.updateSalary');
 Route::post('/admin/searchEmployee', [AdminController::class, 'searchEmployee'])->name('admin.searchEmployee');
 Route::post('/admin/refreshEmployeeTable', [AdminController::class, 'refreshEmployeeTable'])->name('admin.refreshEmployeeTable');

@@ -4,6 +4,22 @@
     Account Approval
 @endsection
 
+@section('navLink')
+<nav>
+    <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-blue-700 rounded-lg bg-gray-700 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-8 md:bg-blue-700 dark:bg-gray-700 md:dark:bg-gray-700">
+        <li>
+            <a href="{{ route('admin.show', ['admin' => Auth::id()]) }}">Home</a>        
+        </li>
+        <li>
+            <a href="{{ route('admin.index') }}">Account Approval</a>
+        </li>
+        <li>
+            <a href="{{ route('roles.index') }}">Role Creation</a>
+        </li>
+    </ul>
+</nav>
+@endsection
+
 @section('pageHeader')
     <div class="bg-gradient-to-r from-gray-700 to-gray-900 text-white py-10 w-full">
         <div class="container mx-auto text-center">
@@ -13,8 +29,10 @@
 @endsection
 
 @section('mainContent')
-    <div class="relative p-4 overflow-x-auto">
-        <table class="w-1/2 mx-auto text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    
+
+<div class="relative overflow-x-auto">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">
@@ -39,7 +57,7 @@
             </tbody>
         </table>
     </div>
-    <form action="{{route('roles.store')}}" method="POST" class="max-w-sm mb-20 mx-auto flex items-center">
+    <form action="{{route('roles.store')}}" class="max-w-sm mx-auto flex items-center">
         <div class="mb-5">
             <label for="role_title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Role</label>
             <input type="text" name="role_title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
