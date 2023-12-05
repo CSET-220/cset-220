@@ -51,3 +51,4 @@ Route::post('/updateLog', [LogController::class, 'updateLog'])->name('log.update
 Route::get('/prescriptions/{prescription_name}/dosage',[PrescriptionController::class, 'getDosage'])->name('prescription.dosage');
 Route::post('/appointments/{appointment}/conduct', [AppointmentController::class, 'conductAppointment'])->name('appointment.conduct');
 Route::post('/admin/approval', [AdminController::class, 'approval'])->name('admin.approval');
+Route::get('/admin/patient/Info', [AdminController::class, 'patientInfo'])->name('admin.patientInfo');
