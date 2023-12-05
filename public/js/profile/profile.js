@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     closeButtons.forEach(btn => {
         btn.addEventListener('click', function (event) {
-            event.preventDefault();
+            // event.preventDefault();
             var modalId = this.getAttribute('data-modal-hide');
         })
     });
