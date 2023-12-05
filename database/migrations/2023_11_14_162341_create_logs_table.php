@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('patient_id')->constrained()->cascadeOnDelete(); // Deletes row if patient is deleted
             $table->foreignId('caregiver_id')->constrained(
                 table: 'users'
-            );//->nullOnDelete(); // If deleted dont delete whole roster just set value to null;
+            );
             $table->date('date');
             $table->boolean('morning_med')->nullable()->default(null);
             $table->boolean('afternoon_med')->nullable()->default(null);
