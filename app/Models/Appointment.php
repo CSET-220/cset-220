@@ -31,10 +31,20 @@ class Appointment extends Model
         return $this->hasOne(Prescription::class, 'id','night_med');
     }
 
+    // TODO might have to use date as well
+    public function scopePatientMissedAppointment($query, $patient_id, $date) {
+        $query->where('patient_id', $patient_id)
+            ->where('date', '<=', $date);
+    }
+
     protected $fillable = [
         'date',
         'patient_id',
         'doctor_id',
         'comments'
     ];
+
+    function scopePatientAppointmentSearch($query, $date, $patient_id) {
+        $query->where('date', $date)->where('patient_id', $patient_id);
+    }
 }

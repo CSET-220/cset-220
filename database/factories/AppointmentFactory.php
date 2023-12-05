@@ -23,10 +23,10 @@ class AppointmentFactory extends Factory
         $meds = Prescription::all();
 
         return [
-            'morning_med' => fake()->optional(0.4)->randomElement($meds->pluck('id')->all()),
-            'afternoon_med' => fake()->optional(0.4)->randomElement($meds->pluck('id')->all()),
-            'night_med' => fake()->optional(0.4)->randomElement($meds->pluck('id')->all()),
-            'comments' => fake()->text(),
+            'morning_med' => fake()->optional(0.5)->randomElement($meds->pluck('id')->all()),
+            'afternoon_med' => fake()->optional(0.5)->randomElement($meds->pluck('id')->all()),
+            'night_med' => fake()->optional(0.5)->randomElement($meds->pluck('id')->all()),
+            'comments' => fake()->optional(.95)->text(),
         ];
     }
 }

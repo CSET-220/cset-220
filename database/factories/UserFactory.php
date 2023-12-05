@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Faker\Provider\Biased;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -21,7 +22,7 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'role_id' => random_int(1, 5),
+            'role_id' => fake()->biasedNumberBetween(2, 6, 'sqrt'),
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),

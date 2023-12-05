@@ -100,6 +100,10 @@ class User extends Authenticatable
         return in_Array($this->role_id, $role_ids->toArray());
     }
 
+    public function scopeNameSearch($query, $id) {
+        $query->where('id', $id);
+    }
+
     // concatenates first name and last name
     // can be accessed with user()->full_name
     protected $appends = ['full_name'];

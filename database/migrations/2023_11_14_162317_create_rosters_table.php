@@ -18,19 +18,19 @@ return new class extends Migration
             );//->nullOnDelete(); // If deleted dont delete whole roster just set value to null
             $table->foreignId('supervisor_id')->constrained(
                 table: 'users'
-            );
+            )->nullOnDelete(); // If deleted dont delete whole roster just set value to null;
             $table->foreignId('caregiver1_id')->constrained(
                 table: 'users'
-            );
+            )->nullOnDelete(); // If deleted dont delete whole roster just set value to null;
             $table->foreignId('caregiver2_id')->constrained(
                 table: 'users'
-            );
+            )->nullOnDelete(); // If deleted dont delete whole roster just set value to null;
             $table->foreignId('caregiver3_id')->constrained(
                 table: 'users'
-            );
+            )->nullOnDelete(); // If deleted dont delete whole roster just set value to null;
             $table->foreignId('caregiver4_id')->constrained(
                 table: 'users'
-            );
+            )->nullOnDelete(); // If deleted dont delete whole roster just set value to null;
             $table->date('date');
             $table->timestamps();
         });
