@@ -6,6 +6,7 @@ use App\Models\Appointment;
 use App\Models\Log;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -18,7 +19,14 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        //
+        if(Auth::check()) {
+            if(auth()->user()->getAccess(['admin', 'caregiver', 'doctor', 'supervisor'])) {
+                $patients = Patient::with('user')->get();
+                return view('employees.index', compact('patients'));
+            } else {
+                return redirect()->route('app.home')->with('access_error', 'You do not have permission to access this page');
+            }
+        }
     }
 
     public function create(){
