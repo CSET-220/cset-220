@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('doctor_id')->constrained(
                 table: 'users'
-            )->nullOnDelete(); // If deleted dont delete whole roster just set value to null
+            );//->nullOnDelete(); // If deleted dont delete whole roster just set value to null
             $table->foreignId('supervisor_id')->constrained(
                 table: 'users'
             )->nullOnDelete(); // If deleted dont delete whole roster just set value to null;

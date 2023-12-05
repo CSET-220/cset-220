@@ -233,6 +233,10 @@
                     $('.pagination .active').addClass('text-gray-600 bg-primary-50 border border-primary-300 hover:bg-gray-100 hover:text-gray-700');
                 },
                 rowCallback: function(row, data, index) {
+                    checkDate = new Date(data.date)
+                    if(isTodayAppt(checkDate) && data.comments === null){
+                        $(row).addClass('bg-green-400');
+                    }
                     $(row).attr({
                         'data-modal-content': JSON.stringify(data)
                     });
