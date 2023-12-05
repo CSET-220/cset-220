@@ -5,6 +5,7 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\Employee;
 use App\Models\Patient;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -58,7 +59,7 @@ class AdminController extends Controller
     public function create()
     {
         if(Auth::check()) {
-            if(auth()->user()->getAccess(['admin']) || auth()->user()->getAccess(['supervisor'])){
+            if(auth()->user()->getAccess(['admin', 'supervisor'])){
                 $employees = Employee::all();
                 return view('admin.create', compact('employees'));
             }
@@ -139,4 +140,41 @@ class AdminController extends Controller
         }
     }
 
+    public function adminReport() 
+    {
+        if(Auth::check()) {
+            if(auth()->user()->getAccess(['admin', 'supervisor'])) {
+                $today = Carbon::today()->toDateString();
+                $patients = Patient::with(['logs', 'appointments'])->get();
+                $patientData = [];
+                foreach($patients as $patient) {
+                    $missedCareLogs = $patient->logs()
+                    ->PatientMissedCare($patient->id, $today)
+                    ->get()
+                    ->keyBy('date');
+
+                    $missedAppointments = $patient->appointments()
+                    ->PatientMissedAppointment($patient->id, $today)
+                    ->get()
+                    ->keyBy('date');
+
+                    $dates = collect($missedCareLogs->keys())->merge($missedAppointments->keys())->unique()->sort();
+
+                    foreach($dates as $date) {
+                        $log = $missedCareLogs->get($date);
+                        $appointment = $missedAppointments->get($date);
+
+                        $patientData[$patient->id][$date] = [
+                            'log' => $log,
+                            'appointment' => $appointment
+                        ];
+                    }
+                } 
+                // dd($patientData);
+                return view('admin.report', compact('patientData'));
+            } else {
+                return redirect()->back();
+            }
+        }
+    }
 } 
