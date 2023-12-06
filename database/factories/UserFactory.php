@@ -26,7 +26,7 @@ class UserFactory extends Factory
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
-            'phone' => fake()->phoneNumber(),
+            'phone' => fake()->numerify('###-###-####'),
             'password' => static::$password ??= Hash::make('password'),
             'dob' => fake()->dateTimeBetween('-100 years', '-60 years'),
             'is_approved' => true,
