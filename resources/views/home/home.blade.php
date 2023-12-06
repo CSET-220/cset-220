@@ -6,6 +6,7 @@
 
 {{-- @section('navLink')
 
+
 @endsection --}}
 
 @section('pageHeader')
@@ -220,9 +221,11 @@
 
     <script>
 
+
         jQuery(document).ready(function () {
             @if ($errors->has('login_email'))
                 console.log('ERRORS PRESENT')
+                jQuery(function($){ $("#login-modal").removeClass('hidden'); })
                 jQuery(function($){ $("#login-modal").removeClass('hidden'); })
             @endif
         });

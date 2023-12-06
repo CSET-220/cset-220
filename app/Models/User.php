@@ -21,7 +21,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
     public function role() {
-        return $this->hasOne(Role::class);
+        return $this->belongsTo(Role::class);
     }
 
     public function patient() {
@@ -98,5 +98,16 @@ class User extends Authenticatable
     public function getAccess(array $role_title){
         $role_ids = Role::whereIn('role_title',$role_title)->pluck('id');
         return in_Array($this->role_id, $role_ids->toArray());
+    }
+
+    public function scopeNameSearch($query, $id) {
+        $query->where('id', $id);
+    }
+
+    // concatenates first name and last name
+    // can be accessed with user()->full_name
+    protected $appends = ['full_name'];
+    public function getFullNameAttribute(){
+        return $this->first_name . ' ' . $this->last_name;
     }
 }

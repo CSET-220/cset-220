@@ -17,7 +17,7 @@ $('#user_type').on('change', function () {
 });
 
 
-$('#phone_number').on('input', function () {
+$('#phone_number, #emergency_contact').on('input', function () {
     let phoneNumber = this.value.replace(/\D/g, '')
     
     if (phoneNumber.length > 10) {

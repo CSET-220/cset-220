@@ -174,6 +174,78 @@ class EmployeeController extends Controller
         }
         
         // var_dump($start_date,$end_date);
+        //  to tell if searching or not to disregard date filters
+        $isSearch = !empty($columnName) && !empty($searchValue);
+        
+        // if they arent searching apply date filter
+        if (!$isSearch) {
+            $start_date = $request->input('start_date'); 
+            $end_date = $request->input('end_date'); 
+            $start_date = \DateTime::createFromFormat('m/d/Y', $start_date)->format('Y-m-d');
+            $end_date = \DateTime::createFromFormat('m/d/Y', $end_date)->format('Y-m-d');
+
+            // date filter
+            $query->whereBetween('date', [$start_date, $end_date]);
+        }
+        
+        // Search
+        if($isSearch){
+            if (!empty($columnName) && !empty($searchValue)) {
+                // dd($searchValue);
+                if($columnName === 'name'){
+                    $query->whereHas('patient.user', function ($subQuery) use ($searchValue) {
+                        $subQuery->whereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%{$searchValue}%"]);
+                    });
+                    // dd($query);
+                }
+                elseif ($columnName === 'morning_med') {
+                    $query->where(function ($subQuery) use ($searchValue) {
+                        $subQuery->whereHas('morningPrescriptions', function ($morningSubQuery) use ($searchValue) {
+                            $morningSubQuery->where('medication_name', 'like', "%{$searchValue}%")
+                                        ->orWhere('medication_dosage', 'like', "%{$searchValue}%");
+                        });
+                    });
+                }
+                elseif ($columnName === 'afternoon_med') {
+                    $query->where(function ($subQuery) use ($searchValue) {
+                        $subQuery->whereHas('afternoonPrescriptions', function ($afternoonSubQuery) use ($searchValue) {
+                            $afternoonSubQuery->where('medication_name', 'like', "%{$searchValue}%")
+                                        ->orWhere('medication_dosage', 'like', "%{$searchValue}%");
+                        });
+                    });
+                }
+                elseif ($columnName === 'night_med') {
+                    $query->where(function ($subQuery) use ($searchValue) {
+                        $subQuery->whereHas('nightPrescriptions', function ($nightSubQuery) use ($searchValue) {
+                            $nightSubQuery->where('medication_name', 'like', "%{$searchValue}%")
+                                        ->orWhere('medication_dosage', 'like', "%{$searchValue}%");
+                        });
+                    });
+                }
+                else{
+                    $query->where($columnName, 'like' ,"%{$searchValue}%");
+                }
+            }
+        }
+        // order by
+        $order = $request->input('order');
+        $columnIndex = $order[0]['column'];
+        $columnName = $request->input("columns.$columnIndex.data");
+        $columnDirection = $order[0]['dir'];
+        if($columnName === 'patient_name'){
+            // dd($columnName);
+            $query->orderBy(Appointment::select(DB::raw('CONCAT(users.first_name, " ", users.last_name)'))
+                ->join('patients', 'appointments.patient_id', '=', 'patients.id')
+                ->join('users', 'patients.user_id', '=', 'users.id')
+                ->whereColumn('appointments.id', 'appointments.id')
+                ->limit(1)
+                , $columnDirection);
+        }
+        else{
+            $query->orderBy($columnName, $columnDirection);
+        }
+        
+        // var_dump($start_date,$end_date);
         return DataTables::of($query)
             ->addColumn('patient_name', function ($appointment) {
                 return $appointment->patient->user->first_name . ' ' . $appointment->patient->user->last_name;

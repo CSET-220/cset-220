@@ -13,6 +13,15 @@
             <li>
                 <a href="{{route('rosters.create')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Create Roster</a>
             </li>
+            <li>
+                <a href="{{route('admin.create')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Employee Roster</a>
+            </li>
+            <li>
+                <a href="{{route('admin.adminReport')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Admin Report</a>
+            </li>
+            <li>
+                <a href="{{route('appointments.index')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Schedule Appointment</a>
+            </li>
         </ul>
     </div>
 </div>

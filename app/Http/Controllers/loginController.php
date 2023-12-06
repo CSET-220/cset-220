@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
+use App\Models\User;
+use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class loginController extends Controller
@@ -39,19 +40,20 @@ class loginController extends Controller
                 return redirect()->route('admin.show',['admin' => Auth::user()])->with('login_success','Login Successful');
             }
             elseif ($user->getAccess(['supervisor'])) {
-                return redirect()->route('employees.show',['employee' => Auth::user()])->with('login_success','Login Successful');
+                return redirect()->route('users.show',['user' => Auth::user()])->with('login_success','Login Successful');
             }
             elseif ($user->getAccess(['doctor'])) {
-                return redirect()->route('employees.show',['employee' => Auth::user()])->with('login_success','Login Successful');
+                return redirect()->route('users.show',['user' => Auth::user()])->with('login_success','Login Successful');
             }
             elseif ($user->getAccess(['caregiver'])) {
-                return redirect()->route('employees.show',['employee' => Auth::user()])->with('login_success','Login Successful');
+                return redirect()->route('users.show',['user' => Auth::user()])->with('login_success','Login Successful');
             }
             elseif ($user->getAccess(['family'])) {
-                return redirect()->route('patients.show',['patient' => Auth::user()])->with('login_success','Login Successful');
+                return redirect()->route('users.show',['user' => Auth::user()])->with('login_success','Login Successful');
             }
             elseif ($user->getAccess(['patient'])) {
-                return redirect()->route('patients.show',['patient' => Auth::user()])->with('login_success','Login Successful');
+                $patient = Patient::where('user_id', $user->id)->first();
+                return redirect()->route('patients.show',['patient' => $patient])->with('login_success','Login Successful');
             }
         }
         else{
