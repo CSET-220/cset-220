@@ -14,7 +14,7 @@
 
 @section('pageHeader')
     {{-- HEADER --}}
-    <div class="bg-gradient-to-r from-gray-700 to-gray-900 text-white py-10 w-full">
+    <div class="bg-gradient-to-r from-gray-700 to-gray-900 text-white py-6 w-full">
         <div class="container mx-auto text-center">
             <h1 class="text-4xl font-bold mb-4">Welcome {{ Auth::user()->full_name }}</h1>
             <p class="text-lg">Profile</p>
@@ -41,13 +41,13 @@
     @include('components.profile.paymentModal')
 @endif
 
-<div class="mx-auto w-full">
-    <div class="flex justify-around flex-col sm:flex-wrap sm:flex-row p-8 pt-4 sm:pb-24 sm:w-full">
+{{-- <div class="mx-auto w-full"> --}}
+    <div class="flex justify-around flex-col sm:flex-wrap sm:flex-row p-8 pt-8 sm:pb-20 sm:w-full flex-grow">
         {{-- Left side --}}
-        <div class="flex flex-col mr-0 mb-4 w-full md:w-1/3 md:mr-6">
+        <div class="flex flex-col mr-0 mb-4 w-full md:w-1/3 md:mr-6 flex-grow">
 
             {{-- Top Left --}}
-            <div class="bg-gray-800 p-4 rounded-lg mb-4 shadow-gray-600 shadow-md w-full text-right">
+            <div class="bg-gray-800 p-4 rounded-lg mb-4 shadow-gray-600 shadow-md w-full text-right flex-grow">
                 <button id="dropdownButton" data-dropdown-toggle="dropdown" class="inline-block text-gray-400 hover:bg-gray-700 focus:ring-4 focus:outline-none ring-gray-200 focus:ring-gray-700 rounded-lg text-sm p-1.5" type="button">
                     <span class="sr-only">Open dropdown</span>
                     <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 3">
@@ -58,31 +58,45 @@
                 <div id="dropdown" class="z-10 hidden text-base list-none divide-y divide-gray-100 rounded-lg shadow w-44 bg-gray-700">
                     <ul class="py-2" aria-labelledby="dropdownButton">
                         <li>
-                            <a id="edit_profile_btn" class="text-left cursor-pointer block px-4 py-2 text-sm hover:bg-gray-600 text-gray-200 hover:text-white">Edit</a>
+                            <a id="edit_profile_btn" class="text-left cursor-pointer block px-4 py-2 text-sm hover:bg-gray-600 text-gray-200 hover:text-white">Edit Information</a>
                         </li>
-                        <li>
-    
-                        <li>
-                            <a id="show-delete-modal" data-modal-target="delete-user-modal"data-modal-toggle="delete-user-modal" class="text-left cursor-pointer block px-4 py-2 text-sm hover:bg-gray-600 text-gray-200 hover:text-white">Delete Account</a>
 
+                        <li>
+                            <a id="edit_prof_pic" data-modal-target="edit-pic-modal"data-modal-toggle="edit-pic-modal" class="text-left cursor-pointer block px-4 py-2 text-sm hover:bg-gray-600 text-gray-200 hover:text-white">Edit Profile Picture</a>
                         </li>
+    
                         {{-- LINK TO PAYMENT MODAL --}}
                         @if (Auth::user()->getAccess(['patient']))
                             <li>
-                                <a data-modal-target="payment-modal" data-modal-toggle="payment-modal" class="cursor-pointer block px-4 py-2 text-sm  hover:bg-gray-600 text-gray-200 hover:text-white">Make a Payment</a>
+                                <a data-modal-target="payment-modal" data-modal-toggle="payment-modal" class="cursor-pointer text-left block px-4 py-2 text-sm  hover:bg-gray-600 text-gray-200 hover:text-white">Make a Payment</a>
                             </li>
-
+                        
                         @elseif (Auth::user()->getAccess(['admin']))
                             <li>
                                 <a href="{{ route('bill.patients', ['user' => Auth::user()]) }}" class="w-full text-left cursor-pointer block px-4 py-2 text-sm hover:bg-gray-600 text-gray-200 hover:text-white">Bill Patients</a>
                             </li>
                         @endif
+                        <li>
+                            <a id="show-delete-modal" data-modal-target="delete-user-modal"data-modal-toggle="delete-user-modal" class="text-left cursor-pointer block px-4 py-2 text-sm hover:bg-gray-600 text-red-500 hover:text-white">Delete Account</a>
+                        </li>
                     </ul>
                 </div>
-                <div class="flex flex-col items-center pb-4">
-                    <img class="w-24 h-24 mb-3 rounded-full shadow-lg" src="https://picsum.photos/200" alt="Bonnie image"/>
+                <div class="flex flex-col flex-grow items-center pb-4 my-auto py-5">
+                    @if (Auth::user()->profile_pic)
+                        <img class="w-24 lg:w-48 h-24 lg:h-48 mb-3 rounded-full shadow-lg object-cover" src="{{ asset(Auth::user()->profile_pic) }}" alt=""/>
+                    @else
+                        <div class="relative inline-flex items-center justify-center mb-3 rounded-full shadow-lg object-cover w-24 h-24 overflow-hidden bg-gray-100 dark:bg-gray-600">
+                            @php
+                                $words = explode(" ",$user_info->full_name);
+                                $userInitials = '';
+                                $userInitials .= strtoupper($words[0][0]) . strtoupper($words[1][0]);
+
+                            @endphp
+                            <span class="font-bold text-5xl text-gray-600 dark:text-gray-300 ">{{ $userInitials }}</span>
+                        </div>
+                    @endif
                     <h5 class="mb-1 text-xl font-medium text-white">{{ ucwords($user_info->full_name) }}</h5>
-                    <span class="text-sm text-gray-500 ">{{ ucwords($user_info->role->role_title) }}</span>
+                    <span class="text-sm text-gray-500">{{ ucwords($user_info->role->role_title) }}</span>
                     {{-- ADMISSION DATE/ BALANCE for Patient --}}
                     @if (Auth::user()->getAccess(['patient']))
                         <p class="text-sm text-gray-500">Admitted: {{ date('F d, Y',strToTime($user_info->patient->admission_date)) }}</p>
@@ -101,7 +115,7 @@
 
 
             {{-- Bottom Left --}}
-            <div class="bg-gray-200 p-4 lg:p-4 rounded-lg shadow-gray-600 shadow-md w-full">
+            <div class="bg-gray-200 p-4 lg:p-4 rounded-lg shadow-gray-600 shadow-md w-full flex-grow">
                 <div class="mt-1">
                     <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
                         <span clas="text-green-500">
@@ -118,26 +132,33 @@
                                     $initials .= strtoupper(substr($name, 0, 1));
                                 }
                             @endphp
-                            <div data-popover-target="popover-doctor-{{ $initials }}" class=" cursor-pointer relative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full bg-blue-600">
-                                <span class="font-medium text-gray-300">{{ $initials }}</span>
-                            </div>
-            
+                            @if($employee->profile_pic)
+                                <img data-popover-target="popover-doctor-{{ $initials }}" src="{{ asset($employee->profile_pic) }}" alt="" srcset="" class="w-8 h-8 rounded-full cursor-pointer ">
+                            @else
+                                <div data-popover-target="popover-doctor-{{ $initials }}" class=" cursor-pointer relative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full bg-blue-600">
+                                    <span class="font-medium text-gray-300">{{ $initials }}</span>
+                                </div>
+                            @endif
                             <div data-popover id="popover-doctor-{{ $initials }}" role="tooltip" class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600">
                                 <div class="p-3">
                                     <div class="flex items-center justify-between mb-2">
-                                        <div class=" cursor-pointerrelative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full bg-blue-600">
-                                            <span class="font-medium text-gray-300">{{ $initials }}</span>
-                                        </div>
+                                        @if($employee->profile_pic)
+                                            <img src="{{ asset($employee->profile_pic) }}" alt="" srcset="" class="w-8 h-8 rounded-full cursor-pointer ">
+                                        @else
+                                            <div class=" cursor-pointer relative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full bg-blue-600">
+                                                <span class="font-medium text-gray-300">{{ $initials }}</span>
+                                            </div>
+                                        @endif
                                         <p>{{ ucwords($employee->role->role_title) }}</p>
                                         <div>
                                             <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-1.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Call</button>
                                         </div>
                                     </div>
                                     <p class="text-base font-semibold leading-none text-gray-900 dark:text-white">
-                                        <a href="#">{{ ucwords($employee->full_name) }}</a>
+                                        <a >{{ ucwords($employee->full_name) }}</a>
                                     </p>
                                     <p class="mb-3 text-sm font-normal">
-                                        <a class="hover:underline">{{ $employee->email }}</a>
+                                        <a class="cursor-pointer hover:underline">{{ $employee->email }}</a>
                                     </p>
                                     <p class="mb-4 text-sm">Contact: <a class="text-blue-600 dark:text-blue-500 hover:underline">{{ $employee->phone }}</a>.</p>
                                     
@@ -158,11 +179,11 @@
         </div>
 
         {{-- Right Side --}}
-        <div class="flex flex-col justify-between ml-0 mb-4 w-full md:w-3/5 md:ml-6">
+        <div class="flex flex-col justify-between ml-0 mb-4 w-full md:w-3/5 md:ml-6 flex-grow">
 
 
             {{-- Top Right --}}
-            <div class="bg-gray-200 p-4 rounded-lg shadow-gray-600 mb-4 shadow-md">
+            <div class="bg-gray-200 p-4 rounded-lg shadow-gray-600 mb-4 shadow-md flex-grow">
 
                 <div class="p-2 rounded-sm">
                     <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
@@ -317,7 +338,7 @@
 
 
             {{-- Bottom Right --}}
-            <div class="bg-gray-200 p-4 pt-2 rounded-lg shadow-gray-600 shadow-md">
+            <div class="bg-gray-200 p-4 pt-2 rounded-lg shadow-gray-600 shadow-md flex-grow">
                 @if (Auth::user()->getAccess(['patient']))
                     {{-- TODAYS LOG FOR PATIENT --}}
                     @include('components.profile.patientDaily')
@@ -342,16 +363,12 @@
         </div>
     </div>
 
-</div>
+{{-- </div> --}}
 
 
 
 
-{{-- DELETE USER MODAL --}}
-{{-- <button data-modal-target="popup-modal" data-modal-toggle="popup-modal" class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-    Toggle modal
-    </button> --}}
-    
+{{-- DELETE USER MODAL --}}    
     <div id="delete-user-modal" aria-hidden="true" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-md max-h-full">
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -366,7 +383,7 @@
                     <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                     </svg>
-                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to delete your account?</h3>
+                    <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Are you sure you want to <span class="font-bold text-red-500">DELETE</span> your account?</h3>
                     <div class="flex items-center justify-center">
                         <form action="{{ route('users.destroy',['user' => Auth::id()]) }}" method="post" class="">
                             @csrf
@@ -380,6 +397,42 @@
         </div>
     </div>
 
+
+{{-- EDIT PROF PIC MODAL --}}
+
+
+<!-- Modal toggle -->
+
+  
+  <!-- Main modal -->
+    <div id="edit-pic-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full max-w-md max-h-full">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                        Update Profile Picture
+                    </h3>
+                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="edit-pic-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="p-4 md:p-5">
+                    <form action="{{ route('edit.profile.pic', ['user' => Auth::id()]) }}" method="post" enctype="multipart/form-data" class="flex flex-col items-center justify-center">
+                        @csrf
+                        <input name="profile_pic" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">
+                        <button type="submit" class="cursor-pointer w-fit hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">Upload</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div> 
+  
     
 @endsection
 

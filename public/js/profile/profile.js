@@ -62,14 +62,6 @@ $('#fam_code_search_btn').on('click', function () {
 document.addEventListener('DOMContentLoaded', function () {
     // Get all elements with the data-modal-hide attribute
     var closeButtons = document.querySelectorAll('[data-modal-hide]');
-
-    closeButtons.forEach(btn => {
-        btn.addEventListener('click', function (event) {
-            event.preventDefault();
-            var modalId = this.getAttribute('data-modal-hide');
-        })
-    });
-    // Loop through the elements
     for (var i = 0; i < closeButtons.length; i++) {
         // Add a click event listener to each element
         closeButtons[i].addEventListener('click', function (event) {

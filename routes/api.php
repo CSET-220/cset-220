@@ -63,3 +63,6 @@ Route::post('/admin/searchEmployee', [AdminController::class, 'searchEmployee'])
 Route::post('/admin/refreshEmployeeTable', [AdminController::class, 'refreshEmployeeTable'])->name('admin.refreshEmployeeTable');
 Route::get('/admin/report/all', [AdminController::class, 'adminReport'])->name('admin.adminReport');
 Route::get('/patients/{patient_id}/{date}', [PatientController::class, 'getPatientLog']);
+
+// EDIT PROFILE PICS
+Route::post('/users/{user}/edit/account/profile/pic', [UserController::class, 'editProfilePic'])->name('edit.profile.pic');

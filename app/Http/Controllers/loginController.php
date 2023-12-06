@@ -37,7 +37,7 @@ class loginController extends Controller
         if(Auth::attempt(['email' =>$request->login_email, 'password' => $request->login_password, 'is_approved' => 1], $remember )){
             $user = Auth::user();
             if($user->getAccess(['admin'])){
-                return redirect()->route('users.show',['admin' => Auth::user()])->with('login_success','Login Successful');
+                return redirect()->route('users.show',['user' => Auth::user()])->with('login_success','Login Successful');
             }
             elseif ($user->getAccess(['supervisor'])) {
                 return redirect()->route('users.show',['user' => Auth::user()])->with('login_success','Login Successful');
