@@ -298,7 +298,7 @@
                 },
                 rowCallback: function(row, data, index) {
                     checkDate = new Date(data.date)
-                    if(isTodayAppt(checkDate) && data.comments === ""){
+                    if(isTodayAppt(checkDate) && data.comments === null){
                         $(row).addClass('bg-green-400');
                     }
                     $(row).attr({
