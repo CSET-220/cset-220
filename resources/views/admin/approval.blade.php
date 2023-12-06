@@ -7,22 +7,6 @@
     Account Approval
 @endsection
 
-@section('navLink')
-<nav>
-    <ul class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-blue-700 rounded-lg bg-gray-700 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-8 md:bg-blue-700 dark:bg-gray-700 md:dark:bg-gray-700">
-        <li>
-            <a href="{{ route('admin.show', ['admin' => Auth::id()]) }}">Home</a>        
-        </li>
-        <li>
-            <a href="{{ route('admin.index') }}">Account Approval</a>
-        </li>
-        <li>
-            <a href="{{ route('roles.index') }}">Role Creation</a>
-        </li>
-    </ul>
-</nav>
-@endsection
-
 @section('pageHeader')
     <div class="bg-gradient-to-r from-gray-700 to-gray-900 text-white py-10 w-full">
         <div class="container mx-auto text-center">
@@ -32,8 +16,8 @@
 @endsection
 
 @section('mainContent')
-    <div class="relative overflow-x-auto">
-        <table id="myTable" class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <div class="w-1/2 mx-auto mb-20 relative p-4 overflow-x-auto">
+        <table id="myTable" class="text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                 <tr>
                     <th scope="col" class="px-6 py-3">
@@ -62,14 +46,13 @@
                             {{App\Models\Role::where('id',$user->role_id)->value('role_title')}}
                         </td>
                         <td class="px-6 py-4">
-                            <input type="checkbox" name="approve[]" value="{{$user->id}}">
+                            <input type="checkbox" class="approved" value="{{$user->id}}">
                         </td>
                         <td class="px-6 py-4">
-                            <input type="checkbox" name="deny[]" value="{{$user->id}}">
+                            <input type="checkbox" class="denied" value="{{$user->id}}">
                         </td>
                     </tr>
                     @endforeach
-                    <input type="submit" value="Submit">
                 </form>
             </tbody>
         </table>
@@ -79,6 +62,7 @@
 @section('script')
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.js"></script>
+    <script src="{{ asset('js/admin/approval.js') }}"></script>
     <script>
         $(document).ready( function () {
             $('#myTable').DataTable();

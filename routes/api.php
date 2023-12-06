@@ -53,7 +53,7 @@ Route::post('/appointments/{appointment}/conduct', [AppointmentController::class
 Route::get('/appointments/by/day', [AppointmentController::class, 'getAppointmentDay'])->name('appointments.by.day');
 Route::get('/appointments/doctor/onShift', [AppointmentController::class, 'getDrOnShift'])->name('doctor.on.shift');
 Route::post('/admin/approval', [AdminController::class, 'approval'])->name('admin.approval');
-
+Route::get('/admin/patient/Info', [AdminController::class, 'patientInfo'])->name('admin.patientInfo');
 Route::post('/users/{user}/payment', [UserController::class, 'payment'])->name('users.payment');
 Route::get('/users/{user}/family/connect', [UserController::class, 'familyCodeSearch'])->name('family.dashboard.connect');
 Route::get('/users/{user}/admin/bill/patients', [AdminController::class, 'billPatients'])->name('bill.patients');
