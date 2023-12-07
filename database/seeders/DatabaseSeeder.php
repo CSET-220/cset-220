@@ -4,13 +4,14 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use App\Models\Appointment;
 use App\Models\Log;
 use App\Models\Role;
 use App\Models\User;
+use App\Models\Family;
 use App\Models\Roster;
 use App\Models\Patient;
 use App\Models\Employee;
+use App\Models\Appointment;
 use App\Models\Prescription;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -37,6 +38,11 @@ class DatabaseSeeder extends Seeder
             Role::updateOrCreate(['id' => $role['id']], $role);
         }
 
+
+        // ----- Admins -----
+        User::factory(4)
+            ->create(['role_id' => 1]);
+            
 
         // ----- Users, Patients, and Employees -----
         User::factory(50)
@@ -69,6 +75,14 @@ class DatabaseSeeder extends Seeder
                     ->create();
                 }
             });
+        
+        
+        // ----- Family Members -----
+        $family_members = User::where('role_id', 6)->get();
+
+        foreach ($family_members as $member) {
+            Family::factory()->create(['family_id' => $member->id]);
+        }
 
 
         // ----- Rosters -----
@@ -185,7 +199,7 @@ class DatabaseSeeder extends Seeder
                 $doctor = Roster::whereDate('date', $date)->first()->doctor_id;
 
                 // check to see if appointment is in the past
-                if ($date <= date('Y-m-d')) {
+                if ($date <= new DateTime()) {
                     Appointment::factory()->create([
                         'patient_id' => $patient->id,
                         'doctor_id' => $doctor,
@@ -203,7 +217,6 @@ class DatabaseSeeder extends Seeder
                         'comments' => null,
                     ]);
                 }
-
             }
         }
     }
