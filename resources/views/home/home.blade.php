@@ -6,6 +6,7 @@
 
 {{-- @section('navLink')
 
+
 @endsection --}}
 
 @section('pageHeader')
@@ -25,10 +26,6 @@
             
             @if (session('access_error'))
                 <p class="text-lg text-red-500">{{ session('access_error') }}</p>
-            @endif
-
-            @if(session('deletion_success'))
-                <p class="text-lg text-green-500">{{ session('deletion_success') }}</p>
             @endif
 
 
@@ -224,9 +221,11 @@
 
     <script>
 
+
         jQuery(document).ready(function () {
             @if ($errors->has('login_email'))
                 console.log('ERRORS PRESENT')
+                jQuery(function($){ $("#login-modal").removeClass('hidden'); })
                 jQuery(function($){ $("#login-modal").removeClass('hidden'); })
             @endif
         });

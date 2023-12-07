@@ -22,7 +22,7 @@
                 <a href="{{route('appointments.index')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Schedule Appointment</a>
             </li>
             <li>
-                <a href="{{route('appointments.index')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Schedule Appointment</a>
+                <a href="{{route('rosters.create')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Create Roster</a>
             </li>
         </ul>
     </div>

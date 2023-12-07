@@ -30,6 +30,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::resource('/users', UserController::class);
 Route::resource('/rosters', RosterController::class);
+Route::resource('/rosters', RosterController::class);
 Route::resource('/roles', RoleController::class);
 Route::resource('/prescriptions', PrescriptionController::class);
 Route::resource('/logs', LogController::class);
@@ -54,6 +55,7 @@ Route::get('/appointments/by/day', [AppointmentController::class, 'getAppointmen
 Route::get('/appointments/doctor/onShift', [AppointmentController::class, 'getDrOnShift'])->name('doctor.on.shift');
 Route::post('/admin/approval', [AdminController::class, 'approval'])->name('admin.approval');
 Route::get('/admin/patient/Info', [AdminController::class, 'patientInfo'])->name('admin.patientInfo');
+Route::post('/admin/updatePatientInfo', [AdminController::class, 'updatePatientInfo'])->name('admin.updatePatientInfo');
 Route::post('/users/{user}/payment', [UserController::class, 'payment'])->name('users.payment');
 Route::get('/users/{user}/family/connect', [UserController::class, 'familyCodeSearch'])->name('family.dashboard.connect');
 Route::get('/users/{user}/admin/bill/patients', [AdminController::class, 'billPatients'])->name('bill.patients');
