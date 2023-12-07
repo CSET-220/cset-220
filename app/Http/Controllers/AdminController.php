@@ -6,11 +6,6 @@ use App\Models\Role;
 use App\Models\Employee;
 use App\Models\Patient;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
-use App\Models\Role;
-use App\Models\Employee;
-use App\Models\Patient;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -62,13 +57,9 @@ class AdminController extends Controller
                     $patient_id = $request->patient_id;
                     $patient = Patient::where('id', $patient_id)->first();
                     $user = User::where('id', $patient->user_id)->first();
-                    $patientInfo = array(
-                        'patient_name' => $user->first_name . ' ' . $user->last_name,
-                        'patient_group' => $patient->patient_group,
-                        'admission_date' => $patient->admission_date
-                    );
+                    $patient_name = $user->first_name . ' ' . $user->last_name;
                     if ($user->is_approved == 1) {
-                        return view('admin.patientInfo', ['patientInfo' => $patientInfo]);
+                        return $patient_name;
                     }
                     else{
                         return view('admin.patientInfo');
@@ -80,6 +71,17 @@ class AdminController extends Controller
                 return redirect()->back();
             }
         }
+    }
+
+    public function updatePatientInfo(Request $request) {
+        // Check if the patient_id exists first
+        if (!Patient::where('id', $request->patient_id)->exists()) {
+            return redirect()->route('admin.patientInfo')->with('error', 'Patient ID does not exist. Patient name will auto populate when the ID valid.');
+        }
+        $patient = Patient::where('id', $request->patient_id)->first();
+        $patient->update(['group' => $request->patient_group]);
+        $patient->update(['admission_date' => $request->admission_date]);
+        return redirect()->route('admin.patientInfo')->with('success', 'Patient Information Updated');
     }
 
     public function billPatients(){
