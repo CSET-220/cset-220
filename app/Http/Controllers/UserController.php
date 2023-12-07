@@ -8,11 +8,15 @@ use App\Models\Log;
 use App\Models\Patient;
 use App\Models\Role;
 use App\Models\Roster;
+use App\Models\Roster;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -182,6 +186,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    // Edit User Info
     // Edit User Info
     public function update(Request $request, string $id)
     {
