@@ -74,6 +74,7 @@ class EmployeeController extends Controller
                 ->whereBetween('date', [$start_date, $end_date])
                 ->orderBy('date', 'desc')
                 ->get();
+                // dd($appointments);
             
             return view('doctors.doctorHome', ['appointments' => $appointments]);
         }
