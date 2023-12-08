@@ -4,7 +4,7 @@
     <div id="dropdownInformation1" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownInformationButton1">
             <li>
-                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
+                <a href="{{route('admin.patientInfo')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Additional Patient Information</a>
             </li>
             <li>
                 <a href="{{route('admin.index')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Account Approval</a>
@@ -17,6 +17,15 @@
             </li>
             <li>
                 <a href="{{route('admin.adminReport')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Admin Report</a>
+            </li>
+            <li>
+                <a href="{{route('appointments.index')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Schedule Appointment</a>
+            </li>
+            <li>
+                <a href="{{route('rosters.create')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Create Roster</a>
+            </li>
+            <li>
+                <a href="{{route('rosters.index')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Rosters</a>
             </li>
         </ul>
     </div>

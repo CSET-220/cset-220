@@ -21,14 +21,14 @@ class Log extends Model
 
     public function scopePatientMissedCare($query, $patient_id, $date) {
         $query->where('patient_id', $patient_id)
-            ->where('date', '<=', $date)
+            ->where('date', '<', $date)
             ->where(function ($q) {
-                $q->whereNull('morning_med')
-                    ->orWhereNull('afternoon_med')
-                    ->orWhereNull('night_med')
-                    ->orWhereNull('breakfast')
-                    ->orWhereNull('lunch')
-                    ->orWhereNull('dinner');
+                $q->where('morning_med', '!=', 1)
+                    ->orWhere('afternoon_med', '!=', 1)
+                    ->orWhere('night_med', '!=', 1)
+                    ->orWhere('breakfast', '!=', 1)
+                    ->orWhere('lunch', '!=', 1)
+                    ->orWhere('dinner', '!=', 1);
             });
     }
     
