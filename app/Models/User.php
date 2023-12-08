@@ -5,16 +5,17 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Log;
 use App\Models\Role;
+use App\Models\Family;
 use App\Models\Roster;
 use App\Models\Patient;
 use App\Models\Employee;
 use App\Models\Appointment;
+use Illuminate\Auth\SessionGuard;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Auth\SessionGuard;
 
 
 class User extends Authenticatable
@@ -30,6 +31,10 @@ class User extends Authenticatable
 
     public function employees() {
         return $this->hasOne(Employee::class);
+    }
+
+    public function families() {
+        return $this->hasMany(Family::class, 'family_id');
     }
 
     public function appointments() {
@@ -102,5 +107,12 @@ class User extends Authenticatable
 
     public function scopeNameSearch($query, $id) {
         $query->where('id', $id);
+    }
+
+    // concatenates first name and last name
+    // can be accessed with user()->full_name
+    protected $appends = ['full_name'];
+    public function getFullNameAttribute(){
+        return $this->first_name . ' ' . $this->last_name;
     }
 }

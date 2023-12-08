@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('patient_id')->constrained();
+            $table->foreignId('patient_id')->constrained()->cascadeOnDelete(); // Deletes row if patient is deleted
             $table->foreignId('caregiver_id')->constrained(
                 table: 'users'
             );

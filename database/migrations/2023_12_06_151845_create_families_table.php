@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employees', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete(); // Added cascade on delete to be able to delete user
-            $table->integer('salary')->default(20000);
+        Schema::create('families', function (Blueprint $table) {
+            $table->foreignId('family_id')->constrained(table: 'users', indexName: 'id')->cascadeOnDelete();
+            $table->foreignId('patient_id')->constrained()->cascadeOnDelete();
+            $table->primary(['family_id', 'patient_id']);
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('employees');
+        Schema::dropIfExists('families');
     }
 };

@@ -6,6 +6,7 @@
 
 {{-- @section('navLink')
 
+
 @endsection --}}
 
 @section('pageHeader')
@@ -25,6 +26,10 @@
             
             @if (session('access_error'))
                 <p class="text-lg text-red-500">{{ session('access_error') }}</p>
+            @endif
+
+            @if(session('deletion_success'))
+                <p class="text-lg text-green-500">{{ session('deletion_success') }}</p>
             @endif
 
 
@@ -219,6 +224,7 @@
     <script src="{{ asset('js/homepage.js') }}"></script>
 
     <script>
+
 
         jQuery(document).ready(function () {
             @if ($errors->has('login_email'))

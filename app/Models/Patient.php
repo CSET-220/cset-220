@@ -17,6 +17,10 @@ class Patient extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function families() {
+        return $this->hasMany(Family::class);
+    }
+
     public function logs() {
         return $this->hasMany(Log::class);
     }
@@ -37,6 +41,6 @@ class Patient extends Model
     ];
 
     protected $casts = [
-        'family_code' => 'hashed'
+        'family_code' => 'encrypted'
     ];
 }

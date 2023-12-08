@@ -39,10 +39,15 @@ class Appointment extends Model
 
     protected $fillable = [
         'date',
+        'patient_id',
+        'doctor_id',
         'comments'
     ];
 
     function scopePatientAppointmentSearch($query, $date, $patient_id) {
         $query->where('date', $date)->where('patient_id', $patient_id);
+    }
+    function scopeGetLastAppointment($query,$patient_id){
+        $query->where('patient_id', $patient_id)->where('date', '<', date('Y-m-d'))->where('comments', '!=', null)->orderBy('date', 'desc')->first();
     }
 }

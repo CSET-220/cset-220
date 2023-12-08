@@ -13,6 +13,15 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->command('app:daily-balance-update')->daily();
+        // Have to use microsoft task scheduler
+        // Create Basic Task
+        // Name + Description
+        // Trigger Daily
+        // Start time a couple minutes from now
+        // Action - Start a Program = C:\xampp\php\php.exe 
+        // Add arguments = artisan schedule:run
+        // Start in = C:absolute\path\to\cset-220
     }
 
     /**

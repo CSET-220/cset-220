@@ -15,8 +15,6 @@ use App\Http\Controllers\PatientController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-
 Route::get('/', [loginController::class , 'home'])->name('app.home');
 Route::get('/patients/{id}/logs', [PatientController::class, 'logs'])->name('patients.logs');
 Route::resource('/patients', PatientController::class);
