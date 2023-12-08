@@ -3,6 +3,7 @@
 
 @section('linkStyles')
     <meta name="csrf-token" content="{{ csrf_token() }}">    
+    <meta name="csrf-token" content="{{ csrf_token() }}">    
 @endsection
 
 @section('title')
@@ -18,6 +19,7 @@
 
             @if (session('appointment_success'))
                 <p class="text-lg text-green-500">{{ session('appointment_success') }}</p>
+                <p class="text-lg text-green-500">{{ session('appointment_success') }}</p>
             @endif
         </div>
     </div>
@@ -31,10 +33,12 @@
 
                 {{-- START OF TOP ROW --}}
                 <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4 bg-gray-800">
+                <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4 bg-gray-800">
                     <div class="w-full md:w-1/2">
                         <div>
                             <div class="flex">
                                 {{-- COLUMN SELECT --}}
+                                <select id="columnName" class="block p-2.5 w-full z-20 text-sm border-s-2 border focus:ring-blue-500 bg-gray-700 border-s-gray-700 border-gray-600 placeholder-gray-400 text-white focus:border-blue-500">
                                 <select id="columnName" class="block p-2.5 w-full z-20 text-sm border-s-2 border focus:ring-blue-500 bg-gray-700 border-s-gray-700 border-gray-600 placeholder-gray-400 text-white focus:border-blue-500">
                                     <option value="name">Patient Name</option>
                                     <option value="date">Appointment Date</option>
@@ -80,6 +84,28 @@
                     </div>
   
 
+                    {{-- DATE PICKER --}}
+                    <div date-rangepicker id="appointment_date_range" class="flex items-center">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                </svg>
+                            </div>
+                            <input id="datePicker_start" value="{{ session('start_date') }}"  name="start" type="text" datepicker-title= "Appointment Start Date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start">
+                        </div>
+                            <span class="mx-4 text-gray-500">to</span>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                </svg>
+                            </div>
+                            <input value="{{ session('end_date') }}" id="datePicker_end" datepicker datepicker-autohide datepicker-buttons" name="end" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end">
+                        </div>
+                    </div>
+  
+
                     <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
                         {{-- OTHER BUTTONS --}}
                     </div>
@@ -89,10 +115,17 @@
                 {{-- TABLE START --}}
                 <div class="">
                     <table id="doctor_patients" class="w-full text-sm text-left text-gray-900">
+                    <table id="doctor_patients" class="w-full text-sm text-left text-gray-900">
                         {{-- TABLE HEADER + Items --}}
+                        <thead class="text-xs text-center uppercase bg-gray-800 text-gray-400">
                         <thead class="text-xs text-center uppercase bg-gray-800 text-gray-400">
                             <tr>
                                 <th scope="col" class="px-4 py-3">Patient Name</th>
+                                <th scope="col" class="px-4 py-3 cursor-pointer hover:underline">Appointment Date</th>
+                                <th scope="col" class="px-4 py-3 cursor-pointer hover:underline">Comment</th>
+                                <th scope="col" class="px-4 py-3 cursor-pointer hover:underline">Morning Medicine</th>
+                                <th scope="col" class="px-4 py-3 cursor-pointer hover:underline">Afternoon Medicine</th>
+                                <th scope="col" class="px-4 py-3 cursor-pointer hover:underline">Night Medicine</th>
                                 <th scope="col" class="px-4 py-3 cursor-pointer hover:underline">Appointment Date</th>
                                 <th scope="col" class="px-4 py-3 cursor-pointer hover:underline">Comment</th>
                                 <th scope="col" class="px-4 py-3 cursor-pointer hover:underline">Morning Medicine</th>
@@ -102,6 +135,7 @@
                         </thead>
                         <tbody>
 
+
                         </tbody>
                     </table>
                 </div>
@@ -109,6 +143,9 @@
         </div>
     </section>
   
+  
+
+    
 
     
 
@@ -124,6 +161,7 @@
                       <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
                           Changelog
                       </h3>
+                      <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm h-8 w-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
                       <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm h-8 w-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
                           <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                               <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -176,6 +214,11 @@
   <div id="appointment_details" aria-hidden="true" class="hidden overflow-x-hidden fixed flex top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
       
   </div> 
+  
+  <!-- Main modal -->
+  <div id="appointment_details" aria-hidden="true" class="hidden overflow-x-hidden fixed flex top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+      
+  </div> 
 
 @endsection
 
@@ -185,7 +228,14 @@
 <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
 <script src="{{ asset('js/doctor/doctorHome.js') }}"></script>
+{{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>   --}}
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.21/js/dataTables.bootstrap4.min.js"></script>
+<script src="{{ asset('js/doctor/doctorHome.js') }}"></script>
     <script type="text/javascript">
+        var dataTable;
+            
         var dataTable;
             
         $(document).ready(function () {
@@ -193,7 +243,9 @@
                 serverSide: true,
                 processing: true,
                 "sDom":"tpr",
+                "sDom":"tpr",
                 pagingType: 'simple_numbers',
+
 
                 language: {
                     // NEXT PAGE AND PAGE NUMBERS
@@ -212,6 +264,9 @@
                         d.start_date = $('input[name="start"]').val();
                         d.end_date = $('input[name="end"]').val();
                         // console.log(d.searchValue);
+                        d.start_date = $('input[name="start"]').val();
+                        d.end_date = $('input[name="end"]').val();
+                        // console.log(d.searchValue);
                     },
                 },
                 // Making each column with specified data
@@ -222,11 +277,20 @@
                     { data: 'morning_med', name: 'morning_med', title: 'Morning Medicine', orderable: true },
                     { data: 'afternoon_med', name: 'afternoon_med', title: 'Afternoon Medicine', orderable: true },
                     { data: 'night_med', name: 'night_med', title: 'Night Medicine', orderable: true },
+                    { data: 'patient_name', name: 'patient.user.first_name', title: 'Patient Name', orderable: true },
+                    { data: 'date', name: 'date', title: 'Date', orderable: true },
+                    { data: 'comments', name: 'comments', title: 'Comments', orderable: true },
+                    { data: 'morning_med', name: 'morning_med', title: 'Morning Medicine', orderable: true },
+                    { data: 'afternoon_med', name: 'afternoon_med', title: 'Afternoon Medicine', orderable: true },
+                    { data: 'night_med', name: 'night_med', title: 'Night Medicine', orderable: true },
                 ],
+                // order
+                order: [[1,'asc']],
                 // order
                 order: [[1,'asc']],
                 // when drawing table create pagination buttons like this
                 drawCallback: function(settings) {
+                    $('#doctor_patients td').addClass('border border-gray-900 p-2 text-left');
                     $('#doctor_patients td').addClass('border border-gray-900 p-2 text-left');
                     $('.pagination').addClass('flex items-center justify-center space-x-2 my-4');
                     $('.pagination li').addClass('inline-flex items-center justify-center text-sm py-2 px-3 leading-tight border bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-white');
@@ -245,18 +309,27 @@
                         let attr = $(this).attr('data-modal-content');
                         var rowData = JSON.parse(attr)
                         // console.log(rowData)
+                        let attr = $(this).attr('data-modal-content');
+                        var rowData = JSON.parse(attr)
+                        // console.log(rowData)
                         displayModal(rowData);
                     });
 
                     $(row).hover(
                         function() {
                             $(this).addClass('hover:bg-gray-800 hover:text-white cursor-pointer hover:shadow-lg');
+                            $(this).addClass('hover:bg-gray-800 hover:text-white cursor-pointer hover:shadow-lg');
                         },
                         function() {
+                            $(this).removeClass('hover:bg-gray-800 hover:text-white hover:shadow-lg');
                             $(this).removeClass('hover:bg-gray-800 hover:text-white hover:shadow-lg');
                         }
                     );
                 },
+            });
+            // END DATATABLE
+            $('#datePicker_start, #datePicker_end').on('changeDate', function () {
+                dataTable.ajax.reload();
             });
             // END DATATABLE
             $('#datePicker_start, #datePicker_end').on('changeDate', function () {
@@ -268,5 +341,7 @@
                 dataTable.ajax.reload();
             });
         });   
+        });   
     </script>
 @endsection
+

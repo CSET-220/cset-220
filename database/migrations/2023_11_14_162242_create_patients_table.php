@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('patients', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete(); // Added cascade on delete to Be able to delete user info
-            $table->string('family_code');
+            $table->text('family_code');
             $table->string('emergency_contact');
             $table->string('contact_relation');
             $table->integer('group')->nullable()->default(null);
