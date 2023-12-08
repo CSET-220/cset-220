@@ -7,6 +7,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\loginController;
+use App\Http\Controllers\FamilyController;
 use App\Http\Controllers\RosterController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\EmployeeController;
@@ -46,6 +47,7 @@ Route::get('/careers', [UserController::class, 'employeeRegister'])->name('emplo
 Route::post('/doctor/search', [EmployeeController::class, 'search'])->name('doctor.search');
 
 
+Route::get('/patients/{patient_id}/{date}', [PatientController::class, 'getPatientLog']);
 
 Route::get('/prescriptions/{prescription_name}/dosage',[PrescriptionController::class, 'getDosage'])->name('prescription.dosage');
 Route::post('/appointments/{appointment}/conduct', [AppointmentController::class, 'conductAppointment'])->name('appointment.conduct');
@@ -66,3 +68,4 @@ Route::get('/admin/report/all', [AdminController::class, 'adminReport'])->name('
 Route::get('/patients/{patient_id}/{date}', [PatientController::class, 'getPatientLog']);
 // EDIT PROFILE PICS
 Route::post('/users/{user}/edit/account/profile/pic', [UserController::class, 'editProfilePic'])->name('edit.profile.pic');
+Route::post('/family/confirm_family', [FamilyController::class, 'confirmFamilyMember'])->name('family.confirmFamilyMember');

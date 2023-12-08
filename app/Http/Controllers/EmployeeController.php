@@ -78,7 +78,8 @@ class EmployeeController extends Controller
             
             return view('doctors.doctorHome', ['appointments' => $appointments]);
         }
-        elseif (Auth::user()->getAccess(['caregiver'])) {
+
+        elseif (Auth::check() && Auth::user()->getAccess(['caregiver'])) {
             $patients = Log::where('caregiver_id', Auth::id())
             ->where('date', Carbon::today())
             ->with('patient.user')
@@ -264,6 +265,7 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        
         
     }
 
