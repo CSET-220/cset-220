@@ -2,7 +2,7 @@
     $log = $user_info->patient->logs->first();
     $prevApt = $user_info->lastApt[0];
 @endphp
-<div>
+<div  class="h-full flex flex-col justify-between">
 
     <div class="p-2 pb-4 rounded-sm">
         <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
@@ -112,7 +112,9 @@
                             $drInitials .= strtoupper(substr($name, 0, 1));
                         }
                     @endphp
-    
+                    @if ($appointment->doctor->profile_pic)
+                        <img data-popover-target="popover-doctor-{{ $drInitials }}" src="{{ asset($employee->profile_pic) }}" alt="" srcset="" class="w-8 h-8 rounded-full cursor-pointer ">
+                    @endif
                     <div data-popover-target="popover-doctor-{{ $drInitials }}" class=" cursor-pointer relative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full bg-blue-600">
                         <span class="font-medium text-gray-300">{{ $drInitials }}</span>
                     </div>

@@ -40,7 +40,6 @@
 @if (Auth::user()->getAccess(['patient']))
     @include('components.profile.paymentModal')
 @endif
-
 {{-- <div class="mx-auto w-full"> --}}
     <div class="flex justify-around flex-col sm:flex-wrap sm:flex-row p-8 pt-8 sm:pb-20 sm:w-full flex-grow">
         {{-- Left side --}}
@@ -75,6 +74,11 @@
                             <li>
                                 <a href="{{ route('bill.patients', ['user' => Auth::user()]) }}" class="w-full text-left cursor-pointer block px-4 py-2 text-sm hover:bg-gray-600 text-gray-200 hover:text-white">Bill Patients</a>
                             </li>
+
+                        @elseif (Auth::user()->getAccess(['doctor']))
+                            <li>
+                                <a data-modal-target="prescription-modal" data-modal-toggle="prescription-modal" class="w-full text-left cursor-pointer block px-4 py-2 text-sm hover:bg-gray-600 text-gray-200 hover:text-white">Create Prescription</a>
+                            </li>
                         @endif
                         <li>
                             <a id="show-delete-modal" data-modal-target="delete-user-modal"data-modal-toggle="delete-user-modal" class="text-left cursor-pointer block px-4 py-2 text-sm hover:bg-gray-600 text-red-500 hover:text-white">Delete Account</a>
@@ -108,6 +112,10 @@
                             <p class="text-sm text-green-500">{{ session('payment_success') }}</p>
                         @endif
                     @endif
+
+                    @error('medication_name')
+                        <p class="text-sm text-red-500">{{ $errors->first('medication_name') }}</p>
+                    @enderror
                 </div>
             </div>
 
@@ -434,6 +442,49 @@
     </div> 
   
     
+
+
+
+    {{-- CREATE RX MODAL --}}
+    <!-- Main modal -->
+    <div id="prescription-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+        <div class="relative p-4 w-full max-w-md max-h-full">
+            <!-- Modal content -->
+            <div class="relative rounded-lg shadow bg-gray-700">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-600">
+                    <h3 class="text-lg font-semibold text-white">
+                        Create New Prescription
+                    </h3>
+                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="prescription-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <form action="{{ route('prescriptions.store') }}" method="post" class="p-4 md:p-5 relative">
+                    <div class="grid gap-4 mb-4 grid-cols-2 relative items-center">
+                        <div class="col-span-2 relative z-0">
+                            <input required type="text" id="rx_name" name="medication_name" class="block py-2.5 px-0 w-full text-sm  bg-transparent border-0 border-b-2  appearance-none text-white border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
+                            <label for="rx_name" class="absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Prescription Name</label>
+                        </div>
+                        <div class="col-span-2 relative z-0">
+                            <input required type="number" id="rx_dosage" step="1" name="medication_dosage" class="block py-2.5 px-0 w-full text-sm bg-transparent border-0 border-b-2  appearance-none text-white border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-0  peer" placeholder=" " />
+                            <label for="rx_dosage" class="absolute text-sm text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Prescription Dosage</label>
+                        </div>
+                    </div>
+                    <div class="w-full flex items-center justify-center">
+                        <button type="submit" class="text-white inline-flex mx-auto items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            <svg class="me-1 -ms-1 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
+                            Add new prescription
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('script')
