@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('phone');
             $table->string('password');
             $table->date('dob');
+            $table->string('profile_pic')->nullable()->default(null); // Added profile pic column
             $table->boolean('is_approved')->default(false);
             $table->rememberToken();
             $table->timestamps();

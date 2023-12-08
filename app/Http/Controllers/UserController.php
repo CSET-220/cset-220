@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Models\Employee;
+use App\Models\Family;
 use App\Models\Log;
 use App\Models\Patient;
 use App\Models\Role;
@@ -110,9 +112,6 @@ class UserController extends Controller
         else{
             return redirect()->route('app.home')->with('register_success', 'Application Received! Please wait for approval.');
         }
-
-
-
     }
 
     public function employeeRegister(){
@@ -129,22 +128,27 @@ class UserController extends Controller
                 $query->where('date', '<=', now())->orderBy('date','desc')->take(3)->with('caregiver');
             }, 
             'employees', 'patient.appointments' => function ($query) {
-                $query->where('date', '>=', now())->orderBy('date','asc')->with('doctor');
+                $query->where('date', '>=', now())
+                ->orderBy('date','asc')
+                ->with(['doctor','morningPrescriptions', 'afternoonPrescriptions', 'nightPrescriptions',]);
             }
             
-            , 'logs', 'doctorRosters', 'supervisorRosters', 'caregiver1Rosters', 'caregiver2Rosters', 'caregiver3Rosters', 'caregiver4Rosters'])->where('id',Auth::id())->first();
+            , 'patient.families','families.patient.user','families.patient.logs' => function($query){
+                $query->where('date', date('Y-m-d'))->first();
+            },
+            'families.patient.appointments' => function($query){
+                $query->where('date', '<', date('Y-m-d'))->orderBy('date', 'desc')->with(['morningPrescriptions', 'afternoonPrescriptions', 'nightPrescriptions',])->first();
+            },'logs', 'doctorRosters', 'supervisorRosters', 'caregiver1Rosters', 'caregiver2Rosters', 'caregiver3Rosters', 'caregiver4Rosters'])->where('id',Auth::id())->first();
             // Get everyone on the roster today
             $roster = Roster::where('date', date('Y-m-d'))->first();
 
-            // Get all family of the patient based on phone number
-            $familyMembers = collect();
             if(Auth::user()->getAccess(['patient'])){
-                $contact = Auth::user()->patient->emergency_contact;
-                $familyMembers = User::where('phone',$contact)->get();
+                $user_info->lastApt = Appointment::getLastAppointment($user_info->patient->id)->with(['morningPrescriptions', 'afternoonPrescriptions', 'nightPrescriptions'])->get();
             }
+            // dd($user_info->lastApt);
             // Get all appointments for admin and supervisor
             $allApts = collect();
-            if(Auth::user()->getAccess(['admin', 'supervisor', 'doctor'])){
+            if(Auth::user()->getAccess(['admin', 'supervisor'])){
                 $allApts = Appointment::with(['patient.user', 'doctor'])->where('date', date('Y-m-d'))->select(['id','date', 'patient_id', 'doctor_id'])->get();
                 // dd($allApts);
             }
@@ -173,7 +177,7 @@ class UserController extends Controller
             }
 
             // dd($caregiverPatients);
-            return view('profile.profile', ['user_info' => $user_info, 'roster' => $roster, 'family' => $familyMembers, 'allApts' => $allApts, 'drApt' => $drApt, 'caregiverPatients' => $caregiverPatients]);
+            return view('profile.profile', ['user_info' => $user_info, 'roster' => $roster, 'allApts' => $allApts, 'drApt' => $drApt, 'caregiverPatients' => $caregiverPatients]);
         }
         else{
             return redirect()->route('app.home')->with('access_error', 'Please Login to view profile.');
@@ -213,9 +217,9 @@ class UserController extends Controller
                         'emergency_contact' => [
                             Rule::when(Auth::user()->getAccess(['patient']), ['required'])
                         ],
-                        'family_code' => [
-                            Rule::when(Auth::user()->getAccess(['patient']), ['required'])
-                        ],
+                        // 'family_code' => [
+                        //     Rule::when(Auth::user()->getAccess(['patient']), ['required'])
+                        // ],
                 ],
                 [
                     'first_name.required' => 'Please enter your First Name',
@@ -245,7 +249,7 @@ class UserController extends Controller
                 $family_code = $request->family_code;
                 $prevFamCode = Patient::where('user_id', Auth::id())->first();
                 if($family_code === ""){
-                    $hashedCode = $prevFamCode;
+                    $hashedCode = $prevFamCode->family_code;
                 }
                 else{
                     $hashedCode = Hash::make($family_code);
@@ -281,22 +285,39 @@ class UserController extends Controller
 
     // Gets patient from fam code
     public function familyCodeSearch(Request $request, $id){
-        $famCode = $request->fam_code_search;
+        // $famCode = $request->fam_code_search;
 
-        $familyMembers = Patient::with(['user', 'logs' => function($query){
-            $query->where('date', '=', date('Y-m-d'))->orderBy('date','desc')->with('caregiver')->first();
-        }])->get();
-        $allFam = [];
-        foreach ($familyMembers as $familyMember) {
-            if (Hash::check($famCode, $familyMember->family_code)) {
-                array_push($allFam,$familyMember);
-            }
-        }
-        session(['familyMembers' => $allFam]);
-        return redirect()->route('users.show');
+        // $familyMembers = Patient::with(['user', 'logs' => function($query){
+        //     $query->where('date', '=', date('Y-m-d'))->orderBy('date','desc')->with('caregiver')->first();
+        // }])->get();
+        // $allFam = [];
+        // foreach ($familyMembers as $familyMember) {
+        //     if (Hash::check($famCode, $familyMember->family_code)) {
+        //         array_push($allFam,$familyMember);
+        //     }
+        // }
+        // session(['familyMembers' => $allFam]);
+        // return redirect()->route('users.show');
     }
     public function edit($id){
 
+    }
+
+
+    public function editProfilePic(Request $request){
+        $request->validate(
+            [
+                'profile_pic' => 'required'
+            ]
+        );
+        $pic = $request->profile_pic;
+        $fileName = time(). "." . $pic->getClientOriginalExtension();
+        // dd($fileName);
+        $pic->move(public_path('/images/profile_pics'),$fileName);
+        $user = Auth::user();
+        $user->profile_pic = 'images/profile_pics/'.$fileName;
+        $user->save();
+        return redirect()->route('users.show', ['user' => Auth::user()])->with('edit_profile_success', "Successfully Added a Profile Picture");
     }
 
     /**
@@ -304,6 +325,28 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
+        if(Auth::user()->getAccess(['patient'])){
+            // dd($id);
+            Appointment::where('patient_id', $id)->delete();
+            Log::where('patient_id',$id)->delete();
+            Patient::where('user_id', $id)->delete();
+        }
+        elseif (Auth::user()->getAccess(['doctor'])) {
+            Roster::where('doctor_id',$id)->delete();
+            Appointment::where('doctor_id', $id)->delete();
+            Employee::where('user_id', $id)->delete();
+
+        }
+        elseif(Auth::user()->getAccess(['supervisor'])){
+            Roster::where('supervisor_id',$id)->delete();
+            Employee::where('user_id', $id)->delete();
+        }
+        elseif(Auth::user()->getAccess(['caregiver'])){
+            Roster::where('caregiver1_id', $id)->orWhere('caregiver2_id', $id)->orWhere('caregiver3_id', $id)->orWhere('caregiver4_id', $id)->delete();
+            Log::where('caregiver_id', $id)->delete();
+            Employee::where('user_id', $id)->delete();
+        }
+
         User::destroy($id);
         return redirect()->route('app.home')->with('deletion_success', 'Account Successfully Deleted');
     }
