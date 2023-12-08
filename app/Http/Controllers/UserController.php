@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Appointment;
 use App\Models\Employee;
+use App\Models\Family;
 use App\Models\Log;
 use App\Models\Patient;
 use App\Models\Role;
@@ -127,19 +128,24 @@ class UserController extends Controller
                 $query->where('date', '<=', now())->orderBy('date','desc')->take(3)->with('caregiver');
             }, 
             'employees', 'patient.appointments' => function ($query) {
-                $query->where('date', '>=', now())->orderBy('date','asc')->with('doctor');
+                $query->where('date', '>=', now())
+                ->orderBy('date','asc')
+                ->with(['doctor','morningPrescriptions', 'afternoonPrescriptions', 'nightPrescriptions',]);
             }
             
-            , 'logs', 'doctorRosters', 'supervisorRosters', 'caregiver1Rosters', 'caregiver2Rosters', 'caregiver3Rosters', 'caregiver4Rosters'])->where('id',Auth::id())->first();
+            , 'patient.families','families.patient.user','families.patient.logs' => function($query){
+                $query->where('date', date('Y-m-d'))->first();
+            },
+            'families.patient.appointments' => function($query){
+                $query->where('date', '<', date('Y-m-d'))->orderBy('date', 'desc')->with(['morningPrescriptions', 'afternoonPrescriptions', 'nightPrescriptions',])->first();
+            },'logs', 'doctorRosters', 'supervisorRosters', 'caregiver1Rosters', 'caregiver2Rosters', 'caregiver3Rosters', 'caregiver4Rosters'])->where('id',Auth::id())->first();
             // Get everyone on the roster today
             $roster = Roster::where('date', date('Y-m-d'))->first();
 
-            // Get all family of the patient based on phone number
-            $familyMembers = collect();
             if(Auth::user()->getAccess(['patient'])){
-                $contact = Auth::user()->patient->emergency_contact;
-                $familyMembers = User::where('phone',$contact)->get();
+                $user_info->lastApt = Appointment::getLastAppointment($user_info->patient->id)->with(['morningPrescriptions', 'afternoonPrescriptions', 'nightPrescriptions'])->get();
             }
+            // dd($user_info->lastApt);
             // Get all appointments for admin and supervisor
             $allApts = collect();
             if(Auth::user()->getAccess(['admin', 'supervisor'])){
@@ -171,7 +177,7 @@ class UserController extends Controller
             }
 
             // dd($caregiverPatients);
-            return view('profile.profile', ['user_info' => $user_info, 'roster' => $roster, 'family' => $familyMembers, 'allApts' => $allApts, 'drApt' => $drApt, 'caregiverPatients' => $caregiverPatients]);
+            return view('profile.profile', ['user_info' => $user_info, 'roster' => $roster, 'allApts' => $allApts, 'drApt' => $drApt, 'caregiverPatients' => $caregiverPatients]);
         }
         else{
             return redirect()->route('app.home')->with('access_error', 'Please Login to view profile.');

@@ -34,7 +34,7 @@ class User extends Authenticatable
     }
 
     public function families() {
-        return $this->hasMany(Family::class);
+        return $this->hasMany(Family::class, 'family_id');
     }
 
     public function appointments() {

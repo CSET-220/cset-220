@@ -24,38 +24,9 @@ $('#user_phone, #family_phone').on('input', function () {
     $(this).val(formattedPhoneNumber);
 });
 
-$('#fam_code_search_btn').on('click', function () {
-    let search = $('#fam_code_search').val();
-    let famId = $('#fam_code_search').attr('data-family-id')
-    let slider = $('#slider')
-    console.log(famId);
 
-    $.ajax({
-        type: "get",
-        url: `/api/users/${famId}/family/connect`,
-        data: {
-            fam_code_search: search,
-        },
-        dataType: "json",
-        success: function (response) {
-            console.log(response);
-            if(response.length < 1){
-                // console.log("ITS EMPTY");
-                let message = $('<p>').text('No Patients Found');
-                div.append(message)
-                // console.log(div.html());
-            }
-            else{
-                response.forEach(familyMember => {
-                    let carouselItem = $('<div>').addClass('carousel-item');
-                    carouselItem.text(familyMember.familyMemberDetail);
-                    slider.append(carouselItem);
-
-                });
-                new Carousel(slider);
-            }
-        }
-    });
+$('#show_patient_search').on('click', function () {
+    $('#patient_search_form').slideToggle(500);
 });
 
 
