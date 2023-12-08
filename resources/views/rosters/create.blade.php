@@ -6,6 +6,9 @@
 @endsection --}}
 
 @section('mainContent')
+{{-- <img class="absolute left-1 top-20" src="https://media0.giphy.com/media/OFhB9mzG1hACQ/giphy.gif" alt="">
+<img class="absolute right-1 top-20 transform scale-x-[-1]" src="https://media0.giphy.com/media/OFhB9mzG1hACQ/giphy.gif" alt=""> --}}
+
 <div class="min-h-full mt-1">
     <div class="flex justify-center mb-1">
         <div class="text-center">

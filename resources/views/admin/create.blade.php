@@ -7,7 +7,7 @@
     <div class="mx-10">
         @if($employees)
         <div class="flex w-full">
-            <select id="columnName" class="w-1/5 block p-2.5 z-20 text-sm border-s-2 border border-s-gray-700 border-blue-700 placeholder-gray-40  rounded-s-lg">
+            <select id="columnName" class="block p-2.5 z-20 text-sm border-s-2 border border-s-gray-700 border-blue-700 placeholder-gray-40  rounded-s-lg">
                 <option value="id">ID</option>
                 <option value="name">Name</option>
                 <option value="role_title">Role</option>
@@ -28,15 +28,12 @@
             </div>
             <div class="relative">
                 <button class="p-2.5 text-sm font-medium h-full rounded-e-lg border border-blue-700">
-                    <svg data-popover-target="refresh" id="refresh-svg" xmlns="http://www.w3.org/2000/svg" x="2px" y="2px" width="25" height="25" viewBox="0 0 30 30">
+                    <svg id="refresh-svg" xmlns="http://www.w3.org/2000/svg" x="2px" y="2px" width="25" height="25" viewBox="0 0 30 30">
                         <path d="M 15 3 C 12.053086 3 9.3294211 4.0897803 7.2558594 5.8359375 A 1.0001 1.0001 0 1 0 8.5449219 7.3652344 C 10.27136 5.9113916 12.546914 5 15 5 C 20.226608 5 24.456683 8.9136179 24.951172 14 L 22 14 L 26 20 L 30 14 L 26.949219 14 C 26.441216 7.8348596 21.297943 3 15 3 z M 4.3007812 9 L 0.30078125 15 L 3 15 C 3 21.635519 8.3644809 27 15 27 C 17.946914 27 20.670579 25.91022 22.744141 24.164062 A 1.0001 1.0001 0 1 0 21.455078 22.634766 C 19.72864 24.088608 17.453086 25 15 25 C 9.4355191 25 5 20.564481 5 15 L 8.3007812 15 L 4.3007812 9 z"></path>
                     </svg>
                 </button>
-                {{-- TODO add more popovers maybe make one to popover and show the user details or something? fix positioning --}}
-                <p data-popover id="refresh" class="invisible w-full">Refresh</p>
             </div>
         </div>
-        {{-- TODO maybe make the table height smaller and use overflow scroll or something to always show the footer and make page not look so empty --}}
         <table class="divide-y divide-gray-200 w-full">
             <thead class="bg-gray-50">
                 <tr>
@@ -97,11 +94,11 @@
                 <div class="grid gap-4 mb-4 grid-cols-2">
                     <div class="col-span-2">
                         <label for="employeeId" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Employee ID</label>
-                        <input type="number" name="employeeId" id="employeeId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required="" readonly>
+                        <input type="number" name="employeeId" id="employeeId" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" required readonly>
                     </div>
                     <div class="col-span-2">
                         <label for="salary" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Salary</label>
-                        <input type="number" name="salary" id="salary" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type Salary Amount" required="">
+                        <input type="number" name="salary" id="salary" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Type Salary Amount" required>
                     </div>
                 </div>
                 @auth
@@ -110,9 +107,12 @@
                     Submit
                 </button>
                 @else
-                <button id="updateSalary" type="button" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-300" disabled>
+                <button id="updateSalary" type="button" class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 disabled:cursor-not-allowed disabled:bg-gray-300" disabled data-popover-target="disabledSalary">
                     Submit
                 </button>
+                <div data-popover id="disabledSalary" class="invisible w-full bg-red-200 text-red-700 p-3 rounded-lg shadow-lg">
+                    <p>You do not have access to this feature</p>
+                </div>
                 @endif
                 @endauth
             </form>
