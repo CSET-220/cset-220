@@ -189,7 +189,6 @@ class UserController extends Controller
      * Update the specified resource in storage.
      */
     // Edit User Info
-    // Edit User Info
     public function update(Request $request, string $id)
     {
         if(Auth::check()){

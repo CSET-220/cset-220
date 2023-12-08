@@ -6,6 +6,7 @@
 
 {{-- @section('navLink')
 
+
 @endsection --}}
 
 @section('pageHeader')
@@ -223,6 +224,7 @@
     <script src="{{ asset('js/homepage.js') }}"></script>
 
     <script>
+
 
         jQuery(document).ready(function () {
             @if ($errors->has('login_email'))
