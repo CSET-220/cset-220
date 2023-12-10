@@ -10,78 +10,98 @@
             <p class="text-2xl font-semibold">Today's Date: {{ \Carbon\Carbon::now()->format('m-d-Y') }}</p>
         @endauth
     </div>
-    <div class="min-h-full mx-10">
+    <div class="mx-10">
         @if($patients)
-        <form action="" class="">
-            <table id="myTable" class="divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient ID</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Morning Med</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Afternoon Med</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Evening Med</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Breakfast</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lunch</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dinner</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    @foreach ($patients as $patient)
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center align-middle">{{ $patient->patient_id }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center align-middle">{{ $patient->patient->user->first_name }} {{ $patient->patient->user->last_name }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center align-middle">{{ \Carbon\Carbon::parse($patient->date)->format('m-d-Y') }}</td>
-                        <td class="px-6 py-4 text-center align-middle">
-                            <input type="checkbox"
-                            {{ $patient->morning_med ? 'checked' : '' }}
-                            data-patient-id="{{$patient->patient_id}}"
-                            data-log-type="morning_med"
-                            data-date="{{ \Carbon\Carbon::parse($patient->date)->format('Y-m-d') }}"
-                            >
-                        </td>
-                        <td class="px-6 py-4 text-center align-middle">
-                            <input type="checkbox" 
-                            {{$patient->afternoon_med ? 'checked' : ''}}
-                            data-patient-id="{{$patient->patient_id}}"
-                            data-log-type="afternoon_med"
-                            data-date="{{ \Carbon\Carbon::parse($patient->date)->format('Y-m-d') }}"
-                            >
-                        </td>
-                        <td class="px-6 py-4 text-center align-middle">
-                            <input type="checkbox" {{$patient->night_med ? 'checked' : ''}}
-                            data-patient-id="{{$patient->patient_id}}"
-                            data-log-type="night_med"
-                            data-date="{{ \Carbon\Carbon::parse($patient->date)->format('Y-m-d') }}"
-                            >
-                        </td>
-                        <td class="px-6 py-4 text-center align-middle">
-                            <input type="checkbox" {{$patient->breakfast ? 'checked' : ''}}
-                            data-patient-id="{{$patient->patient_id}}"
-                            data-log-type="breakfast"
-                            data-date="{{ \Carbon\Carbon::parse($patient->date)->format('Y-m-d') }}"
-                            >
-                        </td>
-                        <td class="px-6 py-4 text-center align-middle">
-                            <input type="checkbox" {{$patient->lunch ? 'checked' : ''}}
-                            data-patient-id="{{$patient->patient_id}}"
-                            data-log-type="lunch"
-                            data-date="{{ \Carbon\Carbon::parse($patient->date)->format('Y-m-d') }}"
-                            >
-                        </td>
-                        <td class="px-6 py-4 text-center align-middle">
-                            <input type="checkbox" {{$patient->dinner ? 'checked' : ''}}
-                            data-patient-id="{{$patient->patient_id}}"
-                            data-log-type="dinner"
-                            data-date="{{ \Carbon\Carbon::parse($patient->date)->format('Y-m-d') }}"
-                            >
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </form>
+        <table id="myTable" class="divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient ID</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Morning Med</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Afternoon Med</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Evening Med</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Breakfast</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lunch</th>
+                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dinner</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+                @foreach ($patients as $patient)
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center align-middle">{{ $patient->patient_id }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center align-middle">{{ $patient->patient->user->first_name }} {{ $patient->patient->user->last_name }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center align-middle">{{ \Carbon\Carbon::parse($patient->date)->format('m-d-Y') }}</td>
+                    <td class="px-6 py-4 text-center align-middle">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="sr-only peer"
+                        {{ $patient->morning_med ? 'checked' : '' }}
+                        data-patient-id="{{$patient->patient_id}}"
+                        data-log-type="morning_med"
+                        data-date="{{ \Carbon\Carbon::parse($patient->date)->format('Y-m-d') }}"
+                        >
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        </label>
+                    </td>
+                    <td class="px-6 py-4 text-center align-middle">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="sr-only peer"
+                        {{$patient->afternoon_med ? 'checked' : ''}}
+                        data-patient-id="{{$patient->patient_id}}"
+                        data-log-type="afternoon_med"
+                        data-date="{{ \Carbon\Carbon::parse($patient->date)->format('Y-m-d') }}"
+                        >
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        </label>
+                    </td>
+                    <td class="px-6 py-4 text-center align-middle">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="sr-only peer"
+                        {{$patient->night_med ? 'checked' : ''}}
+                        data-patient-id="{{$patient->patient_id}}"
+                        data-log-type="night_med"
+                        data-date="{{ \Carbon\Carbon::parse($patient->date)->format('Y-m-d') }}"
+                        >
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        </label>
+                    </td>
+                    <td class="px-6 py-4 text-center align-middle">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="sr-only peer" 
+                        {{$patient->breakfast ? 'checked' : ''}}
+                        data-patient-id="{{$patient->patient_id}}"
+                        data-log-type="breakfast"
+                        data-date="{{ \Carbon\Carbon::parse($patient->date)->format('Y-m-d') }}"
+                        >
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        </label>
+                    </td>
+                    <td class="px-6 py-4 text-center align-middle">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="sr-only peer" 
+                        {{$patient->lunch ? 'checked' : ''}}
+                        data-patient-id="{{$patient->patient_id}}"
+                        data-log-type="lunch"
+                        data-date="{{ \Carbon\Carbon::parse($patient->date)->format('Y-m-d') }}"
+                        >
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        </label>
+                    </td>
+                    <td class="px-6 py-4 text-center align-middle">
+                        <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" class="sr-only peer"
+                        {{$patient->dinner ? 'checked' : ''}}
+                        data-patient-id="{{$patient->patient_id}}"
+                        data-log-type="dinner"
+                        data-date="{{ \Carbon\Carbon::parse($patient->date)->format('Y-m-d') }}"
+                        >
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                        </label>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
         @else
         <div class="flex justify-center align-middle mt-2">
             <p class="text-2xl font-semibold">No patients available</p>

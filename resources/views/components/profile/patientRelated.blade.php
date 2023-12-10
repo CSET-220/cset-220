@@ -16,24 +16,17 @@
                         $initials .= strtoupper(substr($name, 0, 1));
                     }
                 @endphp
-                @if ($fam->user->profile_pic)
-                    <img data-popover-target="popover-patient-caregiver-{{ $fam->family_id }}" src="{{ asset($fam->user->profile_pic) }}" alt="" srcset="" class="w-8 h-8 rounded-full cursor-pointer ">
-                @else
-                    <div data-popover-target="popover-patient-caregiver-{{ $fam->family_id }}" class=" cursor-pointer relative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full bg-blue-600 hover:shadow-md">
-                        <span class="font-medium text-gray-300">{{ $initials }}</span>
-                    </div>
-                @endif
+                
+                <div data-popover-target="popover-patient-caregiver-{{ $fam->family_id }}" class=" cursor-pointer relative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full bg-blue-600 hover:shadow-md">
+                    <span class="font-medium text-gray-300">{{ $initials }}</span>
+                </div>
         
                 <div data-popover id="popover-patient-caregiver-{{ $fam->family_id }}" role="tooltip" class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600">
                     <div class="p-3">
                         <div class="flex items-center justify-between mb-2">
-                            @if ($fam->user->profile_pic)
-                                <img src="{{ asset($fam->user->profile_pic) }}" alt="" srcset="" class="w-8 h-8 rounded-full cursor-pointer ">
-                            @else
-                                <div class=" cursor-pointer relative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full bg-blue-600">
-                                    <span class="font-medium text-gray-300">{{ $initials }}</span>
-                                </div>
-                            @endif
+                            <div class=" cursor-pointerrelative inline-flex items-center justify-center w-8 h-8 overflow-hidden rounded-full bg-blue-600">
+                                <span class="font-medium text-gray-300">{{ $initials }}</span>
+                            </div>
                             <p>{{ $user_info->patient->contact_relation }}</p>
                             <div>
                                 <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xs px-3 py-1.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Call</button>
