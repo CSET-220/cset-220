@@ -56,3 +56,5 @@ Route::post('/appointments/{appointment}/conduct', [AppointmentController::class
 Route::post('/admin/approval', [AdminController::class, 'approval'])->name('admin.approval');
 
 Route::get('/patients/{patient_id}/{date}', [PatientController::class, 'getPatientLog']);
+
+Route::get('/employees/patient/Search', [EmployeeController::class, 'patientSearch'])->name('employees.patientSearch');
