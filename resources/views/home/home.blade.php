@@ -6,6 +6,7 @@
 
 {{-- @section('navLink')
 
+
 @endsection --}}
 
 @section('pageHeader')
@@ -25,6 +26,10 @@
             
             @if (session('access_error'))
                 <p class="text-lg text-red-500">{{ session('access_error') }}</p>
+            @endif
+
+            @if(session('deletion_success'))
+                <p class="text-lg text-green-500">{{ session('deletion_success') }}</p>
             @endif
 
 
@@ -101,6 +106,43 @@
                         @error('password')
                             <p class="text-xs text-red-500">{{ $errors->first('password') }}</p>
                         @enderror
+                        <ul class="hidden password_requirements max-w-md space-y-1 text-gray-500 list-inside dark:text-gray-400">
+                            <h2 class="mb-2 font-semibold text-gray-900 dark:text-white">Password requirements:</h2>
+                            <li class="flex items-center text-sm length_req">
+                                <svg class="length_req w-3.5 h-3.5 me-2 text-gray-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                </svg>
+                                At least 8 characters
+                            </li>
+
+                            <li class="flex items-center text-sm number_req">
+                                <svg class="number_req w-3.5 h-3.5 me-2 text-gray-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                </svg>
+                                At least one NUMBER
+                            </li>
+
+                            <li class="flex items-center text-sm lower_req">
+                                <svg class="lower_req w-3.5 h-3.5 me-2 text-gray-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                </svg>
+                                At least one LOWERCASE character
+                            </li>
+                            
+                            <li class="flex items-center text-sm upper_req">
+                                <svg class="upper_req w-3.5 h-3.5 me-2 text-gray-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                </svg>
+                                At least one UPPERCASE character
+                            </li>
+
+                            <li class="flex items-center text-sm special_req">
+                                <svg class="special_req w-3.5 h-3.5 me-2 text-gray-500 flex-shrink-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
+                                </svg>
+                                At least one SPECIAL character, e.g., ! @ # ?
+                            </li>
+                        </ul>
                     </div>
 
                     {{-- FIRST NAME --}}
@@ -128,7 +170,7 @@
                         {{-- PHONE NUMBER --}}
                         <div class="relative z-0 w-full mb-6 group">
                             <input type="tel" name="phone"  value="{{ old('phone') }}" id="phone_number" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer @error('phone') focus:border-red-500 peer @enderror" placeholder=" " required />
-                            <label for="phone" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 @error('phone')  peer-focus:text-red-500  @enderror">Phone number (123-456-7890)</label>
+                            <label for="phone" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 @error('phone')  peer-focus:text-red-500  @enderror">Phone number</label>
                             @error('phone')
                                 <p class="text-xs text-red-500">{{ $errors->first('phone') }}</p>
                             @enderror
@@ -142,7 +184,7 @@
                                       <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                                     </svg>
                                 </div>
-                                <input value="{{ old('date_of_birth') }}" datepicker datepicker-autohide datepicker-buttons datepicker-format="yyyy/mm/dd" type="text" name="date_of_birth" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
+                                <input value="{{ old('date_of_birth') }}" datepicker datepicker-autohide datepicker-buttons datepicker-format="yyyy/mm/dd" type="text" name="date_of_birth" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Date Of Birth">
                                 @error('date_of_birth')
                                     <p class="text-xs text-red-500">{{ $errors->first('date_of_birth') }}</p>
                                 @enderror
@@ -219,6 +261,7 @@
     <script src="{{ asset('js/homepage.js') }}"></script>
 
     <script>
+
 
         jQuery(document).ready(function () {
             @if ($errors->has('login_email'))

@@ -1,10 +1,26 @@
 $(document).ready(function(){
-    var table = $('#myTable').DataTable();
+    $.fn.dataTable.ext.type.order['date-mmddyyyy-pre'] = function (dateStr) {
+        if (!dateStr) {
+            return 0;
+        }
+        var parts = dateStr.split('-');
+        var date = new Date(parts[2], parts[0] - 1, parts[1]);
+        return date.getTime();
+    };
+    var table = $('#myTable').DataTable({
+        columnDefs: [
+            { type: 'date-mmddyyyy', targets: 0 }
+        ]
+    });
+
     var dataFilters = $(".dataTables_filter");
     dataFilters.addClass("hidden");
+    
     function clearCustomSearch() {
         $.fn.dataTable.ext.search.pop();
     }
+
+    
 
     function defaultSearch() {
         clearCustomSearch();

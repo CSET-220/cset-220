@@ -20,7 +20,7 @@ return new class extends Migration
 
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('patient_id')->constrained();
+            $table->foreignId('patient_id')->constrained()->cascadeOnDelete(); // Deletes row ifpatient is deleted
             $table->foreignId('doctor_id')->constrained(
                 table: 'users'
             );
@@ -34,7 +34,7 @@ return new class extends Migration
                 table: 'prescriptions'
             );
             $table->date('date');
-            $table->string('comments')->nullable();
+            $table->string('comments')->nullable(); // comments need to be null to create appointments
             $table->unique(array('patient_id', 'date'));
             $table->timestamps();
         });

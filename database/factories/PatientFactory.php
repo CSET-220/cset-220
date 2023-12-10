@@ -19,8 +19,8 @@ class PatientFactory extends Factory
     {
         return [
             'user_id' => null,
-            'family_code' => fake()->unique()->sentence(3),
-            'emergency_contact' => fake()->phoneNumber(),
+            'family_code' => fake()->unique()->words(3, true),
+            'emergency_contact' => fake()->numerify('###-###-####'),
             'contact_relation' => fake()->word(),
             'group' => fake()->numberBetween(1, 4),
             'admission_date' => fake()->dateTimeBetween('-10 years', '-1 month'),

@@ -6,9 +6,18 @@
 @section('mainContent')
 <div class="mx-auto min-h-full mt-1">
     <div class="flex justify-center mb-1">
-        <div class="text-center">
-            <h1 class="text-3xl font-semibold">Missed Patient Activity</h1>
-        </div>
+            <p class="flex items-center text-xl font-semibold text-gray-500 dark:text-gray-400">Missed Patient Activity <button data-popover-target="popover-top" data-popover-placement="top" type="button"><svg class="w-4 h-4 ms-2 text-gray-400 hover:text-gray-500" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path></svg><span class="sr-only">Additional Info</span></button></p>
+            <div data-popover id="popover-top" role="tooltip" class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
+                <div class="px-3 py-2 bg-gray-100 border-b border-gray-200 rounded-t-lg dark:border-gray-600 dark:bg-gray-700">
+                    <h3 class="font-semibold text-gray-900 dark:text-white">Additional Info</h3>
+                </div>
+                <div class="px-3 py-2">
+                    <p class="border-b">(-) Means the appointment/log was completed for the date or there was no appointment/log for that date</p>
+                    <p class="border-b">(&#10003;) Means the task was completed</p>
+                    <p class="border-b">(&#x2715;) Means the task was not completed</p>
+                </div>
+                <div data-popper-arrow></div>
+            </div>
     </div>
     <div class="flex justify-center">
         <div class="flex relative max-w-sm">
@@ -27,12 +36,12 @@
                 <tr>
                     <th>Patient ID</th>
                     <th>Date</th>
-                    <th>Doctor</th>
+                    <th>Doctor ID</th>
                     <th>Attended</th>
-                    <th>Caregiver</th>
+                    <th>Caregiver ID</th>
                     <th>Morning Med</th>
                     <th>Afternoon Med</th>
-                    <th>Evening Med</th>
+                    <th>Night Med</th>
                     <th>Breakfast</th>
                     <th>Lunch</th>
                     <th>Dinner</th>
@@ -47,23 +56,22 @@
                     @endphp
                         <tr>
                             <td>{{ $patientId }}</td>
-                            <td>{{ $date ? \Carbon\Carbon::parse($date)->format('m-d-y') : 'N/A' }}</td>
-                            <td>{{ $appointment->exists ? $appointment->doctor_id : 'N/A' }}</td>
-                            {{-- <td><input type="checkbox" {{ optional($data['appointment'])->comments ? 'checked' : ''}}></td> --}}
+                            <td>{{ $date ? \Carbon\Carbon::parse($date)->format('m-d-y') : '-' }}</td>
+                            <td>{{ $appointment->exists ? $appointment->doctor_id : '-' }}</td>
                             <td>
                                 @if($appointment->exists)
-                                    <input type="checkbox" {{ optional($data['appointment'])->comments ? 'checked' : ''}} disabled>
+                                    &#x2715;
                                 @else
-                                    N/A
+                                    -
                                 @endif
                             </td>
-                            <td>{{ $log->exists ? $log->caregiver_id : 'N/A' }}</td>
-                            <td>{{ $log->exists ? ($log->morning_med ? 'Yes' : 'No') : 'N/A' }}</td>
-                            <td>{{ $log->exists ? ($log->afternoon_med ? 'Yes' : 'No') : 'N/A' }}</td>
-                            <td>{{ $log->exists ? ($log->evening_med ? 'Yes' : 'No') : 'N/A'}}</td>
-                            <td>{{ $log->exists ? ($log->breakfast ? 'Yes' : 'No') : 'N/A' }}</td>
-                            <td>{{ $log->exists ? ($log->lunch ? 'Yes' : 'No') : 'N/A' }}</td>
-                            <td>{{ $log->exists ? ($log->dinner ? 'Yes' : 'No') : 'N/A' }}</td>
+                            <td>{{ $log->exists ? $log->caregiver_id : '-' }}</td>
+                            <td>{!! $log->exists ? ($log->morning_med ? '&#10003;' : '&#x2715;') : '-' !!}</td>
+                            <td>{!! $log->exists ? ($log->afternoon_med ? '&#10003;' : '&#x2715;') : '-' !!}</td>
+                            <td>{!! $log->exists ? ($log->night_med ? '&#10003;' : '&#x2715;') : '-' !!}</td>
+                            <td>{!! $log->exists ? ($log->breakfast ? '&#10003;' : '&#x2715;') : '-' !!}</td>
+                            <td>{!! $log->exists ? ($log->lunch ? '&#10003;' : '&#x2715;') : '-' !!}</td>
+                            <td>{!! $log->exists ? ($log->dinner ? '&#10003;' : '&#x2715;') : '-' !!}</td>
                         </tr>
                     @endforeach
                 @endforeach

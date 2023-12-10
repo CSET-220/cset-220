@@ -34,8 +34,10 @@ class AdminController extends Controller
             if($role->role_title == 'doctor' || $role->role_title == 'supervisor' || $role->role_title == 'caregiver' || $role->access_level == 4){
                 Employee::create(['user_id' => $approved_id]);
             }
-            elseif($role == 'patient'){
-                Patient::where("user_id", $approved_id)->update(['admission_date' => date('Y-m-d')]);
+            if($role->role_title == 'patient') {
+                $patient = Patient::where('user_id', $approved_id)->first();
+                $patient->update(['last_billed_date' => now()]);
+                $patient->update(['admission_date' => now()]);
             }
         }
         if($denied_id){
@@ -46,13 +48,61 @@ class AdminController extends Controller
     }
 
     public function show(User $admin){
+
+    }
+
+    public function patientInfo(Request $request, User $admin){
         if (Auth::check()) {
-            if (auth()->user()->getAccess(['admin'])) {
-                return view('admin.home');
+            if (auth()->user()->getAccess(['admin', 'supervisor'])) {
+                if ($request->has('patient_id')) {
+                    $patient_id = $request->patient_id;
+                    $patient = Patient::where('id', $patient_id)->first();
+                    $user = User::where('id', $patient->user_id)->first();
+                    $patient_name = $user->first_name . ' ' . $user->last_name;
+                    if ($user->is_approved == 1) {
+                        return $patient_name;
+                    }
+                    else{
+                        return view('admin.patientInfo');
+                    }
+                }
+                return view('admin.patientInfo');
             }
             else{
                 return redirect()->back();
             }
+        }
+    }
+
+    public function updatePatientInfo(Request $request) {
+        // Check if the patient_id exists first
+        if (!Patient::where('id', $request->patient_id)->exists()) {
+            return redirect()->route('admin.patientInfo')->with('error', 'Patient ID does not exist. Patient name will auto populate when the ID valid.');
+        }
+        $patient = Patient::where('id', $request->patient_id)->first();
+        $patient->update(['group' => $request->patient_group]);
+        $patient->update(['admission_date' => $request->admission_date]);
+        return redirect()->route('admin.patientInfo')->with('success', 'Patient Information Updated');
+    }
+
+    public function billPatients(){
+        if(Auth::check() && Auth::user()->getAccess(['admin'])){
+            $patients = Patient::all();
+            foreach ($patients as $patient) {
+                $today = Carbon::now();
+                $lastBilled = $patient->last_billed_date;
+                $differenceInDays = $today->diffInDays($lastBilled);
+                $amount = $differenceInDays * 10;
+    
+                $patient->last_billed_date = $today;
+                $patient->balance += $amount;
+                $patient->save();
+    
+            }
+            return redirect()->route('users.show', ['user' => Auth::user()])->with('bill_success', 'Successfully Billed All Patients');
+        }
+        else{
+            return redirect()->route('app.home')->with('access_error', 'You do not have permission to view this page.');
         }
     }
 

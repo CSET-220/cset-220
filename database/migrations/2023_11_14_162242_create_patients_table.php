@@ -13,13 +13,15 @@ return new class extends Migration
     {
         Schema::create('patients', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->nullable()->constrained();
-            $table->string('family_code');
+            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete(); // Added cascade on delete to Be able to delete user info
+            $table->text('family_code');
             $table->string('emergency_contact');
             $table->string('contact_relation');
             $table->integer('group')->nullable()->default(null);
             $table->date('admission_date')->nullable()->default(null);
             $table->date('last_paid_date')->nullable()->default(null);
+            $table->date('last_billed_date')->nullable()->default(null);
+            $table->date('last_billed_date')->nullable()->default(null);
             $table->integer('balance')->default(0);
             $table->timestamps();
         });
