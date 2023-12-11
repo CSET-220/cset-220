@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title')
-    Account Approval
+    Role Creation
 @endsection
 
 @section('pageHeader')
