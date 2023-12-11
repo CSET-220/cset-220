@@ -12,15 +12,10 @@ $(document).ready(function(){
             { type: 'date-mmddyyyy', targets: 0 }
         ]
     });
-
-    var dataFilters = $(".dataTables_filter");
-    dataFilters.addClass("hidden");
     
     function clearCustomSearch() {
         $.fn.dataTable.ext.search.pop();
     }
-
-    
 
     function defaultSearch() {
         clearCustomSearch();
