@@ -23,7 +23,6 @@
         <div id="patient_search_form" class="hidden">
             <div class="">
                 <form class="flex justify-between" action="{{ route('family.dashboard.connect', ['user' =>Auth::user()]) }}" method="GET" id="fam_code_form">
-                    @csrf
                     <div class="relative z-0 w-1/2">
                         <input type="number" id="patient_id_search" class="block py-1.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />
                         <label for="patient_id_search" class="absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto">Enter Patient ID</label>
@@ -66,12 +65,12 @@
                             <li class="relative mb-6 sm:mb-0">
                                 <div class="flex items-center">
                                     @if ($log->breakfast)
-                                        <div data-popover-target="family-log-breakfast-{{ $prevApt->id }}" class="z-0 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-0 ring-white dark:bg-blue-900 sm:ring-8 dark:ring-gray-900 shrink-0">
+                                        <div data-popover-target="family-log-breakfast-{{ $log->id }}" class="z-0 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-0 ring-white dark:bg-blue-900 sm:ring-8 dark:ring-gray-900 shrink-0">
                                             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path fill="#1eff00" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
                                         </div>
                                         <div class="hidden sm:flex w-full bg-green-500 h-0.5"></div>
                                     @else
-                                        <div data-popover-target="family-log-breakfast-{{ $prevApt->id }}" class="z-0 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-0 ring-white dark:bg-blue-900 sm:ring-8 dark:ring-gray-900 shrink-0">
+                                        <div data-popover-target="family-log-breakfast-{{ $log->id }}" class="z-0 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-0 ring-white dark:bg-blue-900 sm:ring-8 dark:ring-gray-900 shrink-0">
                                             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path fill="#ff0000" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"/></svg>                
                                         </div>
                                         <div class="hidden sm:flex w-full bg-red-500 h-0.5"></div>
@@ -90,12 +89,12 @@
                             <li class="relative mb-6 sm:mb-0">
                                 <div class="flex items-center">
                                     @if ($log->lunch)
-                                        <div data-popover-target="family-log-lunch-{{ $prevApt->id }}" class="z-10 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-0 ring-white dark:bg-blue-900 sm:ring-8 dark:ring-gray-900 shrink-0">
+                                        <div data-popover-target="family-log-lunch-{{ $log->id }}" class="z-10 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-0 ring-white dark:bg-blue-900 sm:ring-8 dark:ring-gray-900 shrink-0">
                                             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path fill="#1eff00" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
                                         </div>
                                         <div class="hidden sm:flex w-full bg-green-500 h-0.5"></div>
                                     @else
-                                        <div data-popover-target="family-log-lunch-{{ $prevApt->id }}" class="z-10 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-0 ring-white dark:bg-blue-900 sm:ring-8 dark:ring-gray-900 shrink-0">
+                                        <div data-popover-target="family-log-lunch-{{ $log->id }}" class="z-10 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-0 ring-white dark:bg-blue-900 sm:ring-8 dark:ring-gray-900 shrink-0">
                                             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path fill="#ff0000" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"/></svg>                
                                         </div>
                                         <div class="hidden sm:flex w-full bg-red-500 h-0.5"></div>
@@ -114,12 +113,12 @@
                             <li class="relative mb-6 sm:mb-0">
                                 <div class="flex items-center">
                                     @if ($log->dinner)
-                                        <div data-popover-target="family-log-dinner-{{ $prevApt->id }}" class="z-10 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-0 ring-white dark:bg-blue-900 sm:ring-8 dark:ring-gray-900 shrink-0">
+                                        <div data-popover-target="family-log-dinner-{{ $log->id }}" class="z-10 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-0 ring-white dark:bg-blue-900 sm:ring-8 dark:ring-gray-900 shrink-0">
                                             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path fill="#1eff00" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
                                         </div>
                                         <div class="hidden sm:flex w-full bg-green-500 h-0.5"></div>
                                     @else
-                                        <div data-popover-target="family-log-dinner-{{ $prevApt->id }}" class="z-100 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-0 ring-white dark:bg-blue-900 sm:ring-8 dark:ring-gray-900 shrink-0">
+                                        <div data-popover-target="family-log-dinner-{{ $log->id }}" class="z-100 flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full ring-0 ring-white dark:bg-blue-900 sm:ring-8 dark:ring-gray-900 shrink-0">
                                             <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" viewBox="0 0 512 512"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2023 Fonticons, Inc.--><path fill="#ff0000" d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM175 175c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z"/></svg>                
                                         </div>
                                         <div class="hidden sm:flex w-full bg-red-500 h-0.5"></div>
@@ -143,7 +142,7 @@
 
             {{-- POPOVERS --}}
             {{-- MORNING --}}
-            <div data-popover id="family-log-breakfast-{{ $prevApt->id }}" role="tooltip" class="absolute overflow-visible z-50 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
+            <div data-popover id="family-log-breakfast-{{ $log->id }}" role="tooltip" class="absolute overflow-visible z-50 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
                 <div class="px-3 py-2  border-b border-gray-200 rounded-t-lg dark:border-gray-600 bg-gray-700">
                     <h3 class="font-semibold text-white">Morning RX</h3>
                 </div>
@@ -164,7 +163,7 @@
             </div>
 
             {{-- AFTERNOON --}}
-            <div data-popover id="family-log-lunch-{{ $prevApt->id }}" role="tooltip" class="absolute overflow-visible z-50 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
+            <div data-popover id="family-log-lunch-{{ $log->id }}" role="tooltip" class="absolute overflow-visible z-50 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
                 <div class="px-3 py-2  border-b border-gray-200 rounded-t-lg dark:border-gray-600 bg-gray-700">
                     <h3 class="font-semibold text-white">Afternoon RX</h3>
                 </div>
@@ -185,7 +184,7 @@
             </div>
 
             {{-- NIGHT --}}
-            <div data-popover id="family-log-dinner-{{ $prevApt->id }}" role="tooltip" class="absolute overflow-visible z-50 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
+            <div data-popover id="family-log-dinner-{{ $log->id }}" role="tooltip" class="absolute overflow-visible z-50 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
                 <div class="px-3 py-2  border-b border-gray-200 rounded-t-lg dark:border-gray-600 bg-gray-700">
                     <h3 class="font-semibold text-white">Night RX</h3>
                 </div>

@@ -483,7 +483,6 @@
                 </div>
                 <!-- Modal body -->
                 <form action="{{ route('prescriptions.store') }}" method="post" class="p-4 md:p-5 relative">
-                    @csrf
                     <div class="grid gap-4 mb-4 grid-cols-2 relative items-center">
                         <div class="col-span-2 relative z-0">
                             <input required type="text" id="rx_name" name="medication_name" class="block py-2.5 px-0 w-full text-sm  bg-transparent border-0 border-b-2  appearance-none text-white border-gray-600 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " />

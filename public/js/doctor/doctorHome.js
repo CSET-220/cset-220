@@ -25,13 +25,14 @@ $(document).on('click', '#close_appointment', function () {
 $(document).on('click', '#show_conduct_apt', function () {
     // Get encrypted appointment data from data-modal-content attribute
     let data = $(this.parentElement).attr('data-modal-content')
-    let aptInfo = JSON.parse(decodeURIComponent(data)) 
+    let aptInfo = JSON.parse(decodeURIComponent(data))
+    let aptID = $(this).attr('data-apt-id'); 
     $.ajax({
         type: "get",
         url: "/api/prescriptions",
         dataType: "json",
         success: function (response) {
-            displayConductAppointment(aptInfo,response);
+            displayConductAppointment(aptInfo,response,aptID);
         }
     });
 });
@@ -93,7 +94,7 @@ function displayAppointmentModal(appointments){
             // console.log("SHOW SEE PATIENT");
             info += `
                 
-                <a id="show_conduct_apt" class="cursor-pointer my-4 inline-flex items-center py-2 px-3 text-sm font-medium focus:outline-none rounded-lg border focus:z-10 focus:ring-4 focus:ring-gray-700 bg-gray-700 text-gray-400 border-gray-600 hover:text-white hover:bg-gray-600">
+                <a id="show_conduct_apt" data-apt-id="${appointment.id}" class="cursor-pointer my-4 inline-flex items-center py-2 px-3 text-sm font-medium focus:outline-none rounded-lg border focus:z-10 focus:ring-4 focus:ring-gray-700 bg-gray-700 text-gray-400 border-gray-600 hover:text-white hover:bg-gray-600">
                     <svg class="w-3 h-3 me-1.5" aria-hidden="true" viewBox="0 0 30 45" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.50012 45C11.6401 45 15.0002 41.6399 15.0002 37.4999V29.9999H7.50012C3.36009 29.9999 0 33.3599 0 37.4999C0 41.6399 3.36009 45 7.50012 45Z" fill="#0ACF83"/><path d="M0 22.5C0 18.36 3.36009 14.9999 7.50012 14.9999H15.0002V29.9999H7.50012C3.36009 30.0001 0 26.64 0 22.5Z" fill="#A259FF"/><path d="M0 7.50006C0 3.36006 3.36009 0 7.50012 0H15.0002V14.9999H7.50012C3.36009 14.9999 0 11.6401 0 7.50006Z" fill="#F24E1E"/><path d="M15.0002 0H22.4999C26.6399 0 30 3.36006 30 7.50006C30 11.6401 26.6399 14.9999 22.4999 14.9999L15.0002 14.9999V0Z" fill="#FF7262"/><path d="M30 22.5C30 26.64 26.6399 30 22.4999 30C18.3599 30 14.9998 26.64 14.9998 22.5C14.9998 18.36 18.3599 14.9999 22.4999 14.9999C26.6399 14.9999 30 18.36 30 22.5Z" fill="#1ABCFE"/></svg>
                     See Patient
                 </a>
@@ -205,14 +206,10 @@ function displayModal(appointment) {
 }
 
 
-function displayConductAppointment(appointment,prescriptions){
+function displayConductAppointment(appointment,prescriptions,appointment_id){
+    // console.log(appointment_id, "APPOINTMENT ID");
     let data = $('#appointment_list').attr('data-modal-patient')
     let patientInfo = JSON.parse(decodeURIComponent(data))
-    if(appointment.length > 1){
-    
-        console.log(appointment[1].afternoon_med);
-    }
-        // $('#appointment_details').attr('data-modal-backdrop', 'static');
 
     $('#appointment_details').html(`
         <div class="relative p-4 w-full max-w-md max-h-full">
@@ -231,7 +228,7 @@ function displayConductAppointment(appointment,prescriptions){
                     </button>
                 </div>
                 <!-- Modal body -->
-                <form action="/api/appointments/${appointment[0].id}/conduct" method="post" class="p-4 md:p-5">
+                <form action="/api/appointments/${appointment_id}/conduct" method="post" class="p-4 md:p-5">
                     <div class="grid gap-4 mb-4 grid-cols-2">
                         <div class="col-span-2">
                             <label for="morning_prescription_name" class="block mb-2 text-sm font-medium text-white">Morning Prescription</label>
