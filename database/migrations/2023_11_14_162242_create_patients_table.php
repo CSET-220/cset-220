@@ -21,7 +21,6 @@ return new class extends Migration
             $table->date('admission_date')->nullable()->default(null);
             $table->date('last_paid_date')->nullable()->default(null);
             $table->date('last_billed_date')->nullable()->default(null);
-            $table->date('last_billed_date')->nullable()->default(null);
             $table->integer('balance')->default(0);
             $table->timestamps();
         });

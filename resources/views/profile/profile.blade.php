@@ -43,10 +43,10 @@
 {{-- <div class="mx-auto w-full"> --}}
     <div class="flex justify-around flex-col sm:flex-wrap sm:flex-row p-8 pt-8 sm:pb-20 sm:w-full flex-grow">
         {{-- Left side --}}
-        <div class="flex flex-col mr-0 mb-4 w-full md:w-1/3 md:mr-6 flex-grow">
+        <div class="flex flex-col mr-0 mb-4 w-full md:w-1/3 md:mr-6 flex-grow relative">
 
             {{-- Top Left --}}
-            <div class="bg-gray-800 p-4 rounded-lg mb-4 shadow-gray-600 shadow-md w-full text-right flex-grow">
+            <div class="bg-gray-800 p-4 rounded-lg mb-4 shadow-gray-600 shadow-md w-full text-right flex-grow relative">
                 <button id="dropdownButton" data-dropdown-toggle="dropdown" class="inline-block text-gray-400 hover:bg-gray-700 focus:ring-4 focus:outline-none ring-gray-200 focus:ring-gray-700 rounded-lg text-sm p-1.5" type="button">
                     <span class="sr-only">Open dropdown</span>
                     <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 3">
@@ -117,6 +117,24 @@
                         <p class="text-sm text-red-500">{{ $errors->first('medication_name') }}</p>
                     @enderror
                 </div>
+                @if (Auth::user()->getAccess(['admin','supervisor']))
+                    <button data-popover-target="total_users" type="button" class=" absolute bottom-0 left-1/2 transform -translate-x-1/2 border focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 border-gray-600 text-gray-400 hover:text-white hover:bg-gray-600 focus:ring-gray-800">Total Users: {{ $userCounts['allUsers'] }}</button>
+                    <div data-popover id="total_users" role="tooltip" class="absolute z-10 invisible inline-block w-64 text-sm  transition-opacity duration-300  border  rounded-lg shadow-sm opacity-0 text-gray-400 border-gray-600 bg-gray-800 text-left">
+                        <div class="px-3 py-2  border-b  rounded-t-lg border-gray-600 bg-gray-700">
+                            <h3 class="font-semibold text-white">Total Users</h3>
+                        </div>
+                        <div class="px-3 py-2">
+                            <p>Admin: {{ $userCounts['admin'] }}</p>
+                            <p>Supervisors: {{ $userCounts['supervisor'] }}</p>
+                            <p>Doctors: {{ $userCounts['doctor'] }}</p>
+                            <p>Caregivers: {{ $userCounts['caregiver'] }}</p>
+                            <p>Family Members: {{ $userCounts['family'] }}</p>
+                            <p>Patients: {{ $userCounts['patient'] }}</p>
+                        </div>
+                        <div data-popper-arrow></div>
+                    </div>
+                        
+                @endif
             </div>
 
 
