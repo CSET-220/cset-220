@@ -137,7 +137,7 @@ class UserController extends Controller
                 $query->where('date', date('Y-m-d'))->first();
             },
             'families.patient.appointments' => function($query){
-                $query->where('date', '<', date('Y-m-d'))->orderBy('date', 'desc')->with(['morningPrescriptions', 'afternoonPrescriptions', 'nightPrescriptions',])->first();
+                $query->where('date', '<', date('Y-m-d'))->where('comments', '!=', null)->orderBy('date', 'desc')->with(['morningPrescriptions', 'afternoonPrescriptions', 'nightPrescriptions',])->first();
             },'logs', 'doctorRosters', 'supervisorRosters', 'caregiver1Rosters', 'caregiver2Rosters', 'caregiver3Rosters', 'caregiver4Rosters'])->where('id',Auth::id())->first();
             // Get everyone on the roster today
             $roster = Roster::where('date', date('Y-m-d'))->first();
@@ -175,9 +175,17 @@ class UserController extends Controller
             if(Auth::user()->getAccess(['caregiver'])){
                 $caregiverPatients = Log::with(['patient.user', 'caregiver'])->where('caregiver_id', Auth::id())->where('date', date('Y-m-d'))->get();
             }
-
+            $userCounts = [
+                'allUsers' => User::count(),
+                'patient' => User::where('role_id', Role::where('role_title', 'patient')->first()->id)->count(),
+                'family' => User::where('role_id', Role::where('role_title', 'family')->first()->id)->count(),
+                'admin' => User::where('role_id', Role::where('role_title', 'admin')->first()->id)->count(),
+                'supervisor' => User::where('role_id', Role::where('role_title', 'supervisor')->first()->id)->count(),
+                'doctor' => User::where('role_id', Role::where('role_title', 'doctor')->first()->id)->count(),
+                'caregiver' => User::where('role_id', Role::where('role_title', 'caregiver')->first()->id)->count(),
+            ];
             // dd($caregiverPatients);
-            return view('profile.profile', ['user_info' => $user_info, 'roster' => $roster, 'allApts' => $allApts, 'drApt' => $drApt, 'caregiverPatients' => $caregiverPatients]);
+            return view('profile.profile', ['user_info' => $user_info, 'roster' => $roster, 'allApts' => $allApts, 'drApt' => $drApt, 'caregiverPatients' => $caregiverPatients,'userCounts' => $userCounts]);
         }
         else{
             return redirect()->route('app.home')->with('access_error', 'Please Login to view profile.');

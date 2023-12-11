@@ -57,9 +57,13 @@ class loginController extends Controller
             }
         }
         else{
-            return redirect()->back()->withErrors([
-                'login_email' => 'You must be approved before you can login.'
-            ]);
+            $user = User::where('email', $request->login_email)->first();
+            if ($user && $user->approved === false) {
+                return redirect()->back()->withErrors(['login_email' => 'You must be approved before you can login.']);
+            }
+            else{
+                return redirect()->back()->withErrors(['login_email' => 'The password you entered is incorrect.']);
+            }
         }
 
     }
