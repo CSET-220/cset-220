@@ -3,9 +3,6 @@
 
 @section('linkStyles')
     <meta name="csrf-token" content="{{ csrf_token() }}">    
-    <script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
-    <script src="https://unpkg.com/flowbite-datepicker@1.2.2/dist/js/datepicker-full.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/flowbite@1.5.3/dist/flowbite.min.css" />
 @endsection
 
 @section('title')
