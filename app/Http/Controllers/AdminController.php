@@ -62,12 +62,18 @@ class AdminController extends Controller
                     if ($user->is_approved == 1) {
                         return $patient_name;
                     }
-                    else{
-                        return view('admin.patientInfo');
-                    }
                 }
-                return view('admin.patientInfo');
-            }
+                $patients = Patient::with('user')->where(function ($query) {
+                    $query->where('admission_date', null)
+                        ->orWhere('group', null);
+                })->whereHas('user', function ($query) {
+                    $query->where('is_approved', 1);
+                })->get();
+                if ($patients->isEmpty()) {
+                    return view('admin.patientInfo');
+                }
+                return view('admin.patientInfo', compact('patients'));
+            }   
             else{
                 return redirect()->back();
             }
@@ -77,7 +83,7 @@ class AdminController extends Controller
     public function updatePatientInfo(Request $request) {
         // Check if the patient_id exists first
         if (!Patient::where('id', $request->patient_id)->exists()) {
-            return redirect()->route('admin.patientInfo')->with('error', 'Patient ID does not exist. Patient name will auto populate when the ID valid.');
+            return redirect()->route('admin.patientInfo')->with('error', 'Patient ID does not exist.');
         }
         $patient = Patient::where('id', $request->patient_id)->first();
         $patient->update(['group' => $request->patient_group]);
