@@ -26,9 +26,9 @@
                 <button id="clear" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Clear</button>
             </div>
         </div>
-    <table id="myTable" class="table-layout border-collapse border">
-        <thead class="border border-slate-500">
-            <tr>
+    <table id="myTable" class="table-layout border-collapse border text-gray-900">
+        <thead class="border border-slate-500 bg-gray-800 text-gray-400">
+            <tr class="odd cursor-pointer">
                 <th>Date</th>
                 <th>Supervisor</th>
                 <th>Doctor</th>
@@ -38,19 +38,19 @@
                 <th>Caregiver4</th>
             </tr>
         </thead>
-        <tbody class="border border-slate-500">
+        <tbody class="border border-slate-500 bg-gray-400">
             @forelse ($rosters as $roster)
-            <tr>
-                <td>{{ $roster->date ? \Carbon\Carbon::parse($roster->date)->format('m-d-Y') : 'N/A' }}</td>
-                <td>{{ $roster->supervisor->first_name ?? 'N/A' }} {{$roster->supervisor->last_name ?? 'N/A'}}</td>
-                <td>{{ $roster->doctor->first_name ?? 'N/A' }} {{$roster->doctor->last_name ?? 'N/A'}}</td>
-                <td>{{ $roster->caregiver1->first_name ?? 'N/A' }} {{$roster->caregiver1->last_name ?? 'N/A'}}</td>
-                <td>{{ $roster->caregiver2->first_name ?? 'N/A' }} {{$roster->caregiver2->last_name ?? 'N/A'}}</td>
-                <td>{{ $roster->caregiver3->first_name ?? 'N/A' }} {{$roster->caregiver3->last_name ?? 'N/A'}}</td>
-                <td>{{ $roster->caregiver4->first_name ?? 'N/A' }} {{$roster->caregiver4->last_name ?? 'N/A'}}</td>
+            <tr class="hover:text-white hover:bg-gray-800">
+                <td class="border !border-gray-900">{{ $roster->date ? \Carbon\Carbon::parse($roster->date)->format('m-d-Y') : 'N/A' }}</td>
+                <td class="border !border-gray-900">{{ $roster->supervisor->first_name ?? 'N/A' }} {{$roster->supervisor->last_name ?? 'N/A'}}</td>
+                <td class="border !border-gray-900">{{ $roster->doctor->first_name ?? 'N/A' }} {{$roster->doctor->last_name ?? 'N/A'}}</td>
+                <td class="border !border-gray-900">{{ $roster->caregiver1->first_name ?? 'N/A' }} {{$roster->caregiver1->last_name ?? 'N/A'}}</td>
+                <td class="border !border-gray-900">{{ $roster->caregiver2->first_name ?? 'N/A' }} {{$roster->caregiver2->last_name ?? 'N/A'}}</td>
+                <td class="border !border-gray-900">{{ $roster->caregiver3->first_name ?? 'N/A' }} {{$roster->caregiver3->last_name ?? 'N/A'}}</td>
+                <td class="border !border-gray-900">{{ $roster->caregiver4->first_name ?? 'N/A' }} {{$roster->caregiver4->last_name ?? 'N/A'}}</td>
             </tr>
             @empty
-                <tr><td colspan="7">No rosters available</td></tr>
+                <tr><td class="border !border-gray-900" colspan="7">No rosters available</td></tr>
             @endforelse
         </tbody>
     </table>

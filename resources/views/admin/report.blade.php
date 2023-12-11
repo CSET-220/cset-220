@@ -31,8 +31,8 @@
         </div>
     </div>
     <div class="pb-20">
-        <table id="myTable" class="text-base sm:text-sm">
-            <thead>
+        <table id="myTable" class="text-base sm:text-sm text-gray-900">
+            <thead class="bg-gray-800 text-gray-400">
                 <tr>
                     <th>Patient ID</th>
                     <th>Date</th>
@@ -47,14 +47,14 @@
                     <th>Dinner</th>
                 </tr>
             </thead>
-            <tbody class="text-center w-full">
+            <tbody class="text-center w-full border border-slate-500 bg-gray-400">
                 @foreach ($patientData as $patientId => $dates)
                     @foreach ($dates as $date => $data)
                     @php
                         $log = optional($data['log']);
                         $appointment = optional($data['appointment']);
                     @endphp
-                        <tr>
+                        <tr class="hover:text-white hover:bg-gray-800">
                             <td>{{ $patientId }}</td>
                             <td>{{ $date ? \Carbon\Carbon::parse($date)->format('m-d-y') : '-' }}</td>
                             <td>{{ $appointment->exists ? $appointment->doctor_id : '-' }}</td>

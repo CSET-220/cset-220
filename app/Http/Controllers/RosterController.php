@@ -32,8 +32,7 @@ class RosterController extends Controller
     {   
         if(Auth::check()) {
             $user = Auth::user();
-            // TODO change to use one array at some point
-            if (auth()->user()->getAccess(['admin']) || auth()->user()->getAccess(['supervisor'])) {
+            if (auth()->user()->getAccess(['admin', 'supervisor'])) {
                 $doctors = User::where('role_id', 3)->get();
                 $supervisors = User::where('role_id', 2)->get();
                 $caregivers = User::where('role_id', 4)->get();
@@ -85,20 +84,17 @@ class RosterController extends Controller
                 'caregiver4_id' => $request->caregiver4_id,
                 'date' => $date,
             ]);
-            $caregiverGroups = [];
-            for ($i = 1; $i <= 4; $i++) {
-                $caregiverId = $roster->{"caregiver{$i}_id"};
-                if($caregiverId) {
-                    $caregiverGroups[$i] = $caregiverId;
-                }
-            }
-    
-            foreach($caregiverGroups as $group => $caregiverId) {
-                $patientIds = Patient::where('group', $group)->pluck('id');
-                foreach($patientIds as $patientId) {
+            
+            for($group = 1; $group <= 4; $group++) {
+                $caregiverIDField = 'caregiver' . $group . '_id';
+                $caregiverID = $roster->$caregiverIDField;
+
+                $patientsIDs = Patient::where('group', $group)->pluck('id');
+
+                foreach($patientsIDs as $patientID) {
                     Log::create([
-                        'caregiver_id' => $caregiverId,
-                        'patient_id' => $patientId,
+                        'caregiver_id' => $caregiverID,
+                        'patient_id' => $patientID,
                         'date' => $date,
                     ]);
                 }
