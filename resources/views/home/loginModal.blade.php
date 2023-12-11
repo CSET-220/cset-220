@@ -18,6 +18,7 @@
             {{-- Modal FORM --}}
             <div class="p-4 md:p-5">
                 <form action="{{ route('app.login') }}" method="post" class="space-y-4">
+                    @csrf
 
                     {{-- EMAIL --}}
                     <div>

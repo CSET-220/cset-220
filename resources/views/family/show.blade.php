@@ -28,6 +28,7 @@
             <div>
                 <h2 class="text-xl mb-4">Want to check up on a family member?</h2>
                 <form id="family-code-form" method="post" class="flex flex-col w-64 items-start">
+                    @csrf
                     <div class="mb-2">
                         <label for="patient-id">Enter their Patient ID:</label>
                         <input type="text" name="patient_id" id="patient-id" placeholder="Patient ID" required>
