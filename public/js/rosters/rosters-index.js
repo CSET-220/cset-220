@@ -17,6 +17,8 @@ $(document).ready(function(){
         $.fn.dataTable.ext.search.pop();
     }
 
+    
+
     function defaultSearch() {
         clearCustomSearch();
         $.fn.dataTable.ext.search.push(
