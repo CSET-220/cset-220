@@ -12,7 +12,7 @@ class Family extends Model
     use HasFactory;
 
     public function user() {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'family_id');
     }
 
     public function patient() {
@@ -20,7 +20,15 @@ class Family extends Model
     }
 
     protected $fillable = [
-        'user_id',
+        'family_id',
         'patient_id'
     ];
+
+    public function scopeFamilySearch($query, $patient_id, $family_id) {
+        $query->where('patient_id', $patient_id)->where('family_id', $family_id);
+    }
+
+    public function scopeGetAllFamily($query, $family_id) {
+        $query->where('family_id', $family_id);
+    }
 }

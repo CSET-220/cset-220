@@ -6,6 +6,7 @@ use App\Models\Appointment;
 use App\Models\Log;
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -18,7 +19,16 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        //
+        if(Auth::check()) {
+            if(auth()->user()->getAccess(['admin', 'caregiver', 'doctor', 'supervisor'])) {
+                $patients = Patient::with(['user' => function($query) {
+                    $query->select('*', \DB::raw('(YEAR(CURDATE()) - YEAR(dob)) - (RIGHT(CURDATE(), 5) < RIGHT(dob, 5)) as age'));
+                }])->paginate(8);
+                return view('employees.index', compact('patients'));
+            } else {
+                return redirect()->route('app.home')->with('access_error', 'You do not have permission to access this page');
+            }
+        }
     }
 
     public function create(){
@@ -74,6 +84,7 @@ class EmployeeController extends Controller
                 ->whereBetween('date', [$start_date, $end_date])
                 ->orderBy('date', 'desc')
                 ->get();
+                // dd($appointments);
             
             return view('doctors.doctorHome', ['appointments' => $appointments]);
         }
@@ -276,5 +287,60 @@ class EmployeeController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function patientSearch(Request $request)
+    {
+        $columnName = $request->columnName;
+        $searchValue = $request->searchValue;
+
+        if($columnName == 'id') {
+            $patients = Patient::with(['user' => function($query) {
+                $query->select('*', \DB::raw('(YEAR(CURDATE()) - YEAR(dob)) - (RIGHT(CURDATE(), 5) < RIGHT(dob, 5)) as age'));
+            }])
+                ->where('id', $searchValue)
+                ->paginate(8);
+                return view('employees.index', compact('patients'));
+        } else if($columnName == 'name') {
+            $patients = Patient::with(['user' => function($query) {
+                $query->select('*', \DB::raw('(YEAR(CURDATE()) - YEAR(dob)) - (RIGHT(CURDATE(), 5) < RIGHT(dob, 5)) as age'));
+            }])
+                ->whereHas('user', function($query) use ($searchValue) {
+                $query->where('first_name', 'LIKE', '%' . $searchValue . '%')
+                    ->orWhere('last_name', 'LIKE', '%' . $searchValue . '%');
+                })
+                ->paginate(8);
+                return view('employees.index', compact('patients'));
+        } else if($columnName == 'age') {
+            $patients = Patient::with(['user' => function($query) {
+                $query->select('*', \DB::raw('(YEAR(CURDATE()) - YEAR(dob)) - (RIGHT(CURDATE(), 5) < RIGHT(dob, 5)) as age'));
+            }])
+                ->whereHas('user', function($query) use ($searchValue) {
+                    $query->whereRaw('(YEAR(CURDATE()) - YEAR(dob)) - (RIGHT(CURDATE(), 5) < RIGHT(dob, 5)) = ?', [$searchValue]);
+                })                
+                ->paginate(8);
+                return view('employees.index', compact('patients'));        
+        } else if($columnName == 'emergency_contact') {
+            $patients = Patient::with(['user' => function($query) {
+                $query->select('*', \DB::raw('(YEAR(CURDATE()) - YEAR(dob)) - (RIGHT(CURDATE(), 5) < RIGHT(dob, 5)) as age'));
+            }])
+                ->where('emergency_contact', $searchValue)
+                ->paginate(8);
+                return view('employees.index', compact('patients'));
+        } else if($columnName == 'contact_relation') {
+            $patients = Patient::with(['user' => function($query) {
+                $query->select('*', \DB::raw('(YEAR(CURDATE()) - YEAR(dob)) - (RIGHT(CURDATE(), 5) < RIGHT(dob, 5)) as age'));
+            }])
+                ->where('contact_relation', $searchValue)
+                ->paginate(8);
+                return view('employees.index', compact('patients'));
+        } else if($columnName == 'admission_date') {
+            $patients = Patient::with(['user' => function($query) {
+                $query->select('*', \DB::raw('(YEAR(CURDATE()) - YEAR(dob)) - (RIGHT(CURDATE(), 5) < RIGHT(dob, 5)) as age'));
+            }])
+                ->where('admission_date', $searchValue)
+                ->paginate(8);
+                return view('employees.index', compact('patients'));
+        }
     }
 }
