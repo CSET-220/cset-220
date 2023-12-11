@@ -88,7 +88,8 @@ class EmployeeController extends Controller
             
             return view('doctors.doctorHome', ['appointments' => $appointments]);
         }
-        elseif (Auth::user()->getAccess(['caregiver'])) {
+
+        elseif (Auth::check() && Auth::user()->getAccess(['caregiver'])) {
             $patients = Log::where('caregiver_id', Auth::id())
             ->where('date', Carbon::today())
             ->with('patient.user')
@@ -275,6 +276,7 @@ class EmployeeController extends Controller
     public function update(Request $request, string $id)
     {
         
+        
     }
 
     public function edit($id){
@@ -307,7 +309,9 @@ class EmployeeController extends Controller
             }])
                 ->whereHas('user', function($query) use ($searchValue) {
                 $query->where('first_name', 'LIKE', '%' . $searchValue . '%')
-                    ->orWhere('last_name', 'LIKE', '%' . $searchValue . '%');
+                    ->orWhere('last_name', 'LIKE', '%' . $searchValue . '%')
+                    ->orwhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%$searchValue%"]);
+;
                 })
                 ->paginate(8);
                 return view('employees.index', compact('patients'));
