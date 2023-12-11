@@ -267,6 +267,9 @@
             @if ($errors->has('login_email'))
                 console.log('ERRORS PRESENT')
                 jQuery(function($){ $("#login-modal").removeClass('hidden'); })
+
+            @elseif ($errors->has('email') || $errors->has('password') || $errors->has('first_name') || $errors->has('last_name') || $errors->has('phone') || $errors->has('date_of_birth') || $errors->has('user_type'))
+                $('#register')[0].scrollIntoView()
             @endif
         });
     </script>
