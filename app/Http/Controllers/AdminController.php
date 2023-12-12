@@ -5,6 +5,8 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\Employee;
 use App\Models\Patient;
+use App\Models\Roster;
+use App\Models\Log;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -82,6 +84,17 @@ class AdminController extends Controller
         $patient = Patient::where('id', $request->patient_id)->first();
         $patient->update(['group' => $request->patient_group]);
         $patient->update(['admission_date' => $request->admission_date]);
+        
+        $rosters = Roster::where('date', '>', $request->admission_date)->get();
+        foreach ($rosters as $roster) {
+            $caregiverIDField = 'caregiver' . $request->patient_group . '_id';
+            $caregiverID = $roster->$caregiverIDField;
+            Log::create([
+                'patient_id' => $request->patient_id,
+                'caregiver_id' => $caregiverID,
+                'date' => $roster->date,
+            ]);
+        }
         return redirect()->route('admin.patientInfo')->with('success', 'Patient Information Updated');
     }
 
