@@ -134,8 +134,8 @@
                         {{-- USER TYPE --}}
                         <div class="relative">
                             <label for="user_type" class="sr-only">Positions Available</label>
-                            <select id="" name="user_type" class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
-                                <option hidden>Positions Available</option>
+                            <select id="" name="user_type" class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer" required>
+                                <option hidden value="">Positions Available</option>
                                 <option value="supervisor" @if (old('user_type') == "supervisor") {{ 'selected' }} @endif>Supervisor</option>
                                 <option value="doctor" @if (old('user_type') == "doctor") {{ 'selected' }} @endif>Doctor</option>
                                 <option value="caregiver" @if (old('user_type') == "caregiver") {{ 'selected' }} @endif>Caregiver</option>
