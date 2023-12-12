@@ -52,8 +52,7 @@ class loginController extends Controller
                 return redirect()->route('users.show',['user' => Auth::user()])->with('login_success','Login Successful');
             }
             elseif ($user->getAccess(['patient'])) {
-                $patient = Patient::where('user_id', $user->id)->first();
-                return redirect()->route('patients.show',['patient' => $patient])->with('login_success','Login Successful');
+                return redirect()->route('users.show',['user' => Auth::user()])->with('login_success','Login Successful');
             }
         }
         else{
