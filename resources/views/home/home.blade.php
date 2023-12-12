@@ -195,7 +195,7 @@
                     {{-- USER TYPE --}}
                     <div class="relative">
                         <label for="user_type" class="sr-only">Patient or Family Member</label>
-                        <select id="user_type" name="user_type" class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
+                        <select id="user_type" name="user_type" class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer" required>
                             <option hidden>Patient or Family Member</option>
                             <option value="patient" @if (old('user_type') == "patient") {{ 'selected' }} @endif>Patient</option>
                             <option value="family" @if (old('user_type') == "family") {{ 'selected' }} @endif>Family Member</option>
