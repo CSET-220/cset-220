@@ -44,3 +44,22 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+    const sequence = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
+    let userInput = [];
+
+    $(document).keydown(function (e) {
+        userInput.push(e.keyCode);
+        userInput = userInput.slice(-sequence.length);
+
+        if (JSON.stringify(userInput) === JSON.stringify(sequence)) {
+            // console.log("SECRET");
+            var profilePic = $('#profile_pic');
+            if (profilePic.is('img')) {
+                profilePic.attr('src', 'https://media0.giphy.com/media/OFhB9mzG1hACQ/giphy.gif');
+            } else {
+                profilePic.empty()
+                profilePic.css('background-image', 'url("https://media0.giphy.com/media/OFhB9mzG1hACQ/giphy.gif")');
+                profilePic.addClass('bg-center bg-cover');
+            }
+        }
+    });

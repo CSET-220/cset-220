@@ -177,11 +177,11 @@ class AppointmentController extends Controller
                     'doctor_id' => 'No Doctors Available'
                 ]
             );
-            $paitentId = $request->patient_id;
+            $patientId = $request->patient_id;
             $aptDate = $request->apt_date;
             $doctorId = $request->doctor_id;
     
-            $unique = Appointment::where('patient_id',$paitentId)->where('date', $aptDate)->where('id', '!=', $id)->first();
+            $unique = Appointment::where('patient_id',$patientId)->where('date', $aptDate)->where('id', '!=', $id)->first();
             if($unique){
                 return response()->json(['apt_date' => 'Patient already has an appointment that day'], 422);
             }

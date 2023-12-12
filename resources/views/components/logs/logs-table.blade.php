@@ -14,6 +14,18 @@
     <div class="mb-4">
         <h1 class="text-3xl font-semibold">All Logs</h1>
     </div>
+    
+    <div class="flex justify-center">
+        <div class="flex relative max-w-sm">
+            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                </svg>
+            </div>
+            <input id="datePicker" required name="date" datepicker datepicker-autohide type="text" autocomplete="off" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-pointer" placeholder="Select date">
+            <button id="clear" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Clear</button>
+        </div>
+    </div>
 
     <table id="myTable" class="table-layout">
         <thead class="border border-slate-500">
@@ -37,7 +49,7 @@
                     $appointment = $patient->appointments->firstWhere('date', $log->date);
                 @endphp
                 <tr id="patient-log-row">
-                    <td>{{ date('m/d/y', strtotime($log->date)) }}</td>
+                    <td>{{ date('m-d-Y', strtotime($log->date)) }}</td>
                     <td>
                         {{ $appointment ? $appointment->doctor->first_name . " " . $appointment->doctor->last_name : 'N/A' }}
                     </td>
@@ -71,27 +83,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/v/dt/dt-1.13.8/b-2.4.2/b-html5-2.4.2/cr-1.7.0/date-1.5.1/r-2.5.0/rg-1.4.1/rr-1.4.1/sc-2.3.0/sb-1.6.0/sp-2.2.0/sl-1.7.0/sr-1.3.0/datatables.min.js"></script>
-
+    
     <script>
-        $(document).ready( () => {
-            let filename = "{{ $patient->user->first_name }} {{ $patient->user->last_name }} - Daily Logs";
-
-            $('#myTable').DataTable({
-                dom: 'lBfrtip',
-                buttons: [{
-                    extend: 'pdf',
-                    text: 'Download Logs',
-                    filename: `${filename}`,
-                    title: 'Daily Logs',
-                    customize: function (doc) {
-                        doc.defaultStyle.alignment = 'center';
-                    },
-                }],
-                "columnDefs": [
-                    {"className": "dt-center", "targets": "_all"}
-                ],
-            });
-        })
+        let filename = "{{ $patient->user->first_name }} {{ $patient->user->last_name }} - Daily Logs";
     </script>
+    <script src="{{ asset('js/patients/patient-logs.js') }}"></script>
 
 @endsection

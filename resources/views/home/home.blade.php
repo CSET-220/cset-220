@@ -230,7 +230,7 @@
                         <div class="relative">
                             <label for="emergency_relation" class="sr-only">Relation To Patient</label>
                             <select id="emergency_relation" name="emergency_relation" class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
-                                <option hidden>Relation to the Patient</option>
+                                <option value="" hidden>Relation to the Patient</option>
                                 <option value="spouse" @if (old('emergency_relation') == "spouse") {{ 'selected' }} @endif>Spouse</option>
                                 <option value="parent" @if (old('emergency_relation') == "parent") {{ 'selected' }} @endif>Parent</option>
                                 <option value="child" @if (old('emergency_relation') == "child") {{ 'selected' }} @endif>Child</option>
@@ -267,7 +267,9 @@
             @if ($errors->has('login_email'))
                 console.log('ERRORS PRESENT')
                 jQuery(function($){ $("#login-modal").removeClass('hidden'); })
-                jQuery(function($){ $("#login-modal").removeClass('hidden'); })
+
+            @elseif ($errors->has('email') || $errors->has('password') || $errors->has('first_name') || $errors->has('last_name') || $errors->has('phone') || $errors->has('date_of_birth') || $errors->has('user_type'))
+                $('#register')[0].scrollIntoView()
             @endif
         });
     </script>

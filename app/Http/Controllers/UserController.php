@@ -137,7 +137,7 @@ class UserController extends Controller
                 $query->where('date', date('Y-m-d'))->first();
             },
             'families.patient.appointments' => function($query){
-                $query->where('date', '<', date('Y-m-d'))->orderBy('date', 'desc')->with(['morningPrescriptions', 'afternoonPrescriptions', 'nightPrescriptions',])->first();
+                $query->where('date', '<', date('Y-m-d'))->where('comments', '!=', null)->orderBy('date', 'desc')->with(['morningPrescriptions', 'afternoonPrescriptions', 'nightPrescriptions',])->first();
             },'logs', 'doctorRosters', 'supervisorRosters', 'caregiver1Rosters', 'caregiver2Rosters', 'caregiver3Rosters', 'caregiver4Rosters'])->where('id',Auth::id())->first();
             // Get everyone on the roster today
             $roster = Roster::where('date', date('Y-m-d'))->first();

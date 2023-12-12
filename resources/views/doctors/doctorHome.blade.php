@@ -88,7 +88,7 @@
 
                 {{-- TABLE START --}}
                 <div class="">
-                    <table id="doctor_patients" class="w-full text-sm text-left text-gray-900">
+                    <table id="doctor_patients" class="min-w-full text-sm text-left text-gray-900">
                         {{-- TABLE HEADER + Items --}}
                         <thead class="text-xs text-center uppercase bg-gray-800 text-gray-400">
                             <tr>

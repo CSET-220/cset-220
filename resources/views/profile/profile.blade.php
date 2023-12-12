@@ -87,9 +87,9 @@
                 </div>
                 <div class="flex flex-col flex-grow items-center pb-4 my-auto py-5">
                     @if (Auth::user()->profile_pic)
-                        <img class="w-24 lg:w-32 h-24 lg:h-32 mb-3 rounded-full shadow-lg object-cover" src="{{ asset(Auth::user()->profile_pic) }}" alt=""/>
+                        <img id="profile_pic" class="w-24 lg:w-32 h-24 lg:h-32 mb-3 rounded-full shadow-lg object-cover" src="{{ asset(Auth::user()->profile_pic) }}" alt=""/>
                     @else
-                        <div class="relative inline-flex items-center justify-center mb-3 rounded-full shadow-lg object-cover w-24 h-24 overflow-hidden bg-gray-100 dark:bg-gray-600">
+                        <div id="profile_pic" class="relative inline-flex items-center justify-center mb-3 rounded-full shadow-lg object-cover w-24 h-24 overflow-hidden bg-gray-100 dark:bg-gray-600">
                             @php
                                 $words = explode(" ",$user_info->full_name);
                                 $userInitials = '';

@@ -11,11 +11,6 @@ td {
     @apply w-20;
 }
 
-/* TODO can change if needed just didn't need it to show on the filter page */
-.dataTables_filter {
-    @apply hidden;
-}
-
 .date-picker {
     @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 cursor-pointer;
 }
@@ -46,3 +41,15 @@ td.dt-center {
 .animated-spin {
     animation: spin 1s linear infinite;
 }
+
+tr:hover .employee-svg {
+    @apply text-white;
+}
+
+#refresh-svg {
+    @apply stroke-gray-400 fill-gray-400;
+}
+
+#refresh-svg:hover {
+    @apply stroke-white fill-white;
+} 

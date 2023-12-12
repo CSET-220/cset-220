@@ -5,7 +5,8 @@
 <div class="mx-auto min-h-full mt-5 mb-5">
     {{-- TODO this will the wrapper for the search attributes adjust widths once have all the inputs in --}}
     <div class="flex">
-        <form action="{{ route('employees.patientSearch') }}" method="GET">            
+        <form action="{{ route('employees.patientSearch') }}" method="GET">
+            @csrf
             <select name="columnName" class="p-2.5 z-20 text-sm border-s-2 border border-s-gray-700 border-blue-700 placeholder-gray-40  rounded-s-lg">
                 <option value="id">Patient Id</option>
                 <option value="name">Name</option>
