@@ -309,7 +309,9 @@ class EmployeeController extends Controller
             }])
                 ->whereHas('user', function($query) use ($searchValue) {
                 $query->where('first_name', 'LIKE', '%' . $searchValue . '%')
-                    ->orWhere('last_name', 'LIKE', '%' . $searchValue . '%');
+                    ->orWhere('last_name', 'LIKE', '%' . $searchValue . '%')
+                    ->orwhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%$searchValue%"]);
+;
                 })
                 ->paginate(8);
                 return view('employees.index', compact('patients'));

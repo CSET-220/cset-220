@@ -37,6 +37,7 @@ class Patient extends Model
         'group',
         'admission_date',
         'last_paid_date',
+        'last_billed_date',
         'balance'
     ];
 
