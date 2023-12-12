@@ -1,4 +1,4 @@
-<div class="h-full flex flex-col justify-between">
+<div>
     <div class="p-2 pb-4 rounded-sm">
         <div class="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
             <span clas="text-green-500">
@@ -70,5 +70,4 @@
             </li>
         @endforeach
     </ol>
-    <div></div>
 </div>

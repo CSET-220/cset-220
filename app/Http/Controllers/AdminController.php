@@ -38,10 +38,6 @@ class AdminController extends Controller
                 $patient = Patient::where('user_id', $approved_id)->first();
                 $patient->update(['last_billed_date' => now()]);
                 $patient->update(['admission_date' => now()]);
-            if($role->role_title == 'patient') {
-                $patient = Patient::where('user_id', $approved_id)->first();
-                $patient->update(['last_billed_date' => now()]);
-                $patient->update(['admission_date' => now()]);
             }
         }
         if($denied_id){
