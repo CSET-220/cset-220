@@ -13,6 +13,9 @@
                 <a href="{{route('roles.index')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Role Creation</a>
             </li>
             <li>
+                <a href="{{route('employees.index')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">View all Patients</a>
+            </li>
+            <li>
                 <a href="{{route('admin.create')}}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Employee Roster</a>
             </li>
             <li>
