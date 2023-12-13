@@ -7,7 +7,7 @@
     <div class="mt-1 mb-1 flex flex-col items-center justify-center">
         @auth
             <h1 class="text-3xl font-semibold">Welcome {{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</h1>
-            <p class="text-2xl font-semibold">Today's Date: {{ \Carbon\Carbon::now()->format('m-d-Y') }}</p>
+            <p class="text-2xl font-semibold">Today's Date: {{ \Carbon\Carbon::now('America/New_York')->format('m-d-Y') }}</p>
         @endauth
     </div>
     <div class="mx-10">

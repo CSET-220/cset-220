@@ -91,7 +91,7 @@ class EmployeeController extends Controller
 
         elseif (Auth::check() && Auth::user()->getAccess(['caregiver'])) {
             $patients = Log::where('caregiver_id', Auth::id())
-            ->where('date', Carbon::today())
+            ->where('date', Carbon::today('America/New_York'))
             ->with('patient.user')
             ->get();
             return view('caregivers.home', compact('patients'));
