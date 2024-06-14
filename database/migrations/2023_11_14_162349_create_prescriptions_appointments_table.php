@@ -20,21 +20,21 @@ return new class extends Migration
 
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('patient_id')->constrained();
+            $table->foreignId('patient_id')->constrained()->cascadeOnDelete(); // Deletes row ifpatient is deleted
             $table->foreignId('doctor_id')->constrained(
                 table: 'users'
             );
-            $table->foreignId('morning_med')->constrained(
+            $table->foreignId('morning_med')->nullable()->constrained(
                 table: 'prescriptions'
-            )->nullable()->default(null);
-            $table->foreignId('afternoon_med')->constrained(
+            );
+            $table->foreignId('afternoon_med')->nullable()->constrained(
                 table: 'prescriptions'
-            )->nullable()->default(null);
-            $table->foreignId('night_med')->constrained(
+            );
+            $table->foreignId('night_med')->nullable()->constrained(
                 table: 'prescriptions'
-            )->nullable()->default(null);
+            );
             $table->date('date');
-            $table->string('comments');
+            $table->string('comments')->nullable(); // comments need to be null to create appointments
             $table->unique(array('patient_id', 'date'));
             $table->timestamps();
         });

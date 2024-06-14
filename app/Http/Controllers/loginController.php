@@ -2,44 +2,78 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
+use App\Models\User;
+use App\Models\Patient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 class loginController extends Controller
 {
     public function home(){
-        return view('index');
+        return view('home.home');
     }
 
     public function login(Request $request){
-        // User can login using family code or email
-        //
-        // $loginType = $request->loginType;
-        // $emailOrFamCode = filter_var($loginType,FILTER_VALIDATE_EMAIL) ? 'email' : 'family_code';
-        // dd($emailOrFamCode);
+        // dd($request);
+
         $credentials = $request->validate(
             [
-                'email' => 'required',
-                'password' => 'required'
+                'login_email' => 'required|exists:users,email',
+                'login_password' => 'required'
             ],
             [
-                'email.required' => 'Please enter valid Email',
-                'password.required' => 'Please enter a password'
+                'login_email.required' => 'Please enter valid Email',
+                'login_email.exists' => 'That email is not linked to an account',
+                'login_password.required' => 'Please enter a password'
             ]
-    
+
         );
-        if(Auth::attempt($credentials)){
+        // remember me checkbox
+        $remember = ($request->has('remember')) ? true : false;
+
+
+        if(Auth::attempt(['email' =>$request->login_email, 'password' => $request->login_password, 'is_approved' => 1], $remember )){
             $user = Auth::user();
-            $user->getAccess();
-            dd($user->getAccess());
+            if($user->getAccess(['admin'])){
+                return redirect()->route('users.show',['user' => Auth::user()])->with('login_success','Login Successful');
+            }
+            elseif ($user->getAccess(['supervisor'])) {
+                return redirect()->route('users.show',['user' => Auth::user()])->with('login_success','Login Successful');
+            }
+            elseif ($user->getAccess(['doctor'])) {
+                return redirect()->route('users.show',['user' => Auth::user()])->with('login_success','Login Successful');
+            }
+            elseif ($user->getAccess(['caregiver'])) {
+                return redirect()->route('users.show',['user' => Auth::user()])->with('login_success','Login Successful');
+            }
+            elseif ($user->getAccess(['family'])) {
+                return redirect()->route('users.show',['user' => Auth::user()])->with('login_success','Login Successful');
+            }
+            elseif ($user->getAccess(['patient'])) {
+                return redirect()->route('users.show',['user' => Auth::user()])->with('login_success','Login Successful');
+            }
         }
         else{
-            return redirect()->back()->withErrors([
-                'email' => 'Invalid Credentials'
-            ]);
+            $user = User::where('email', $request->login_email)->first();
+            if ($user && $user->approved === false) {
+                return redirect()->back()->withErrors(['login_email' => 'You must be approved before you can login.']);
+            }
+            else{
+                return redirect()->back()->withErrors(['login_email' => 'The password you entered is incorrect.']);
+            }
         }
 
+    }
+
+    public function logout(Request $request){
+        Auth::logout();
+
+        $request->session()->invalidate();
+
+        $request->session()->regenerateToken();
+        
+        return redirect()->route('app.home')->with('logout_success', 'Sucessfully Logged Out');
     }
 }

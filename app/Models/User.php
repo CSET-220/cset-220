@@ -5,23 +5,24 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Models\Log;
 use App\Models\Role;
+use App\Models\Family;
 use App\Models\Roster;
 use App\Models\Patient;
 use App\Models\Employee;
 use App\Models\Appointment;
+use Illuminate\Auth\SessionGuard;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Auth\SessionGuard;
 
 
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
     public function role() {
-        return $this->hasOne(Role::class);
+        return $this->belongsTo(Role::class);
     }
 
     public function patient() {
@@ -30,6 +31,10 @@ class User extends Authenticatable
 
     public function employees() {
         return $this->hasOne(Employee::class);
+    }
+
+    public function families() {
+        return $this->hasMany(Family::class, 'family_id');
     }
 
     public function appointments() {
@@ -65,12 +70,13 @@ class User extends Authenticatable
     }
 
     protected $fillable = [
+        'role_id',
         'first_name',
         'last_name',
         'email',
         'phone',
         'password',
-        'date_of_birth',
+        'dob',
         'is_approved'
     ];
 
@@ -94,9 +100,19 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    public function getAccess(){
-        // dd($this);
-        $access = Role::select('role_title')->where('id',$this->role_id)->first();
-        return $access->role_title;
+    public function getAccess(array $role_title){
+        $role_ids = Role::whereIn('role_title',$role_title)->pluck('id');
+        return in_Array($this->role_id, $role_ids->toArray());
+    }
+
+    public function scopeNameSearch($query, $id) {
+        $query->where('id', $id);
+    }
+
+    // concatenates first name and last name
+    // can be accessed with user()->full_name
+    protected $appends = ['full_name'];
+    public function getFullNameAttribute(){
+        return $this->first_name . ' ' . $this->last_name;
     }
 }
